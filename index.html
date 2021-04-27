@@ -1,14 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <title>Steam API</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="main.css" />
+  <script src='main.js'></script>
 </head>
 <body>
-    <h1>This is my website that I am still making.</h1>
+    <div class="container-fluid">
+        <div class="row">
+          <div class="header col-xs-12 col-md-12">
+            <h1>Title</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="body col-xs-12 col-md-12">
+            <div class="form-body">
+              <form id="entry-form">
+                <div class="form-group">
+                  <label for="username">Steam ID</label>
+                  <input type="text" class="form-control" id="username" aria-describedby="username-help" placeholder="Enter Steam ID" name="username">
+                  <small id="username-help" class="form-text">Enter a Steam URL or SteamID of a user.</small>
+                </div>
+                <div class="form-group">
+                  <label for="game">Steam Game</label>
+                  <input type="text" class="form-control" id="game" aria-describedby="game-help" placeholder="Steam Game" name="game">
+                  <small id="game-help" class="form-text">Enter a game or app that is available on Steam.</small>
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="footer col-xs-12 col-md-12">
+            <hr>
+            <p class="footer-links">Link | Link | Link | Link | Link</p>
+            <p class="footer-authors font-weight-light">Created by</p>
+            <p class="footer-legal text-muted ">Steam and the Steam logo are trademarks of Valve Corporation. All other trademarks are property of their respective owners.
+              <a href="\">Fair use disclaimer</a> 
+            </p>
+          </div>
+        </div>
+     </div>
 </body>
 </html>
