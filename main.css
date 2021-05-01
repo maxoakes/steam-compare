@@ -3,6 +3,7 @@ body
     background-color: rgb(6, 11, 26);
 }
 
+/* General Styling for the three title page sections */
 .header
 {
     display: flex;
@@ -30,10 +31,16 @@ body
     border: 1px solid red;
 }
 
+/* Form */
 #entry-form
 {
     width: 66%;
     min-width: 240px;
+}
+
+#entry-form > button
+{
+    float: right;
 }
 
 /* Global footer styling. Should remain the same for each page */
