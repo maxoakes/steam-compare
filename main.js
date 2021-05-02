@@ -6,8 +6,9 @@ document.getElementById("entry-form").addEventListener("submit", function(event)
     var userid = document.getElementById("username").value;
     var url = 'https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key='+key+'&steamid=' + userid + '&format=json';
     event.preventDefault();
-    console.log()
-    fetch(url, {mode:'cors'}).then(response => {
+    console.log();
+    fetch(url, {headers: {'Access-Control-Allow-Origin':'*'}})
+    .then(response => {
         console.log(response.json())
     })
     .catch(error => {
