@@ -31,6 +31,43 @@ body
     border: 1px solid red;
 }
 
+/* User and game page styles */
+/* User info and search bar */
+.user-info
+{
+    display: flex;
+    border: 1px blue solid;
+}
+
+.user-info > div
+{
+    border: 1px pink solid;
+}
+.search-box
+{
+    border: 1px green solid;
+}
+
+#stats-search-form
+{
+    width: 100%;
+}
+
+#stats-search-form > button
+{
+    width: 100%;
+}
+
+/* Game content divs */
+.user-game-content
+{
+    border: 1px orange solid;
+}
+
+.user-game-charts
+{
+    border: 1px yellow solid;
+}
 /* Form */
 #entry-form
 {
