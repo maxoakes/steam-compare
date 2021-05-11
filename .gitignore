@@ -1,3 +1,4 @@
 # to work properly in VSCode, make sure the encoding of this .gitignore file is UTF-8. Don't ask me why.
 node_modules/
 cors-anywhere/
+*.old
