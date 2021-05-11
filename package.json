@@ -4,6 +4,7 @@
   "description": "Showcase of steam user's profile",
   "main": "main.js",
   "dependencies": {
+    "bootstrap": "^5.0.0",
     "chart.js": "^3.2.1",
     "express": "^4.17.1",
     "react": "^17.0.2",
