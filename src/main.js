@@ -1,3 +1,4 @@
+export default function Main() {
 document.getElementById("entry-form").addEventListener("submit", async function(event)
 {
     event.preventDefault();
@@ -184,4 +185,6 @@ async function fetchJSON(apiURL, headers)
   }
   var data = await response.json();
   return data;
+}
+
 }
