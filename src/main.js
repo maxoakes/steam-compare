@@ -1,7 +1,8 @@
+
 export default function Main() {
-document.getElementById("entry-form").addEventListener("submit", async function(event)
+async function grabData (event)
 {
-    event.preventDefault();
+    //event.preventDefault();
     // TODO this works as a proxy website for CORS to allow the api to get fetched.
     //Perhaps there is a more elegent way to do this
     const proxy = "https://still-tor-77449.herokuapp.com/"
@@ -173,7 +174,7 @@ document.getElementById("entry-form").addEventListener("submit", async function(
     {
       console.log("\tNO item searched");
     }
-})
+}
 
 async function fetchJSON(apiURL, headers)
 {
@@ -186,5 +187,14 @@ async function fetchJSON(apiURL, headers)
   var data = await response.json();
   return data;
 }
+
+grabData();
+
+return(
+  <div>
+    <h1>content</h1>
+  </div>
+);
+
 
 }

@@ -7,8 +7,10 @@ import{
   Route,
   Link
 } from "react-router-dom";
+import Main from './Main.js'
 
 function App() {
+
   return (
     <div className='App'>
       <div className="container-fluid">
@@ -31,7 +33,17 @@ function App() {
                   <input type="text" className="form-control" id="game" aria-describedby="game-help" placeholder="Enter a Steam Game" name="game" value="Stardew Valley" />
                   <small id="game-help" className="form-text">Enter a game or app that is available on Steam.</small>
                 </div>
-                <button type="submit" id="entry-submit" className="btn btn-primary">Search!</button>
+                <Router>
+                  <Link to="/main">
+                    <button type="submit" id="entry-submit" className="btn btn-primary" >Search!</button>
+                  </Link>
+
+                  <Switch>
+                    <Route path="/main">
+                      <Main />
+                    </Route>
+                  </Switch>
+                </Router>
               </form>
             </div>
           </div>
