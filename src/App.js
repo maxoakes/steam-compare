@@ -9,11 +9,21 @@ import{
 } from "react-router-dom";
 import Main from './Main.js'
 
-let gSearch = "";
 
 function App() {
-
-
+  const[search, setSearch] = useState(null);
+ 
+  function theSearch(event){
+    setSearch(event.target.value);
+  }
+  function HasSearched(){
+    console.log({search});
+    return ({search} !== null) ? (
+      <h2>theres a search {search}</h2>
+    ) : (
+      <h2>No search yet</h2>
+    );
+  }
 
   return (
     <div className='App'>
@@ -30,7 +40,7 @@ function App() {
               <form id="entry-form">
                 <div className="form-group">
                   <label htmlFor="username">Steam ID</label>
-                  <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" onSubmit={setSearch}/>
+                  <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" onChange={theSearch}/>
                   <small id="username-help" className="form-text">Enter a Steam 'vanity' URL of a user.</small>
                 </div>
                 <div className="form-group">
@@ -68,21 +78,13 @@ function App() {
     );
   }
 
-  function HasSearched(){
-    let check = gSearch;
-    console.log(gSearch + 'help');
+  /*
   
-    return check !== "" ? (
-      <h2>theres a search {check}</h2>
-    ) : (
-      <h2>No search yet</h2>
-    );
-  }
 
   function setSearch(event){
     gSearch = event.target.value;
     console.log(gSearch)
   }
-
+  */
 
 export default App;
