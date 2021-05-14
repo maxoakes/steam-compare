@@ -9,7 +9,7 @@ import{
 } from "react-router-dom";
 import Main from './Main.js'
 
-let gSearch = null;
+let gSearch = "";
 
 function App() {
 
@@ -30,7 +30,7 @@ function App() {
               <form id="entry-form">
                 <div className="form-group">
                   <label htmlFor="username">Steam ID</label>
-                  <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" onChange={setSearch}/>
+                  <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" onSubmit={setSearch}/>
                   <small id="username-help" className="form-text">Enter a Steam 'vanity' URL of a user.</small>
                 </div>
                 <div className="form-group">
@@ -69,11 +69,11 @@ function App() {
   }
 
   function HasSearched(){
-    let check = {gSearch};
-
+    let check = gSearch;
+    console.log(gSearch + 'help');
   
-    return check === "" ? (
-      <h2>Theres a search {gSearch}</h2>
+    return check !== "" ? (
+      <h2>theres a search {check}</h2>
     ) : (
       <h2>No search yet</h2>
     );
