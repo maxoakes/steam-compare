@@ -1,5 +1,5 @@
 import './App.css'
-import React from "react";
+import React, { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.css'
 import{
   BrowserRouter as Router,
@@ -9,7 +9,11 @@ import{
 } from "react-router-dom";
 import Main from './Main.js'
 
+let gSearch = null;
+
 function App() {
+
+
 
   return (
     <div className='App'>
@@ -17,6 +21,7 @@ function App() {
         <div className="row">
           <div className="header col-xs-12 col-md-12">
             <h1>Title</h1>
+            <HasSearched />
           </div>
         </div>
         <div className="row">
@@ -25,7 +30,7 @@ function App() {
               <form id="entry-form">
                 <div className="form-group">
                   <label htmlFor="username">Steam ID</label>
-                  <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" value="scouteriv" />
+                  <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" onChange={setSearch}/>
                   <small id="username-help" className="form-text">Enter a Steam 'vanity' URL of a user.</small>
                 </div>
                 <div className="form-group">
@@ -62,5 +67,22 @@ function App() {
     </div>
     );
   }
+
+  function HasSearched(){
+    let check = {gSearch};
+
+  
+    return check === "" ? (
+      <h2>Theres a search {gSearch}</h2>
+    ) : (
+      <h2>No search yet</h2>
+    );
+  }
+
+  function setSearch(event){
+    gSearch = event.target.value;
+    console.log(gSearch)
+  }
+
 
 export default App;
