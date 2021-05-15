@@ -1,5 +1,5 @@
 import './App.css'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.css'
 import{
   BrowserRouter as Router,
@@ -16,14 +16,22 @@ function App() {
   function theSearch(event){
     setSearch(event.target.value);
   }
-  function HasSearched(){
-    console.log({search});
-    return ({search} !== null) ? (
-      <h2>theres a search {search}</h2>
-    ) : (
-      <h2>No search yet</h2>
-    );
-  }
+  useEffect(()=>{
+    HasSearched();
+}, [search])
+
+function HasSearched(){
+  console.log({search});
+
+  return ({search} !== "") ? (
+    <h2>theres a search {search}</h2>
+  ) : (
+    <h2>No search yet</h2> //this should activate when there isnt a search
+    //what im thinking with this is once the user makes a search the search bars go to the top.
+    //and when there isnt a search they are at the center.
+    //or once the user clicks search it goes to a new page but idk how to do that with react
+  );
+}
 
   return (
     <div className='App'>
