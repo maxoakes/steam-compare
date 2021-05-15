@@ -11,7 +11,7 @@ import Main from './Main.js'
 
 
 function App() {
-  const[search, setSearch] = useState(null);
+  const[search, setSearch] = useState("");
  
   function theSearch(event){
     setSearch(event.target.value);
@@ -22,9 +22,36 @@ function App() {
 
 function HasSearched(){
   console.log({search});
+  let check = search;
+  console.log(check)
 
-  return ({search} !== "") ? (
+  return (check !== "") ? (
+    <div>
     <h2>theres a search {search}</h2>
+              <form id="entry-form">
+                <div className="form-group">
+                  <label htmlFor="username">Steam ID</label>
+                  <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" onChange={theSearch}/>
+                  <small id="username-help" className="form-text">Enter a Steam 'vanity' URL of a user.</small>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="game">Steam Game</label>
+                  <input type="text" className="form-control" id="game" aria-describedby="game-help" placeholder="Enter a Steam Game" name="game" value="Stardew Valley" />
+                  <small id="game-help" className="form-text">Enter a game or app that is available on Steam.</small>
+                </div>
+                <Router>
+                  <Link to="/main">
+                    <button type="submit" id="entry-submit" className="btn btn-primary" >Search!</button>
+                  </Link>
+
+                  <Switch>
+                    <Route path="/main">
+                      <Main />
+                    </Route>
+                  </Switch>
+                </Router>
+              </form> 
+      </div>
   ) : (
     <h2>No search yet</h2> //this should activate when there isnt a search
     //what im thinking with this is once the user makes a search the search bars go to the top.
