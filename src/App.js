@@ -15,10 +15,12 @@ function App() {
  
   function theSearch(event){
     setSearch(event.target.value);
+    console.log({search});
   }
+  
   useEffect(()=>{
     HasSearched();
-}, [search])
+  }, [search])
 
 function HasSearched(){
   console.log({search});
@@ -31,7 +33,7 @@ function HasSearched(){
               <form id="entry-form">
                 <div className="form-group">
                   <label htmlFor="username">Steam ID</label>
-                  <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" onChange={theSearch}/>
+                  <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username"/>
                   <small id="username-help" className="form-text">Enter a Steam 'vanity' URL of a user.</small>
                 </div>
                 <div className="form-group">
@@ -66,9 +68,9 @@ function HasSearched(){
         <div className="row">
           <div className="header col-xs-12 col-md-12">
             <h1>Title</h1>
-            <HasSearched />
           </div>
         </div>
+        <HasSearched />
         <div className="row">
           <div className="body col-xs-12 col-md-12">
             <div className="form-body">
