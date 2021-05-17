@@ -35,7 +35,7 @@ function App() {
                 <form id="entry-form" onSubmit={theSearch}>
                   <div className="form-group">
                     <label htmlFor="username">Steam ID</label>
-                    <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username"/>
+                    <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" value="scouteriv"/>
                     <small id="username-help" className="form-text">Enter a Steam 'vanity' URL of a user.</small>
                   </div>
                   <div className="form-group">
@@ -63,7 +63,7 @@ function App() {
           <form id="entry-form" onSubmit={theSearch}>
             <div className="form-group">
               <label htmlFor="username">Steam ID</label>
-              <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" />
+              <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" value="scouteriv"/>
               <small id="username-help" className="form-text">Enter a Steam 'vanity' URL of a user.</small>
             </div>
             <div className="form-group">
