@@ -1,4 +1,5 @@
 
+import {Redirect} from 'react-router-dom';
 export default function Main() {
 async function grabData (event)
 {
@@ -190,10 +191,10 @@ async function fetchJSON(apiURL, headers)
 
 grabData();
 
-
 return(
   <div>
-    <h1>content</h1>
+    <h1 >content</h1>
+    <Redirect to ="/" />
   </div>
 );
 
