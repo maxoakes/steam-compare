@@ -23,75 +23,75 @@ function App() {
     HasSearched();
   }, [search])
 
-function HasSearched(){
-  console.log({search});
-  let check = search;
-  console.log(check)
+  function HasSearched(){
+    console.log({search});
+    let check = search;
+    console.log(check)
 
-  return (check !== "") ? (
-    <div>
-    <h2>theres a search {search}</h2>
-              <form id="entry-form">
-                <div className="form-group">
-                  <label htmlFor="username">Steam ID</label>
-                  <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username"/>
-                  <small id="username-help" className="form-text">Enter a Steam 'vanity' URL of a user.</small>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="game">Steam Game</label>
-                  <input type="text" className="form-control" id="game" aria-describedby="game-help" placeholder="Enter a Steam Game" name="game" value="Stardew Valley" />
-                  <small id="game-help" className="form-text">Enter a game or app that is available on Steam.</small>
-                </div>
-                <Router>
-                  <Link to="/main">
-                    <button type="submit" id="entry-submit" className="btn btn-primary" >Search!</button>
-                  </Link>
+    return (check !== "") ? (
+      <div>
+      <h2>theres a search {search}</h2>
+                <form id="entry-form" onSubmit={theSearch}>
+                  <div className="form-group">
+                    <label htmlFor="username">Steam ID</label>
+                    <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username"/>
+                    <small id="username-help" className="form-text">Enter a Steam 'vanity' URL of a user.</small>
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="game">Steam Game</label>
+                    <input type="text" className="form-control" id="game" aria-describedby="game-help" placeholder="Enter a Steam Game" name="game" value="Stardew Valley" />
+                    <small id="game-help" className="form-text">Enter a game or app that is available on Steam.</small>
+                  </div>
+                  <Router>
+                    <Link to="/main">
+                      <button type="submit" id="entry-submit" className="btn btn-primary" >Search!</button>
+                    </Link>
 
-                  <Switch>
-                    <Route path="/main">
-                      <Main />
-                    </Route>
-                  </Switch>
-                </Router>
-              </form> 
-      </div>
-  ) : (
-    //this should activate when there isnt a search
-    //what im thinking with this is once the user makes a search the search bars go to the top.
-    //and when there isnt a search they are at the center.
-    //or once the user clicks search it goes to a new page but idk how to do that with react
-    <div className="row">
-    <div className="body col-xs-12 col-md-12">
-      <div className="form-body">
-        <form id="entry-form" onSubmit={theSearch}>
-          <div className="form-group">
-            <label htmlFor="username">Steam ID</label>
-            <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" />
-            <small id="username-help" className="form-text">Enter a Steam 'vanity' URL of a user.</small>
-          </div>
-          <div className="form-group">
-            <label htmlFor="game">Steam Game</label>
-            <input type="text" className="form-control" id="game" aria-describedby="game-help" placeholder="Enter a Steam Game" name="game" value="Stardew Valley" />
-            <small id="game-help" className="form-text">Enter a game or app that is available on Steam.</small>
-          </div>
-          <Router>
-            <Link to="/main">
-              <button type="submit" id="entry-submit" className="btn btn-primary" >Search!</button>
-            </Link>
+                    <Switch>
+                      <Route path="/main">
+                        <Main />
+                      </Route>
+                    </Switch>
+                  </Router>
+                </form> 
+        </div>
+    ) : (
+      //this should activate when there isnt a search
+      //what im thinking with this is once the user makes a search the search bars go to the top.
+      //and when there isnt a search they are at the center.
+      //or once the user clicks search it goes to a new page but idk how to do that with react
+      <div className="row">
+      <div className="body col-xs-12 col-md-12">
+        <h1>No Search</h1>
+        <div className="form-body">
+          <form id="entry-form" onSubmit={theSearch}>
+            <div className="form-group">
+              <label htmlFor="username">Steam ID</label>
+              <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" />
+              <small id="username-help" className="form-text">Enter a Steam 'vanity' URL of a user.</small>
+            </div>
+            <div className="form-group">
+              <label htmlFor="game">Steam Game</label>
+              <input type="text" className="form-control" id="game" aria-describedby="game-help" placeholder="Enter a Steam Game" name="game" value="Stardew Valley" />
+              <small id="game-help" className="form-text">Enter a game or app that is available on Steam.</small>
+            </div>
+            <Router>
+              <Link to="/main">
+                <button type="submit" id="entry-submit" className="btn btn-primary" >Search!</button>
+              </Link>
 
-            <Switch>
-              <Route path="/main">
-                <Main />
-              </Route>
-            </Switch>
-          </Router>
-        </form>
+              <Switch>
+                <Route path="/main">
+                  <Main />
+                </Route>
+              </Switch>
+            </Router>
+          </form>
+        </div>
       </div>
     </div>
-  </div>
-  );
-}
-
+    );
+  }
   return (
     <div className='App'>
       <div className="container-fluid">
@@ -116,14 +116,5 @@ function HasSearched(){
     </div>
     );
   }
-
-  /*
-  
-
-  function setSearch(event){
-    gSearch = event.target.value;
-    console.log(gSearch)
-  }
-  */
 
 export default App;
