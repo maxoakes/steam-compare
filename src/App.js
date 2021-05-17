@@ -7,7 +7,7 @@ import{
   Route,
   Link
 } from "react-router-dom";
-import Main from './Main.js'
+import Main from './main.js'
 
 
 function App() {
@@ -17,6 +17,7 @@ function App() {
     let user = document.getElementById("username");
     setSearch(user.value);
     console.log({search});
+
   }
   
   useEffect(()=>{
@@ -42,14 +43,12 @@ function App() {
                     <input type="text" className="form-control" id="game" aria-describedby="game-help" placeholder="Enter a Steam Game" name="game" value="Stardew Valley" />
                     <small id="game-help" className="form-text">Enter a game or app that is available on Steam.</small>
                   </div>
-                  <Router>
-
-                    <Main>
+    
                       <button type="submit" id="entry-submit" className="btn btn-primary" >Search!</button>
-                    </Main>
-
-                  
-                  </Router>
+     
+     <Router>
+       <Main></Main>
+     </Router>
                 </form> 
         </div>
     ) : (
