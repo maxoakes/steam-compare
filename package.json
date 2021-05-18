@@ -2,7 +2,7 @@
   "name": "steamcompare",
   "version": "1.1.0",
   "description": "Showcase of steam user's profile",
-  "homepage": "https://maxoakes.github.io/maxoakes.github.io/",
+  "homepage": ".",
   "main": "main.js",
   "dependencies": {
     "bootstrap": "^5.0.0",
@@ -24,7 +24,7 @@
     "build": "react-scripts build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -b main -d build"
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
