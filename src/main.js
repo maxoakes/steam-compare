@@ -1,6 +1,11 @@
 
 import {Redirect} from 'react-router-dom';
+import {useEffect, useState} from "react";
 export default function Main() {
+  const [playerinfo, setPlayer] = useState("");
+  const [onlineTest, setOnline] = useState("");
+  const [steamLevel, setLevel] = useState("");
+  const [timeLogOff, setTime] = useState("");
 async function grabData (event)
 {
     //event.preventDefault();
@@ -108,6 +113,19 @@ async function grabData (event)
       //userStatsForGameResponse.playerstats yields stats and acheivements, but achievements was retrieved earlier
       console.log(userStatsForGameResponse.playerstats.stats);
 
+      console.log("ISteamUser/GetPlayerSummaries")
+      var playerSummeryResponse = await fetchJSON(proxy + 
+        'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=' + 
+        key + '&steamids=' + steamid + '&format=json', headers)
+      console.log(playerSummeryResponse.response.players[0])
+      setPlayer(playerSummeryResponse.response.players[0]);
+
+      console.log("IPlayerService/GetSteamLevel")
+      var steamLevelResponse = await fetchJSON(proxy + 
+        'https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=' + 
+        key + '&steamid=' + steamid + '&format=json', headers)
+      console.log(steamLevelResponse.response)
+      setLevel(steamLevelResponse.response.player_level.toString());
     }
     //if only the username is valid
     else if (steamid && !appid)
@@ -131,6 +149,8 @@ async function grabData (event)
         'https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=' + 
         key + '&steamid=' + steamid + '&format=json', headers)
       console.log(steamLevelResponse.response)
+      setLevel(steamLevelResponse.response.player_level.toString());
+      console.log(steamLevel);
 
       console.log("IPlayerService/GetCommunityBadgeProgress")
       var communityBadgeProgressResponse = await fetchJSON(proxy + 
@@ -155,6 +175,12 @@ async function grabData (event)
         'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=' + 
         key + '&steamids=' + steamid + '&format=json', headers)
       console.log(playerSummeryResponse.response.players[0])
+      setPlayer(playerSummeryResponse.response.players[0]);
+      //console.log(playerinfo.loccountrycode);
+      //console.log(profPic);
+     
+      console.log(playerinfo.personastate)
+ 
 
       console.log("ISteamUser/GetUserGroupList")
       var groupListResponse = await fetchJSON(proxy + 
@@ -189,11 +215,77 @@ async function fetchJSON(apiURL, headers)
   return data;
 }
 
+useEffect( () =>{
 grabData();
+}
+, []);
+
+useEffect( () => {
+  switch(playerinfo.personastate){
+    case 0:
+      setOnline("Offline")
+      break;
+    case 1:
+      setOnline("Online")
+      break;
+    case 2:
+      setOnline("Busy")
+      break;
+    case 3:
+      setOnline("Away")
+      break;
+    case 4:
+      setOnline("Snooze")
+      break;
+    case 5:
+      setOnline("Looking to Trade")
+      break;
+    case 6:
+      setOnline("Looking to Play")
+      break;
+    default:
+      setOnline("Private")
+      break;
+  }
+  console.log(onlineTest)
+
+  //https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
+  let time = new Date(playerinfo.lastlogoff * 1000);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = time.getFullYear();
+  var month = months[time.getMonth()];
+  let date = time.getDate();
+  let hours = time.getHours();
+  let min = "0" + time.getMinutes();
+  setTime(month + "/" + date + "/" + year+ "~" + hours + ':' + min.substr(-2))
+  console.log(playerinfo.lastlogoff)
+}, [playerinfo])
 
 return(
   <div>
-    <h1 className="blue-glow">content</h1>
+    {playerinfo &&
+    <div className="row">
+      <div className="body col-xs-12 col-md-12">
+            <div className="row"> 
+              <div className="user-info col-xs-8 col-md-8">
+                <div id="profile-image">
+                  <img src={playerinfo.avatarfull} height="100px" width="100px" alt="Avatar"></img>
+                </div>
+                <div className="profile-info">
+                  <p className="profile-text">
+                    <span id="profile-display-name">{playerinfo.personaname}</span> | 
+                    <span id="profile-country">{playerinfo.loccountrycode}</span> | 
+                    <span id="profile-status">{onlineTest}</span> | 
+                    <span id="profile-level">Level {steamLevel}</span> | 
+                    <span id="profile-steamid">Steam ID {playerinfo.steamid}</span> | 
+                    <span id="profile-steamid">Last Time Online {timeLogOff}</span> 
+                  </p>
+                </div>
+              </div>
+            </div>
+      </div>
+    </div>
+    }
     <Redirect to ="/" />
   </div>
 );

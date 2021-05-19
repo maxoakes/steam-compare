@@ -39,17 +39,18 @@ function App() {
 
                   <div className="col-sm-5">
                     <label className="blue-glow" htmlFor="username">Steam ID</label>
-                    <input type="text" className="form-control dark-bg" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" value="scouteriv"/>
+                    <input type="text" className="form-control dark-bg" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" value="scouteriv" required/>
                   </div>
                   <div className="col-sm-5">
                     <label className="green-glow" htmlFor="game">Steam Game</label>
-                    <input type="text" className="form-control" id="game" aria-describedby="game-help" placeholder="Enter a Steam Game" name="game" value="Stardew Valley" />
+                    <input type="text" className="form-control" id="game" aria-describedby="game-help" placeholder="Enter a Steam Game" name="game" value="stardew valley" />
                   </div>
                   <div className="col-sm-2 mt-4">
                       <button type="submit" id="entry-submit" className="btn btn-primary bg-dark" >Search!</button>
                   </div>
                 </div>
               </form>
+              <br></br>
      <Router>
        <Main></Main>
      </Router>
@@ -68,12 +69,12 @@ function App() {
           <form id="entry-form" onSubmit={theSearch}>
             <div className="form-group">
               <label htmlFor="username">Steam ID</label>
-              <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" value="scouteriv"/>
+              <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" value="scouteriv" required/>
               <small id="username-help" className="form-text">Enter a Steam 'vanity' URL of a user.</small>
             </div>
             <div className="form-group">
               <label htmlFor="game">Steam Game</label>
-              <input type="text" className="form-control" id="game" aria-describedby="game-help" placeholder="Enter a Steam Game" name="game" value="Stardew Valley" />
+              <input type="text" className="form-control" id="game" aria-describedby="game-help" placeholder="Enter a Steam Game" name="game" value="stardew valley"/>
               <small id="game-help" className="form-text">Enter a game or app that is available on Steam.</small>
             </div>
         
