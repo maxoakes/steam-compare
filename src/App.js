@@ -20,10 +20,11 @@ function App() {
 
   }
   
+  /*
   useEffect(()=>{
     HasSearched();
   }, [search])
-
+*/
   function HasSearched(){
     console.log({search});
     let check = search;
@@ -50,6 +51,7 @@ function App() {
                   </div>
                 </div>
               </form>
+              <br></br>
      <Router>
        <Main></Main>
      </Router>
