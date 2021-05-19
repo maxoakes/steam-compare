@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 export default function Main() {
   const [playerinfo, setPlayer] = useState("");
   const [onlineTest, setOnline] = useState("");
+  const [steamLevel, setLevel] = useState("");
 async function grabData (event)
 {
     //event.preventDefault();
@@ -134,6 +135,8 @@ async function grabData (event)
         'https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=' + 
         key + '&steamid=' + steamid + '&format=json', headers)
       console.log(steamLevelResponse.response)
+      setLevel(steamLevelResponse.response.player_level.toString());
+      console.log(steamLevel);
 
       console.log("IPlayerService/GetCommunityBadgeProgress")
       var communityBadgeProgressResponse = await fetchJSON(proxy + 
@@ -248,7 +251,7 @@ return(
                     <span id="profile-display-name">{playerinfo.personaname}</span> | 
                     <span id="profile-country">{playerinfo.loccountrycode}</span> | 
                     <span id="profile-status">{onlineTest}</span> | 
-                    <span id="profile-level">Level 999</span> | 
+                    <span id="profile-level">Level {steamLevel}</span> | 
                     <span id="profile-url">urlusername</span> | 
                     <span id="profile-steamid">1234567890123456</span> | 
                   </p>
