@@ -1,10 +1,9 @@
 
 import {Redirect} from 'react-router-dom';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 export default function Main() {
-  const [profPic, setPic] = useState("")
-  const [personaName, setName] = useState("")
   const [playerinfo, setPlayer] = useState("");
+
 async function grabData (event)
 {
     //event.preventDefault();
@@ -159,8 +158,6 @@ async function grabData (event)
         'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=' + 
         key + '&steamids=' + steamid + '&format=json', headers)
       console.log(playerSummeryResponse.response.players[0])
-      setPic(playerSummeryResponse.response.players[0].avatarfull);
-      setName(playerSummeryResponse.response.players[0].personaname);
       setPlayer(playerSummeryResponse.response.players[0]);
       console.log(playerinfo.loccountrycode);
       //console.log(profPic);
@@ -198,21 +195,24 @@ async function fetchJSON(apiURL, headers)
   return data;
 }
 
+useEffect( () =>{
 grabData();
+}
+, []);
 
 return(
   <div>
-    {profPic && playerinfo &&
+    {playerinfo &&
     <div className="row">
       <div className="body col-xs-12 col-md-12">
             <div className="row"> 
               <div className="user-info col-xs-8 col-md-8">
                 <div id="profile-image">
-                  <img src={profPic} height="100px" width="100px" alt="Avatar"></img>
+                  <img src={playerinfo.avatarfull} height="100px" width="100px" alt="Avatar"></img>
                 </div>
-                <div class="profile-info">
+                <div className="profile-info">
                   <p class="profile-text">
-                    <span id="profile-display-name">{personaName}</span> | 
+                    <span id="profile-display-name">{playerinfo.personaname}</span> | 
                     <span id="profile-country">{playerinfo.loccountrycode}</span> | 
                     <span id="profile-status">isOnline</span> | 
                     <span id="profile-level">Level 999</span> | 
