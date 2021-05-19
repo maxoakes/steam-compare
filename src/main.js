@@ -113,6 +113,12 @@ async function grabData (event)
       //userStatsForGameResponse.playerstats yields stats and acheivements, but achievements was retrieved earlier
       console.log(userStatsForGameResponse.playerstats.stats);
 
+      console.log("ISteamUser/GetPlayerSummaries")
+      var playerSummeryResponse = await fetchJSON(proxy + 
+        'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=' + 
+        key + '&steamids=' + steamid + '&format=json', headers)
+      console.log(playerSummeryResponse.response.players[0])
+      setPlayer(playerSummeryResponse.response.players[0]);
     }
     //if only the username is valid
     else if (steamid && !appid)
