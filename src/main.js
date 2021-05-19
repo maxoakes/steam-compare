@@ -163,27 +163,7 @@ async function grabData (event)
       //console.log(profPic);
      
       console.log(playerinfo.personastate)
-        switch(playerinfo.personastate){
-          case 0:
-            setOnline("Offline")
-            break;
-          case 1:
-            setOnline("Online")
-            break;
-          case 2:
-            setOnline("Busy")
-            break;
-          case 3:
-            setOnline("Away")
-            break;
-          case 4:
-            setOnline("Snooze")
-            break;
-          default:
-            setOnline("Private")
-            break;
-        }
-        console.log(onlineTest)
+ 
 
       console.log("ISteamUser/GetUserGroupList")
       var groupListResponse = await fetchJSON(proxy + 
@@ -222,6 +202,30 @@ useEffect( () =>{
 grabData();
 }
 , []);
+
+useEffect( () => {
+  switch(playerinfo.personastate){
+    case 0:
+      setOnline("Offline")
+      break;
+    case 1:
+      setOnline("Online")
+      break;
+    case 2:
+      setOnline("Busy")
+      break;
+    case 3:
+      setOnline("Away")
+      break;
+    case 4:
+      setOnline("Snooze")
+      break;
+    default:
+      setOnline("Private")
+      break;
+  }
+  console.log(onlineTest)
+}, [playerinfo])
 
 return(
   <div>
