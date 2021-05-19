@@ -51,14 +51,32 @@ body {
 
 .blue-glow {
   color: aqua;
-  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px aqua, 0 0 40px aqua,
-    0 0 50px aqua;
+  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px aqua;
+}
+.blue-glow + input[type="text"] {
+  background-color: black;
+  color: aqua;
+  text-shadow: none;
+}
+.blue-glow + input[type="text"]:focus {
+  background-color: black;
+  color: white;
+  text-shadow: none;
+}
+.green-glow + input[type="text"] {
+  background-color: black;
+  color: greenyellow;
+  text-shadow: none;
+}
+.green-glow + input[type="text"]:focus {
+  background-color: black;
+  color: white;
+  text-shadow: none;
 }
 
 .green-glow {
   color: greenyellow;
-  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px greenyellow,
-    0 0 40px greenyellow, 0 0 50px greenyellow;
+  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px greenyellow;
 }
 
 /* Game content divs */
