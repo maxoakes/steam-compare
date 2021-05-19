@@ -32,24 +32,22 @@ function App() {
     return (check !== "") ? (
       <div>
       <h2>theres a search {search}</h2>
-                <form id="entry-form" onSubmit={theSearch}>
-                  <div className="form-group">
-                    <label htmlFor="username">Steam ID</label>
+                <form className="form-horizontal mt-2" onSubmit={theSearch}>
+                  <div className="input-group">
+                    <label className="form-label sr-only mt-2" htmlFor="username">Steam ID</label>
                     <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" value="scouteriv"/>
-                    <small id="username-help" className="form-text">Enter a Steam 'vanity' URL of a user.</small>
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="game">Steam Game</label>
+                 
+                    <label className="form-label sr-only mt-2" htmlFor="game">Steam Game</label>
                     <input type="text" className="form-control" id="game" aria-describedby="game-help" placeholder="Enter a Steam Game" name="game" value="Stardew Valley" />
-                    <small id="game-help" className="form-text">Enter a game or app that is available on Steam.</small>
-                  </div>
+                  
     
                       <button type="submit" id="entry-submit" className="btn btn-primary" >Search!</button>
-     
+                  </div>
+                  </form>
      <Router>
        <Main></Main>
      </Router>
-                </form> 
+                 
         </div>
     ) : (
       //this should activate when there isnt a search
