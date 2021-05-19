@@ -236,10 +236,16 @@ useEffect( () => {
   }
   console.log(onlineTest)
 
+  //https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
   let time = new Date(playerinfo.lastlogoff * 1000);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = time.getFullYear();
+  var month = months[time.getMonth()];
+  let date = time.getDate();
   let hours = time.getHours();
   let min = "0" + time.getMinutes();
-  setTime(hours + ':' + min.substr(-2))
+  setTime(month + "/" + date + "/" + year+ "~" + hours + ':' + min.substr(-2))
+  console.log(playerinfo.lastlogoff)
 }, [playerinfo])
 
 return(

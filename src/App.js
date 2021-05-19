@@ -20,11 +20,10 @@ function App() {
 
   }
   
-  /*
   useEffect(()=>{
     HasSearched();
   }, [search])
-*/
+
   function HasSearched(){
     console.log({search});
     let check = search;
