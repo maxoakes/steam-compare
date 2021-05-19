@@ -5,6 +5,7 @@ export default function Main() {
   const [playerinfo, setPlayer] = useState("");
   const [onlineTest, setOnline] = useState("");
   const [steamLevel, setLevel] = useState("");
+  const [timeLogOff, setTime] = useState("");
 async function grabData (event)
 {
     //event.preventDefault();
@@ -234,6 +235,11 @@ useEffect( () => {
       break;
   }
   console.log(onlineTest)
+
+  let time = new Date(playerinfo.lastlogoff * 1000);
+  let hours = time.getHours();
+  let min = "0" + time.getMinutes();
+  setTime(hours + ':' + min.substr(-2))
 }, [playerinfo])
 
 return(
@@ -252,8 +258,8 @@ return(
                     <span id="profile-country">{playerinfo.loccountrycode}</span> | 
                     <span id="profile-status">{onlineTest}</span> | 
                     <span id="profile-level">Level {steamLevel}</span> | 
-                    <span id="profile-url">urlusername</span> | 
-                    <span id="profile-steamid">1234567890123456</span> | 
+                    <span id="profile-steamid">Steam ID {playerinfo.steamid}</span> | 
+                    <span id="profile-steamid">Last Time Online {timeLogOff}</span> 
                   </p>
                 </div>
               </div>
