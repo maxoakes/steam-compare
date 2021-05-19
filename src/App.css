@@ -50,10 +50,15 @@ body {
 }
 
 .blue-glow {
-  color: black;
+  color: aqua;
+  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px aqua, 0 0 40px aqua,
+    0 0 50px aqua;
 }
 
 .green-glow {
+  color: greenyellow;
+  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px greenyellow,
+    0 0 40px greenyellow, 0 0 50px greenyellow;
 }
 
 /* Game content divs */

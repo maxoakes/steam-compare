@@ -31,7 +31,7 @@ function App() {
 
     return (check !== "") ? (
       <div className="row">
-        <div className="body col-12">
+        <div className="bg-dark body col-12">
 
       <h2>theres a search {search}</h2>
               <form onSubmit={theSearch}>
