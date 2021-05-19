@@ -3,7 +3,7 @@ import {Redirect} from 'react-router-dom';
 import {useEffect, useState} from "react";
 export default function Main() {
   const [playerinfo, setPlayer] = useState("");
-  let onlineStatus = "";
+  const [onlineTest, setOnline] = useState("");
 async function grabData (event)
 {
     //event.preventDefault();
@@ -165,26 +165,25 @@ async function grabData (event)
       console.log(playerinfo.personastate)
         switch(playerinfo.personastate){
           case 0:
-            onlineStatus = "Offline"
+            setOnline("Offline")
             break;
           case 1:
-            onlineStatus = "Online"
+            setOnline("Online")
             break;
           case 2:
-            onlineStatus = "Busy"
+            setOnline("Busy")
             break;
           case 3:
-            onlineStatus = "Away"
+            setOnline("Away")
             break;
           case 4:
-            onlineStatus = "Snooze"
+            setOnline("Snooze")
             break;
           default:
-            onlineStatus = "No"
+            setOnline("Private")
             break;
         }
-        console.log(onlineStatus);
-      
+        console.log(onlineTest)
 
       console.log("ISteamUser/GetUserGroupList")
       var groupListResponse = await fetchJSON(proxy + 
@@ -238,7 +237,7 @@ return(
                   <p className="profile-text">
                     <span id="profile-display-name">{playerinfo.personaname}</span> | 
                     <span id="profile-country">{playerinfo.loccountrycode}</span> | 
-                    <span id="profile-status">{onlineStatus}</span> | 
+                    <span id="profile-status">{onlineTest}</span> | 
                     <span id="profile-level">Level 999</span> | 
                     <span id="profile-url">urlusername</span> | 
                     <span id="profile-steamid">1234567890123456</span> | 
