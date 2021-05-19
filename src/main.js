@@ -3,7 +3,7 @@ import {Redirect} from 'react-router-dom';
 import {useEffect, useState} from "react";
 export default function Main() {
   const [playerinfo, setPlayer] = useState("");
-
+  let onlineStatus = "";
 async function grabData (event)
 {
     //event.preventDefault();
@@ -159,8 +159,32 @@ async function grabData (event)
         key + '&steamids=' + steamid + '&format=json', headers)
       console.log(playerSummeryResponse.response.players[0])
       setPlayer(playerSummeryResponse.response.players[0]);
-      console.log(playerinfo.loccountrycode);
+      //console.log(playerinfo.loccountrycode);
       //console.log(profPic);
+     
+      console.log(playerinfo.personastate)
+        switch(playerinfo.personastate){
+          case 0:
+            onlineStatus = "Offline"
+            break;
+          case 1:
+            onlineStatus = "Online"
+            break;
+          case 2:
+            onlineStatus = "Busy"
+            break;
+          case 3:
+            onlineStatus = "Away"
+            break;
+          case 4:
+            onlineStatus = "Snooze"
+            break;
+          default:
+            onlineStatus = "No"
+            break;
+        }
+        console.log(onlineStatus);
+      
 
       console.log("ISteamUser/GetUserGroupList")
       var groupListResponse = await fetchJSON(proxy + 
@@ -211,10 +235,10 @@ return(
                   <img src={playerinfo.avatarfull} height="100px" width="100px" alt="Avatar"></img>
                 </div>
                 <div className="profile-info">
-                  <p class="profile-text">
+                  <p className="profile-text">
                     <span id="profile-display-name">{playerinfo.personaname}</span> | 
                     <span id="profile-country">{playerinfo.loccountrycode}</span> | 
-                    <span id="profile-status">isOnline</span> | 
+                    <span id="profile-status">{onlineStatus}</span> | 
                     <span id="profile-level">Level 999</span> | 
                     <span id="profile-url">urlusername</span> | 
                     <span id="profile-steamid">1234567890123456</span> | 
