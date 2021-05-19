@@ -35,15 +35,15 @@ function App() {
               <form onSubmit={theSearch}>
                 <div className="form-group row">
 
-                  <div className="form-group col-md-5">
-                    <label className="mt-2" htmlFor="username">Steam ID</label>
+                  <div className="form-group col-sm-5">
+                    <label className="" htmlFor="username">Steam ID</label>
                     <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" value="scouteriv"/>
                   </div>
-                  <div className="form-group col-md-5">
-                    <label className="mt-2" htmlFor="game">Steam Game</label>
+                  <div className="form-group col-sm-5">
+                    <label className="" htmlFor="game">Steam Game</label>
                     <input type="text" className="form-control" id="game" aria-describedby="game-help" placeholder="Enter a Steam Game" name="game" value="Stardew Valley" />
                   </div>
-                  <div className="form-group col-md-2">
+                  <div className="form-group col-sm-2 mt-4">
                       <button type="submit" id="entry-submit" className="btn btn-primary" >Search!</button>
                   </div>
                 </div>
