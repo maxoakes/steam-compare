@@ -193,7 +193,7 @@ grabData();
 
 return(
   <div>
-    <h1 >content</h1>
+    <h1 className="blue-glow">content</h1>
     <Redirect to ="/" />
   </div>
 );
