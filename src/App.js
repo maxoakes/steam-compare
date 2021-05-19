@@ -32,18 +32,22 @@ function App() {
     return (check !== "") ? (
       <div>
       <h2>theres a search {search}</h2>
-                <form className="form-horizontal mt-2" onSubmit={theSearch}>
-                  <div className="input-group">
-                    <label className="form-label sr-only mt-2" htmlFor="username">Steam ID</label>
+              <form onSubmit={theSearch}>
+                <div className="form-group row">
+
+                  <div className="form-group col-md-5">
+                    <label className="mt-2" htmlFor="username">Steam ID</label>
                     <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" value="scouteriv"/>
-                 
-                    <label className="form-label sr-only mt-2" htmlFor="game">Steam Game</label>
+                  </div>
+                  <div className="form-group col-md-5">
+                    <label className="mt-2" htmlFor="game">Steam Game</label>
                     <input type="text" className="form-control" id="game" aria-describedby="game-help" placeholder="Enter a Steam Game" name="game" value="Stardew Valley" />
-                  
-    
+                  </div>
+                  <div className="form-group col-md-2">
                       <button type="submit" id="entry-submit" className="btn btn-primary" >Search!</button>
                   </div>
-                  </form>
+                </div>
+              </form>
      <Router>
        <Main></Main>
      </Router>
