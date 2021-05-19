@@ -1,6 +1,8 @@
 
 import {Redirect} from 'react-router-dom';
+import {useState} from "react";
 export default function Main() {
+  const [profPic, setPic] = useState("")
 async function grabData (event)
 {
     //event.preventDefault();
@@ -155,6 +157,8 @@ async function grabData (event)
         'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=' + 
         key + '&steamids=' + steamid + '&format=json', headers)
       console.log(playerSummeryResponse.response.players[0])
+      setPic(playerSummeryResponse.response.players[0].avatarfull)
+      console.log(profPic);
 
       console.log("ISteamUser/GetUserGroupList")
       var groupListResponse = await fetchJSON(proxy + 
@@ -193,8 +197,30 @@ grabData();
 
 return(
   <div>
-    <h1 className="blue-glow">content</h1>
-    <Redirect to ="/" />
+    {profPic &&
+    
+    <div class="row">
+      <div class="body col-xs-12 col-md-12">
+            <div className="row"> 
+              <div className="user-info col-xs-8 col-md-8">
+                <div id="profile-image">
+                  <img src={profPic} height="100px" width="100px" alt="Avatar"></img>
+                </div>
+                <div class="profile-info">
+                  <p class="profile-text">
+                    <span id="profile-display-name">Username</span> | 
+                    <span id="profile-country">Country</span> | 
+                    <span id="profile-status">isOnline</span> | 
+                    <span id="profile-level">Level 999</span> | 
+                    <span id="profile-url">urlusername</span> | 
+                    <span id="profile-steamid">1234567890123456</span> | 
+                  </p>
+                </div>
+              </div>
+            </div>
+      </div>
+    </div>
+    }
   </div>
 );
 

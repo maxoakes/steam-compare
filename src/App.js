@@ -43,7 +43,7 @@ function App() {
                   </div>
                   <div className="col-sm-5">
                     <label className="green-glow" htmlFor="game">Steam Game</label>
-                    <input type="text" className="form-control" id="game" aria-describedby="game-help" placeholder="Enter a Steam Game" name="game" value="Stardew Valley" />
+                    <input type="text" className="form-control" id="game" aria-describedby="game-help" placeholder="Enter a Steam Game" name="game" />
                   </div>
                   <div className="col-sm-2 mt-4">
                       <button type="submit" id="entry-submit" className="btn btn-primary bg-dark" >Search!</button>
@@ -73,7 +73,7 @@ function App() {
             </div>
             <div className="form-group">
               <label htmlFor="game">Steam Game</label>
-              <input type="text" className="form-control" id="game" aria-describedby="game-help" placeholder="Enter a Steam Game" name="game" value="Stardew Valley" />
+              <input type="text" className="form-control" id="game" aria-describedby="game-help" placeholder="Enter a Steam Game" name="game" />
               <small id="game-help" className="form-text">Enter a game or app that is available on Steam.</small>
             </div>
         
