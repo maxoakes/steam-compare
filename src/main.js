@@ -119,6 +119,13 @@ async function grabData (event)
         key + '&steamids=' + steamid + '&format=json', headers)
       console.log(playerSummeryResponse.response.players[0])
       setPlayer(playerSummeryResponse.response.players[0]);
+
+      console.log("IPlayerService/GetSteamLevel")
+      var steamLevelResponse = await fetchJSON(proxy + 
+        'https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=' + 
+        key + '&steamid=' + steamid + '&format=json', headers)
+      console.log(steamLevelResponse.response)
+      setLevel(steamLevelResponse.response.player_level.toString());
     }
     //if only the username is valid
     else if (steamid && !appid)
@@ -279,6 +286,7 @@ return(
       </div>
     </div>
     }
+    <Redirect to ="/" />
   </div>
 );
 
