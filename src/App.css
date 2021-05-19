@@ -49,6 +49,13 @@ body {
   width: 100%;
 }
 
+.blue-glow {
+  color: black;
+}
+
+.green-glow {
+}
+
 /* Game content divs */
 .user-game-content {
   border: 1px orange solid;

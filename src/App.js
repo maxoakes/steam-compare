@@ -30,20 +30,22 @@ function App() {
     console.log(check)
 
     return (check !== "") ? (
-      <div>
+      <div className="row">
+        <div className="body col-12">
+
       <h2>theres a search {search}</h2>
               <form onSubmit={theSearch}>
                 <div className="form-group row">
 
-                  <div className="form-group col-sm-5">
-                    <label className="" htmlFor="username">Steam ID</label>
+                  <div className="col-sm-5">
+                    <label className="blue-glow" htmlFor="username">Steam ID</label>
                     <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" value="scouteriv"/>
                   </div>
-                  <div className="form-group col-sm-5">
-                    <label className="" htmlFor="game">Steam Game</label>
+                  <div className="col-sm-5">
+                    <label className="green-glow" htmlFor="game">Steam Game</label>
                     <input type="text" className="form-control" id="game" aria-describedby="game-help" placeholder="Enter a Steam Game" name="game" value="Stardew Valley" />
                   </div>
-                  <div className="form-group col-sm-2 mt-4">
+                  <div className="col-sm-2 mt-4">
                       <button type="submit" id="entry-submit" className="btn btn-primary" >Search!</button>
                   </div>
                 </div>
@@ -52,6 +54,7 @@ function App() {
        <Main></Main>
      </Router>
                  
+        </div>
         </div>
     ) : (
       //this should activate when there isnt a search
