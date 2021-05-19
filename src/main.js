@@ -220,6 +220,12 @@ useEffect( () => {
     case 4:
       setOnline("Snooze")
       break;
+    case 5:
+      setOnline("Looking to Trade")
+      break;
+    case 6:
+      setOnline("Looking to Play")
+      break;
     default:
       setOnline("Private")
       break;
