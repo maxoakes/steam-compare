@@ -1,93 +1,130 @@
 import './App.css'
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.css'
-import{
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
+import { Route, useHistory } from 'react-router'
 import Main from './main.js'
 
-
-function App() {
-  const[search, setSearch] = useState("");
- 
-  function theSearch(event){
-    let user = document.getElementById("username");
-    setSearch(user.value);
-    console.log({search});
-
-  }
+function App()
+{
+  function BodyHTML()
+  {
+    const [usernameSearch, setUsernameSearch] = useState("");
+    const [appSearch, setAppSearch] = useState("");
+    const [isMainMenuSearch, setIsMainMenuSearch] = useState(true);
   
-  useEffect(()=>{
-    HasSearched();
-  }, [search])
+    useEffect(() => {
+      console.log("Searched name: " + usernameSearch + ". Searched app: "+ appSearch);
+    });
 
-  function HasSearched(){
-    console.log({search});
-    let check = search;
-    console.log(check)
-
-    return (check !== "") ? (
+    let searchMenuWithStatsHTML = (
       <div className="row">
         <div className="bg-dark body col-12">
-
-      <h2>theres a search {search}</h2>
-              <form onSubmit={theSearch}>
-                <div className="form-group row">
-
-                  <div className="col-sm-5">
-                    <label className="blue-glow" htmlFor="username">Steam ID</label>
-                    <input type="text" className="form-control dark-bg" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" value="scouteriv" required/>
-                  </div>
-                  <div className="col-sm-5">
-                    <label className="green-glow" htmlFor="game">Steam Game</label>
-                    <input type="text" className="form-control" id="game" aria-describedby="game-help" placeholder="Enter a Steam Game" name="game" value="stardew valley" />
-                  </div>
-                  <div className="col-sm-2 mt-4">
-                      <button type="submit" id="entry-submit" className="btn btn-primary bg-dark" >Search!</button>
-                  </div>
-                </div>
-              </form>
-              <br></br>
-     <Router>
-       <Main></Main>
-     </Router>
-                 
-        </div>
-        </div>
-    ) : (
-      //this should activate when there isnt a search
-      //what im thinking with this is once the user makes a search the search bars go to the top.
-      //and when there isnt a search they are at the center.
-      //or once the user clicks search it goes to a new page but idk how to do that with react
-      <div className="row">
-      <div className="body col-xs-12 col-md-12">
-        <h1>No Search</h1>
-        <div className="form-body">
-          <form id="entry-form" onSubmit={theSearch}>
-            <div className="form-group">
-              <label htmlFor="username">Steam ID</label>
-              <input type="text" className="form-control" id="username" aria-describedby="username-help" placeholder="Enter a Steam ID" name="username" value="scouteriv" required/>
-              <small id="username-help" className="form-text">Enter a Steam 'vanity' URL of a user.</small>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group row">
+              <div className="col-sm-5">
+                <label className="blue-glow" htmlFor="username">Steam ID</label>
+                <input type="text"
+                className="form-control dark-bg"
+                id="username"
+                aria-describedby="username-help"
+                placeholder="Enter a Steam ID"
+                name="username"
+                value={usernameSearch}
+                onChange={e => setUsernameSearch(e.target.value)}
+                />
+              </div>
+              <div className="col-sm-5">
+                <label className="green-glow" htmlFor="game">Steam Game</label>
+                <input type="text"
+                className="form-control"
+                id="game"
+                aria-describedby="game-help"
+                placeholder="Enter a Steam Game"
+                name="game"
+                value={appSearch}
+                onChange={e => setAppSearch(e.target.value)}
+                />
+              </div>
+              <div className="col-sm-2 mt-4">
+                  <button type="submit" id="entry-submit" className="btn btn-primary bg-dark" >Search!</button>
+              </div>
             </div>
-            <div className="form-group">
-              <label htmlFor="game">Steam Game</label>
-              <input type="text" className="form-control" id="game" aria-describedby="game-help" placeholder="Enter a Steam Game" name="game" value="stardew valley"/>
-              <small id="game-help" className="form-text">Enter a game or app that is available on Steam.</small>
-            </div>
-        
-          
-                <button type="submit" id="entry-submit" className="btn btn-primary" >Search!</button>
-        
-
           </form>
+          <br></br>
+          <Router>
+            <Main></Main>
+          </Router>      
         </div>
       </div>
-    </div>
     );
-  }
+
+    let centeredSearchHTML = (
+      <div className="row">
+        <div className="body col-xs-12 col-md-12">
+          <div className="form-body">
+            <form id="entry-form" onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="username">Steam ID</label>
+                <label className="blue-glow" htmlFor="username">Steam ID</label>
+                      <input type="text"
+                      className="form-control dark-bg"
+                      id="username"
+                      aria-describedby="username-help"
+                      placeholder="Enter a Steam ID"
+                      name="username"
+                      value={usernameSearch}
+                      onChange={e => setUsernameSearch(e.target.value)}
+                      required/>
+                <small id="username-help" className="form-text">Enter a Steam 'vanity' URL of a user.</small>
+              </div>
+              <div className="form-group">
+                <label htmlFor="game">Steam Game</label>
+                <input type="text"
+                      className="form-control"
+                      id="game"
+                      aria-describedby="game-help"
+                      placeholder="Enter a Steam Game"
+                      name="game"
+                      value={appSearch}
+                      onChange={e => setAppSearch(e.target.value)}
+                      />
+                <small id="game-help" className="form-text">Enter a game or app that is available on Steam.</small>
+              </div>
+              <button type="submit" id="entry-submit" className="btn btn-primary" >Search!</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    );
+
+    let bodyHTML = isMainMenuSearch ? centeredSearchHTML : searchMenuWithStatsHTML;
+
+    function handleSubmit(event)
+    {
+      console.log("BUTTON PRESS: Searched name: " + usernameSearch + ". Searched app: "+ appSearch);
+      event.preventDefault();
+      if (appSearch || usernameSearch)
+      {
+        console.log("there is a search present");
+        if (!isMainMenuSearch)
+        {
+          console.log("stats window already open, calling grabData() manually.");
+          setIsMainMenuSearch(true);
+          return null;
+        }
+        setIsMainMenuSearch(false);
+      }
+      else
+      {
+        console.log("there is not a search present")
+        setIsMainMenuSearch(true);
+      };
+    };
+    
+    return bodyHTML;
+  };
+
   return (
     <div className='App'>
       <div className="container-fluid">
@@ -96,10 +133,9 @@ function App() {
             <h1>Title</h1>
           </div>
         </div>
-        <HasSearched />
-
+        <BodyHTML></BodyHTML>
         <div className="row">
-          <div className="footer col-xs-12 col-md-12">
+          <div className="footer col-xs-12 col-md-12 bg-dark">
             <hr />
             <p className="footer-links">Link | Link | Link | Link | Link</p>
             <p className="footer-authors font-weight-light">Created by</p>
@@ -108,9 +144,9 @@ function App() {
             </p>
           </div>
         </div>
-     </div>
+      </div>
     </div>
-    );
-  }
+  );
+}
 
 export default App;
