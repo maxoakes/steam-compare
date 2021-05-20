@@ -2,13 +2,13 @@ import './App.css'
 import React, {useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.css'
 import { BrowserRouter as Router } from "react-router-dom";
-import { Route, useHistory } from 'react-router'
 import Main from './main.js'
 
 function App()
 {
   function BodyHTML()
   {
+    //current states of the search bars
     const [usernameSearch, setUsernameSearch] = useState("");
     const [appSearch, setAppSearch] = useState("");
     const [isMainMenuSearch, setIsMainMenuSearch] = useState(true);
@@ -17,6 +17,7 @@ function App()
       console.log("Searched name: " + usernameSearch + ". Searched app: "+ appSearch);
     });
 
+    //HTML of the searchbars when the window is showing user/game stats
     let searchMenuWithStatsHTML = (
       <div className="row">
         <div className="bg-dark body col-12">
@@ -52,6 +53,7 @@ function App()
             </div>
           </form>
           <br></br>
+          {/* the content that is fetched form the Steam API and main.js will be created here */}
           <Router>
             <Main></Main>
           </Router>      
@@ -59,6 +61,7 @@ function App()
       </div>
     );
 
+    //HTML of the searchbar when it is the initial search menu
     let centeredSearchHTML = (
       <div className="row">
         <div className="body col-xs-12 col-md-12">
@@ -100,6 +103,7 @@ function App()
 
     let bodyHTML = isMainMenuSearch ? centeredSearchHTML : searchMenuWithStatsHTML;
 
+    //when the seach button is pressed, set the states of the searchbar, inturn showing the correct HTML
     function handleSubmit(event)
     {
       console.log("BUTTON PRESS: Searched name: " + usernameSearch + ". Searched app: "+ appSearch);
@@ -125,6 +129,7 @@ function App()
     return bodyHTML;
   };
 
+  //always show the header and footer, then show whatever searchbar is active in BodyHTML tags
   return (
     <div className='App'>
       <div className="container-fluid">
@@ -137,10 +142,18 @@ function App()
         <div className="row">
           <div className="footer col-xs-12 col-md-12 bg-dark">
             <hr />
-            <p className="footer-links">Link | Link | Link | Link | Link</p>
-            <p className="footer-authors font-weight-light">Created by</p>
-            <p className="footer-legal text-muted ">Steam and the Steam logo are trademarks of Valve Corporation. All other trademarks are property of their respective owners.
-              <a href="\">Fair use disclaimer</a> 
+            <p className="footer-links">
+              <a href="https://steamdb.info/calculator/">SteamDB</a> |&nbsp;
+              <a href="https://store.steampowered.com/">Steam Store</a> |&nbsp;
+              <a href="https://partner.steamgames.com/doc/webapi_overview">Steam Web API Documentation</a> |&nbsp;
+              <a href="https://steamapi.xpaw.me/">xPaw's Steam Web API Documentation</a>
+            </p>
+            <p className="footer-authors font-weight-light">
+              Created by Arturo Bravo, Courtney Ficker, Max Oakes
+            </p>
+            <p className="footer-legal text-muted ">Steam and the Steam logo are trademarks of
+            Valve Corporation. All other trademarks are property of their respective owners.
+            This deployment was created under fair use.
             </p>
           </div>
         </div>
