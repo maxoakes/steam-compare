@@ -69,37 +69,48 @@ async function grabData (event)
       }
     }
 
+    let contentHead = document.getElementById("user-app-content")
+    if (contentHead)
+    {
+      while (contentHead.firstChild)
+      {
+        contentHead.removeChild(contentHead.firstChild);
+      }
+    }
+
     //if both a user and game is searched and valid
     if (steamid && appid)
     {
+      let appTitle;
       console.log("\tappid AND steamid searched")
 
       console.log("ISteamUserStats/GetPlayerAchievements")
       var playerAchievementsResponse = await fetchJSON(proxy +
         'https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?key=' + 
         key + '&steamid=' + steamid + '&appid=' + appid + '&format=json', headers)
-      console.log(playerAchievementsResponse.playerstats);
+      //console.log(playerAchievementsResponse.playerstats);
 
       //global stats
       console.log("ISteamUserStats/GetGlobalAchievementPercentagesForApp")
       var globalAchievementPercentagesResponse = await fetchJSON(proxy +
         'https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v2/?key=' + 
         key + '&gameid=' + appid + '&format=json', headers)
-      console.log(globalAchievementPercentagesResponse.achievementpercentages);
+      //console.log(globalAchievementPercentagesResponse.achievementpercentages);
 
       console.log("ISteamUserStats/GetNumberOfCurrentPlayers")
       var numCurrentPlayersResponse = await fetchJSON(proxy +
         'https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?key=' + 
         key + '&appid=' + appid + '&format=json', headers)
-      console.log(numCurrentPlayersResponse.response);
-
+      //console.log(numCurrentPlayersResponse.response);
+      
       console.log("ISteamUserStats/GetSchemaForGame")
       var gameSchemaResponse = await fetchJSON(proxy +
         'https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key=' + 
         key + '&appid=' + appid + '&format=json', headers)
       console.log(gameSchemaResponse.game);
-      var gameStats = gameSchemaResponse.game.availableGameStats.stats;
-
+      appTitle = gameSchemaResponse.game.gameName;
+      
+      //var gameStats = gameSchemaResponse.game.availableGameStats.stats;
       //the inputs to this one must come from the previous API call
       //not a lot of games implement this. not sure if we want to call it
       // console.log("ISteamUserStats/GetSchemaForGame")
@@ -119,15 +130,21 @@ async function grabData (event)
       var playerSummeryResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=' + 
         key + '&steamids=' + steamid + '&format=json', headers)
-      console.log(playerSummeryResponse.response.players[0])
-      setPlayer(playerSummeryResponse.response.players[0]);
-
+      //console.log(playerSummeryResponse.response.players[0])
+      
       console.log("IPlayerService/GetSteamLevel")
       var steamLevelResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=' + 
         key + '&steamid=' + steamid + '&format=json', headers)
-      console.log(steamLevelResponse.response)
+      //console.log(steamLevelResponse.response)
+      
+      setPlayer(playerSummeryResponse.response.players[0]);
       setLevel(steamLevelResponse.response.player_level.toString());
+
+      createAppTitleHTML(appTitle, numCurrentPlayersResponse.response.player_count);
+      createAchievementTableHTML(playerAchievementsResponse.playerstats.achievements,
+        globalAchievementPercentagesResponse.achievementpercentages.achievements,
+        gameSchemaResponse.game.availableGameStats.achievements);
     }
     //if only the username is valid
     else if (steamid && !appid)
@@ -205,17 +222,76 @@ async function grabData (event)
     }
 }
 
+function createAppTitleHTML(title, playerCount)
+{
+  let titleRow = document.createElement("div");
+  titleRow.className = "row";
+
+  let titleDiv = document.createElement("div");
+  var titleText = document.createElement("h2");
+  var playerCountText = document.createElement("p");
+
+  titleDiv.className = "p-2 app-title border border-warning";
+  titleText.innerText = title;
+  titleText.className = "text-light text-center";
+  playerCountText.innerText = playerCount + " current active players";
+  playerCountText.className = "text-light text-center";
+
+  titleDiv.appendChild(titleText);
+  titleDiv.appendChild(playerCountText);
+  titleRow.appendChild(titleDiv);
+  document.getElementById("user-app-content").appendChild(titleRow);
+}
+
+function createAchievementTableHTML(userAchievements, globalAchievements, achievementSchemas)
+{
+  let achievementRow = document.createElement("div");
+  achievementRow.className = "row";
+  let achievementGrid = document.createElement("div");
+  achievementGrid.className = "d-flex flex-wrap";
+
+  console.log(userAchievements);
+  console.log(globalAchievements);
+  console.log(achievementSchemas);
+
+  for (let i = 0; i < achievementSchemas.length; i++)
+  {
+    let square = document.createElement("div");
+    square.className = "border border-warning";
+    
+    let icon = document.createElement("img");
+    icon.className = "mx-auto";
+    icon.src = achievementSchemas[i].icon;
+    icon.alt = achievementSchemas[i].name;
+
+    let name = document.createElement("h3");
+    name.className = "text-light text-center";
+    name.innerText = achievementSchemas[i].displayName;
+    
+    let description = document.createElement("p");
+    description.className = "text-light text-center";
+    description.innerText = achievementSchemas[i].description ? achievementSchemas[i].description : "No description provided";
+    
+    square.appendChild(icon);
+    square.appendChild(name);
+    square.appendChild(description);
+    achievementGrid.appendChild(square);
+  }
+
+  achievementRow.appendChild(achievementGrid);
+  document.getElementById("user-app-content").appendChild(achievementRow);
+}
+
 async function fetchJSON(apiURL, headers)
 {
   var response = await fetch(apiURL, headers);
-  if (response.status == 403)
+  if (response.status === 403)
   {
     console.error("User profile is likely set to private.");
   }
   else if (!response.ok)
   {
-    console.error("Oops! Something went wrong when getting API. \
-    Usually the case if a user input is not good. Error code " + response.status);
+    console.error("Oops! Something went wrong when getting API. Usually the case if a user input is not good. Error code " + response.status);
   }
   var data = await response.json();
   return data;
@@ -291,6 +367,10 @@ return(
               </p>
             </div>
           </div>
+        </div>
+        <div className="row">
+        <div id="user-app-content" className="user-info col-xs-8 col-md-8 d-flex justify-content-center">
+        </div>
         </div>
       </div>
     </div>

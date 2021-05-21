@@ -21,7 +21,7 @@ function App()
     //HTML of the searchbars when the window is showing user/game stats
     let searchMenuWithStatsHTML = (
       <div className="row">
-        <div className="bg-dark body col-12">
+        <div className="body col-12">
           <form onSubmit={handleSubmit}>
             <div className="form-group row">
               <div className="col-sm-5">
