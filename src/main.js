@@ -266,7 +266,7 @@ return(
     {playerinfo &&
     <div className="row">
  
-      <div className="body col-xs-12 col-md-12">
+      <div className="col-xs-12 col-md-12">
         
         <div className="row "> 
           <div className="user-info col-xs-8 col-md-8 d-flex justify-content-center">

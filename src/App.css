@@ -31,12 +31,10 @@ body {
 /* User info and search bar */
 .user-info {
   display: flex;
-  border: 1px blue solid;
   margin: auto;
 }
 
 .user-info > div {
-  border: 1px pink solid;
 }
 .search-box {
   border: 1px green solid;
@@ -82,8 +80,12 @@ body {
 
 .yellow-neon-border {
   border: 1px solid white;
-  box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px yellow, 0 0 40px yellow,
-    0 0 50px yellow;
+  box-shadow: 0 0 10px yellow;
+  background-color: black;
+}
+.profile-info {
+  border-radius: 10px;
+  color: white;
 }
 /* Game content divs */
 .user-game-content {
