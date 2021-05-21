@@ -135,7 +135,7 @@ async function grabData (event)
       console.log("IPlayerService/GetOwnedGames")
       var ownedGamesResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=' + 
-        key + '&steamid=' + steamid + '&format=json', headers)
+        key + '&steamid=' + steamid + '&format=json&include_appinfo=1', headers)
       console.log(ownedGamesResponse.response)
 
       console.log("IPlayerService/GetRecentlyPlayedGames")
