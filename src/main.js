@@ -1,7 +1,7 @@
 
 import {Redirect} from 'react-router-dom';
 import {useEffect, useState} from "react";
-const Main = ({usernameSearch}) => {
+const Main = ({usernameSearch, searchClick}) => {
   console.log("SEARCH:", usernameSearch)
   //THIS COULD HELP US ^^^^
   const [playerinfo, setPlayer] = useState("");
@@ -220,7 +220,7 @@ async function fetchJSON(apiURL, headers)
 useEffect( () =>{
 grabData();
 }
-, [usernameSearch]);
+, [searchClick]);
 
 useEffect( () => {
   switch(playerinfo.personastate){
