@@ -275,7 +275,7 @@ return(
         
         <div className="row "> 
           <div className="user-info col-xs-8 col-md-8 d-flex justify-content-center">
-            <div className="profile-info yellow-neon-border">
+            <div className="profile-info yellow-neon-border mb-4">
               <div className="d-flex justify-content-center">
                 <img id="profile-image" src={playerinfo.avatarfull} height="100px" width="100px" alt="Avatar"></img>
               </div>
@@ -295,14 +295,14 @@ return(
     </div>
     }
   {playedGames && 
-    <div className="profile-info recentGames bg-light yellow-neon-border">
-      <ul className="list-group mb-2">
+    <div className="profile-info recentGames yellow-neon-border row m-4 d-flex justify-content-center">
+        <h4 className="col-12">Recently Played Games</h4>
         {playedGames.map(game => (
-          <li key={game.appid} className="list-group-item">
+          <div className="m-2 col-12 col-sm-3">
             {game.name}
-          </li>
+          </div>
         ))}
-      </ul>
+    
 
     </div>
   }

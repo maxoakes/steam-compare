@@ -33,7 +33,6 @@ body {
   display: flex;
   margin: auto;
   position: relative;
-  padding-bottom: 100px;
 }
 
 .user-info > div {
