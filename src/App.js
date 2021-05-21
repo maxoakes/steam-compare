@@ -12,6 +12,7 @@ function App()
     const [usernameSearch, setUsernameSearch] = useState("");
     const [appSearch, setAppSearch] = useState("");
     const [isMainMenuSearch, setIsMainMenuSearch] = useState(true);
+    const [searchClick, setClick] = useState(0);
   
     useEffect(() => {
       console.log("Searched name: " + usernameSearch + ". Searched app: "+ appSearch);
@@ -48,14 +49,14 @@ function App()
                 />
               </div>
               <div className="col-sm-2 mt-4">
-                  <button type="submit" id="entry-submit" className="btn btn-primary bg-dark" >Search!</button>
+                  <button type="submit" id="entry-submit" className="btn btn-primary bg-dark" onClick={handleClick}>Search!</button>
               </div>
             </div>
           </form>
           <br></br>
           {/* the content that is fetched form the Steam API and main.js will be created here */}
           <Router>
-            <Main></Main>
+            <Main usernameSearch={usernameSearch} searchClick={searchClick}></Main>
           </Router>      
         </div>
       </div>
@@ -114,8 +115,8 @@ function App()
         if (!isMainMenuSearch)
         {
           console.log("stats window already open, calling grabData() manually.");
-          setIsMainMenuSearch(true);
-          return null;
+          setIsMainMenuSearch(false);
+          return bodyHTML;
         }
         setIsMainMenuSearch(false);
       }
@@ -125,6 +126,10 @@ function App()
         setIsMainMenuSearch(true);
       };
     };
+
+    function handleClick(event){
+      setClick(searchClick+1);
+    }
     
     return bodyHTML;
   };

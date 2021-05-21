@@ -1,7 +1,9 @@
 
 import {Redirect} from 'react-router-dom';
 import {useEffect, useState} from "react";
-export default function Main() {
+const Main = ({usernameSearch, searchClick}) => {
+  console.log("SEARCH:", usernameSearch)
+  //THIS COULD HELP US ^^^^
   const [playerinfo, setPlayer] = useState("");
   const [onlineTest, setOnline] = useState("");
   const [steamLevel, setLevel] = useState("");
@@ -135,7 +137,7 @@ async function grabData (event)
       console.log("IPlayerService/GetOwnedGames")
       var ownedGamesResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=' + 
-        key + '&steamid=' + steamid + '&format=json', headers)
+        key + '&steamid=' + steamid + '&format=json&include_appinfo=1', headers)
       console.log(ownedGamesResponse.response)
 
       console.log("IPlayerService/GetRecentlyPlayedGames")
@@ -222,7 +224,7 @@ async function fetchJSON(apiURL, headers)
 useEffect( () =>{
 grabData();
 }
-, []);
+, [searchClick]);
 
 useEffect( () => {
   switch(playerinfo.personastate){
@@ -269,24 +271,27 @@ return(
   <div>
     {playerinfo &&
     <div className="row">
-      <div className="body col-xs-12 col-md-12">
-            <div className="row"> 
-              <div className="user-info col-xs-8 col-md-8">
-                <div id="profile-image">
-                  <img src={playerinfo.avatarfull} height="100px" width="100px" alt="Avatar"></img>
-                </div>
-                <div className="profile-info">
-                  <p className="profile-text">
-                    <span id="profile-display-name">{playerinfo.personaname}</span> | 
-                    <span id="profile-country">{playerinfo.loccountrycode}</span> | 
-                    <span id="profile-status">{onlineTest}</span> | 
-                    <span id="profile-level">Level {steamLevel}</span> | 
-                    <span id="profile-steamid">Steam ID {playerinfo.steamid}</span> | 
-                    <span id="profile-steamid">Last Time Online {timeLogOff}</span> 
-                  </p>
-                </div>
+ 
+      <div className="col-xs-12 col-md-12">
+        
+        <div className="row "> 
+          <div className="user-info col-xs-8 col-md-8 d-flex justify-content-center">
+            <div className="profile-info yellow-neon-border">
+              <div className="d-flex justify-content-center">
+                <img id="profile-image" src={playerinfo.avatarfull} height="100px" width="100px" alt="Avatar"></img>
               </div>
+              <p className="profile-text">
+                <span id="profile-display-name">{playerinfo.personaname} | </span>
+                  <span id="profile-country">{playerinfo.loccountrycode} | </span>
+                  <span id="profile-status">{onlineTest}</span> 
+                  <br />
+                  <span id="profile-level">Level {steamLevel}</span> | 
+                  <span id="profile-steamid">Steam ID {playerinfo.steamid}</span> | 
+                  <span id="profile-steamid">Last Time Online {timeLogOff}</span> 
+              </p>
             </div>
+          </div>
+        </div>
       </div>
     </div>
     }
@@ -296,3 +301,4 @@ return(
 
 
 }
+export default Main

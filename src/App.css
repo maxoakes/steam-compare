@@ -31,11 +31,12 @@ body {
 /* User info and search bar */
 .user-info {
   display: flex;
-  border: 1px blue solid;
+  margin: auto;
+  position: relative;
+  padding-bottom: 100px;
 }
 
 .user-info > div {
-  border: 1px pink solid;
 }
 .search-box {
   border: 1px green solid;
@@ -79,6 +80,26 @@ body {
   text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px greenyellow;
 }
 
+.yellow-neon-border {
+  border: 1px solid white;
+  box-shadow: 0 0 10px yellow;
+  background-color: black;
+}
+.profile-info {
+  border-radius: 10px;
+  color: white;
+  z-index: 1;
+}
+.profile-text {
+  margin: 10px;
+  text-align: center;
+}
+
+#profile-display-name,
+#profile-country,
+#profile-status {
+  font-size: 1.5em;
+}
 /* Game content divs */
 .user-game-content {
   border: 1px orange solid;
@@ -102,6 +123,8 @@ body {
   text-align: center;
   font-size: small;
   height: 15vh;
+  position: fixed;
+  z-index: 4;
 }
 
 .footer p {
