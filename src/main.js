@@ -8,6 +8,7 @@ const Main = ({usernameSearch, searchClick}) => {
   const [onlineTest, setOnline] = useState("");
   const [steamLevel, setLevel] = useState("");
   const [timeLogOff, setTime] = useState("");
+  const [playedGames, setRecentGames] =useState([])
 async function grabData (event)
 {
     //event.preventDefault();
@@ -145,6 +146,7 @@ async function grabData (event)
         'https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key=' + 
         key + '&steamid=' + steamid + '&format=json', headers)
       console.log(recentlyPlayedGamesResponse.response)
+      setRecentGames(recentlyPlayedGamesResponse.response.games);
 
       console.log("IPlayerService/GetSteamLevel")
       var steamLevelResponse = await fetchJSON(proxy + 
@@ -263,6 +265,7 @@ useEffect( () => {
   console.log(playerinfo.lastlogoff)
 }, [playerinfo])
 
+
 return(
   <div>
     {playerinfo &&
@@ -291,6 +294,18 @@ return(
       </div>
     </div>
     }
+  {playedGames && 
+    <div className="profile-info recentGames bg-light yellow-neon-border">
+      <ul className="list-group mb-2">
+        {playedGames.map(game => (
+          <li key={game.appid} className="list-group-item">
+            {game.name}
+          </li>
+        ))}
+      </ul>
+
+    </div>
+  }
     <Redirect to ="/" />
   </div>
 );
