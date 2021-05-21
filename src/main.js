@@ -265,24 +265,26 @@ return(
   <div>
     {playerinfo &&
     <div className="row">
+ 
       <div className="body col-xs-12 col-md-12">
-            <div className="row"> 
-              <div className="user-info col-xs-8 col-md-8">
-                <div id="profile-image">
-                  <img src={playerinfo.avatarfull} height="100px" width="100px" alt="Avatar"></img>
-                </div>
-                <div className="profile-info">
-                  <p className="profile-text">
-                    <span id="profile-display-name">{playerinfo.personaname}</span> | 
-                    <span id="profile-country">{playerinfo.loccountrycode}</span> | 
-                    <span id="profile-status">{onlineTest}</span> | 
-                    <span id="profile-level">Level {steamLevel}</span> | 
-                    <span id="profile-steamid">Steam ID {playerinfo.steamid}</span> | 
-                    <span id="profile-steamid">Last Time Online {timeLogOff}</span> 
-                  </p>
-                </div>
+        
+        <div className="row "> 
+          <div className="user-info col-xs-8 col-md-8 d-flex justify-content-center">
+            <div className="profile-info yellow-neon-border">
+              <div className="d-flex justify-content-center">
+                <img id="profile-image" src={playerinfo.avatarfull} height="100px" width="100px" alt="Avatar"></img>
               </div>
+              <p className="profile-text">
+                <span id="profile-display-name">{playerinfo.personaname}</span> | 
+                  <span id="profile-country">{playerinfo.loccountrycode}</span> | 
+                  <span id="profile-status">{onlineTest}</span> | 
+                  <span id="profile-level">Level {steamLevel}</span> | 
+                  <span id="profile-steamid">Steam ID {playerinfo.steamid}</span> | 
+                  <span id="profile-steamid">Last Time Online {timeLogOff}</span> 
+              </p>
             </div>
+          </div>
+        </div>
       </div>
     </div>
     }
