@@ -208,9 +208,13 @@ async function grabData (event)
 async function fetchJSON(apiURL, headers)
 {
   var response = await fetch(apiURL, headers);
-  if (!response.ok)
+  if (response.status == 403)
   {
-    throw new Error("Oops! Something went wrong when getting API. \
+    console.error("User profile is likely set to private.");
+  }
+  else if (!response.ok)
+  {
+    console.error("Oops! Something went wrong when getting API. \
     Usually the case if a user input is not good. Error code " + response.status);
   }
   var data = await response.json();
