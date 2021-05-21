@@ -275,9 +275,10 @@ return(
                 <img id="profile-image" src={playerinfo.avatarfull} height="100px" width="100px" alt="Avatar"></img>
               </div>
               <p className="profile-text">
-                <span id="profile-display-name">{playerinfo.personaname}</span> | 
-                  <span id="profile-country">{playerinfo.loccountrycode}</span> | 
-                  <span id="profile-status">{onlineTest}</span> | 
+                <span id="profile-display-name">{playerinfo.personaname} | </span>
+                  <span id="profile-country">{playerinfo.loccountrycode} | </span>
+                  <span id="profile-status">{onlineTest}</span> 
+                  <br />
                   <span id="profile-level">Level {steamLevel}</span> | 
                   <span id="profile-steamid">Steam ID {playerinfo.steamid}</span> | 
                   <span id="profile-steamid">Last Time Online {timeLogOff}</span> 
