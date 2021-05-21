@@ -53,7 +53,7 @@ function App()
           </form>
           <br></br>
           <Router>
-            <Main></Main>
+            <Main usernameSearch={usernameSearch}></Main>
           </Router>      
         </div>
       </div>
@@ -110,8 +110,8 @@ function App()
         if (!isMainMenuSearch)
         {
           console.log("stats window already open, calling grabData() manually.");
-          setIsMainMenuSearch(true);
-          return null;
+          setIsMainMenuSearch(false);
+          return bodyHTML;
         }
         setIsMainMenuSearch(false);
       }

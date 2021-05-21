@@ -1,7 +1,9 @@
 
 import {Redirect} from 'react-router-dom';
 import {useEffect, useState} from "react";
-export default function Main() {
+const Main = ({usernameSearch}) => {
+  console.log("SEARCH:", usernameSearch)
+  //THIS COULD HELP US ^^^^
   const [playerinfo, setPlayer] = useState("");
   const [onlineTest, setOnline] = useState("");
   const [steamLevel, setLevel] = useState("");
@@ -218,7 +220,7 @@ async function fetchJSON(apiURL, headers)
 useEffect( () =>{
 grabData();
 }
-, []);
+, [usernameSearch]);
 
 useEffect( () => {
   switch(playerinfo.personastate){
@@ -295,3 +297,4 @@ return(
 
 
 }
+export default Main
