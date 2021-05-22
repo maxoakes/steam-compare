@@ -295,7 +295,7 @@ return(
     </div>
     }
   {playedGames && 
-    <div className="profile-info recentGames yellow-neon-border row m-4 d-flex justify-content-center">
+    <div className="profile-info recentGames yellow-neon-border row mx-4 d-flex justify-content-center">
         <h4 className="col-12 text-center mt-2">Recently Played Games</h4>
         {playedGames.map(game => (
           <div className="m-2 col-12 col-sm-3">
