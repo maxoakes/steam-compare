@@ -262,11 +262,16 @@ useEffect( () => {
   var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   var year = time.getFullYear();
   var month = months[time.getMonth()];
+  if(month !== undefined){
   let date = time.getDate();
   let hours = time.getHours();
   let min = "0" + time.getMinutes();
   setTime(month + "/" + date + "/" + year+ "~" + hours + ':' + min.substr(-2))
   console.log(playerinfo.lastlogoff)
+  }
+  else{
+    setTime("Private")
+  }
 }, [playerinfo])
 
 
@@ -279,18 +284,21 @@ return(
         
         <div className="row "> 
           <div className="user-info col-xs-8 col-md-8 d-flex justify-content-center">
-            <div className="profile-info yellow-neon-border mb-4">
-              <div className="d-flex justify-content-center">
+            <div className="profile-info yellow-neon-border mb-4 mt-2">
+              <div className="d-flex justify-content-center mt-2">
                 <img id="profile-image" src={playerinfo.avatarfull} height="100px" width="100px" alt="Avatar"></img>
               </div>
               <p className="profile-text">
                 <span id="profile-display-name">{playerinfo.personaname} | </span>
+                {playerinfo.loccountrycode &&
                   <span id="profile-country">{playerinfo.loccountrycode} | </span>
+                }
                   <span id="profile-status">{onlineTest}</span> 
                   <br />
                   <span id="profile-level">Level {steamLevel}</span> | 
-                  <span id="profile-steamid">Steam ID {playerinfo.steamid}</span> | 
-                  <span id="profile-steamid">Last Time Online {timeLogOff}</span> 
+                  <span id="profile-steamid"> Steam ID: {playerinfo.steamid}</span> | 
+                  {}
+                  <span id="profile-steamid"> Last Time Online: {timeLogOff}</span> 
               </p>
             </div>
           </div>
