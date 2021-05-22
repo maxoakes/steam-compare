@@ -328,6 +328,7 @@ return(
 
     </div>
   }
+  <div className="footer-space"></div>
     <Redirect to ="/" />
   </div>
 );

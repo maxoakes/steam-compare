@@ -16,6 +16,7 @@ body {
 .body {
   background-color: lightslategray;
   height: 75vh;
+  padding-bottom: 100px;
 }
 
 .form-body {
@@ -146,7 +147,12 @@ body {
   font-size: small;
   height: 15vh;
   position: fixed;
+  bottom: 0px;
   z-index: 4;
+}
+
+.footer-space {
+  padding: 15vh;
 }
 
 .footer p {
