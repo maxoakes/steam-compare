@@ -8,9 +8,11 @@ const Main = ({usernameSearch, searchClick}) => {
   const [onlineTest, setOnline] = useState("");
   const [steamLevel, setLevel] = useState("");
   const [timeLogOff, setTime] = useState("");
-  const [playedGames, setRecentGames] =useState([])
+  const [playedGames, setRecentGames] =useState([]);
+  const [hasPrivate, setPrivate] = useState(null);
 async function grabData (event)
 {
+    setPrivate(null)
     //event.preventDefault();
     // TODO this works as a proxy website for CORS to allow the api to get fetched.
     //Perhaps there is a more elegent way to do this
@@ -213,6 +215,7 @@ async function fetchJSON(apiURL, headers)
   if (response.status == 403)
   {
     console.error("User profile is likely set to private.");
+    setPrivate(1);
   }
   else if (!response.ok)
   {
@@ -277,6 +280,10 @@ useEffect( () => {
 
 return(
   <div>
+    {hasPrivate &&
+      <h1 className="text-white">This User Has Some Data Set to Private</h1>
+    
+    }
     {playerinfo &&
     <div className="row">
  
@@ -310,7 +317,7 @@ return(
     <div className="profile-info recentGames yellow-neon-border row mx-4 d-flex justify-content-center">
         <h4 className="col-12 text-center mt-2">Recently Played Games</h4>
         {playedGames.map(game => (
-          <div key={game.appid} className="m-2 col-11 col-sm-4 bg-secondary p-2 rounded the-game">
+          <div key={game.appid} className="m-2 col-11 col-sm-3 bg-secondary p-2 rounded the-game">
             <img id="game-icon" className="mr-3" src={'http://media.steampowered.com/steamcommunity/public/images/apps/' + game.appid + '/' + game.img_icon_url + '.jpg'} 
               alt={'Game icon:' + game.name} />
             <span className="ml-2">{game.name}</span>
