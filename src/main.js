@@ -298,10 +298,11 @@ return(
     <div className="profile-info recentGames yellow-neon-border row mx-4 d-flex justify-content-center">
         <h4 className="col-12 text-center mt-2">Recently Played Games</h4>
         {playedGames.map(game => (
-          <div className="m-2 col-12 col-sm-3">
-            <img id="game icon" src={'http://media.steampowered.com/steamcommunity/public/images/apps/' + game.appid + '/' + game.img_icon_url + '.jpg'} 
+          <div key={game.appid} className="m-2 col-11 col-sm-4 bg-secondary p-2 rounded">
+            <img id="game-icon" className="mr-3" src={'http://media.steampowered.com/steamcommunity/public/images/apps/' + game.appid + '/' + game.img_icon_url + '.jpg'} 
               alt={'Game icon:' + game.name} />
-            {game.name}
+            <span className="ml-2">{game.name}</span>
+            <span className="game-facts"> </span>
           </div>
         ))}
     
