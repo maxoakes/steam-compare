@@ -225,13 +225,13 @@ async function grabData (event)
 function createAppTitleHTML(title, playerCount)
 {
   let titleRow = document.createElement("div");
-  titleRow.className = "row";
+  titleRow.className = "row col-xs-12 col-md-12";
 
   let titleDiv = document.createElement("div");
   var titleText = document.createElement("h2");
   var playerCountText = document.createElement("p");
 
-  titleDiv.className = "p-2 app-title border border-warning";
+  titleDiv.className = "col-xs-12 col-md-12 p-2 app-title border border-warning";
   titleText.innerText = title;
   titleText.className = "text-light text-center";
   playerCountText.innerText = playerCount + " current active players";
@@ -246,9 +246,9 @@ function createAppTitleHTML(title, playerCount)
 function createAchievementTableHTML(userAchievements, globalAchievements, achievementSchemas)
 {
   let achievementRow = document.createElement("div");
-  achievementRow.className = "row";
+  achievementRow.className = "row col-xs-12";
   let achievementGrid = document.createElement("div");
-  achievementGrid.className = "d-flex flex-wrap";
+  achievementGrid.className = "d-flex flex-row flex-wrap";
 
   console.log(userAchievements);
   console.log(globalAchievements);
@@ -256,25 +256,39 @@ function createAchievementTableHTML(userAchievements, globalAchievements, achiev
 
   for (let i = 0; i < achievementSchemas.length; i++)
   {
+    let iconSize = 75;
     let square = document.createElement("div");
-    square.className = "border border-warning";
+    square.className = "achievement-square border border-warning col-xs-12 col-sm-6 col-md-4 col-lg-3";
+
     
     let icon = document.createElement("img");
-    icon.className = "mx-auto";
+    icon.className = "achievement-icon mx-auto";
+    icon.width = iconSize;
+    icon.height = iconSize;
     icon.src = achievementSchemas[i].icon;
     icon.alt = achievementSchemas[i].name;
+    square.appendChild(icon);
+
+    let globalRate = document.createElement("p");
+    globalRate.className = "achievement-global-percent text-light text-center m-0 p-0";
+    globalRate.innerText = globalAchievements[i].percent.toFixed(2) + "% of players have this achievement.";
+    square.appendChild(globalRate);
+
+    let unlocked = document.createElement("p");
+    unlocked.className = "achievement-unlock text-light text-center m-0 p-0";
+    unlocked.innerText = userAchievements[i].achieved ? ("Unlocked " + userAchievements[i].unlocktime) : "Locked";
+    square.appendChild(unlocked);
 
     let name = document.createElement("h3");
-    name.className = "text-light text-center";
+    name.className = "achievement-title text-light text-center fs-4";
     name.innerText = achievementSchemas[i].displayName;
+    square.appendChild(name);
     
     let description = document.createElement("p");
-    description.className = "text-light text-center";
+    description.className = "achievement-description text-light text-center fs-6";
     description.innerText = achievementSchemas[i].description ? achievementSchemas[i].description : "No description provided";
-    
-    square.appendChild(icon);
-    square.appendChild(name);
     square.appendChild(description);
+    
     achievementGrid.appendChild(square);
   }
 
@@ -368,9 +382,7 @@ return(
             </div>
           </div>
         </div>
-        <div className="row">
-        <div id="user-app-content" className="user-info col-xs-8 col-md-8 d-flex justify-content-center">
-        </div>
+        <div id="user-app-content" className="row justify-content-center">
         </div>
       </div>
     </div>

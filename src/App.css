@@ -117,6 +117,45 @@ body {
   float: right;
 }
 
+.achievement-square
+{
+  display: grid;
+  grid-template-columns: 75px auto ;
+  grid-template-rows: auto auto auto;
+}
+
+.achievement-icon
+{
+  grid-column: 1 / span 1;
+  grid-row: 1 / span 2;
+}
+
+.achievement-global-percent
+{
+  grid-column-start: 2;
+  grid-row-start: 1;
+  font-size: 8pt;
+}
+
+.achievement-unlock
+{
+  grid-column-start: 2;
+  grid-row-start: 2;
+  font-size: 8pt;
+}
+
+.achievement-title
+{
+  grid-column: 1 / span 2;
+  grid-row: 3 / span 1;
+}
+
+.achievement-description
+{
+  grid-column: 1 / span 2;
+  grid-row: 4 / span 1;
+}
+
 /* Global footer styling. Should remain the same for each page */
 .footer {
   text-align: center;
