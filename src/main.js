@@ -296,9 +296,11 @@ return(
     }
   {playedGames && 
     <div className="profile-info recentGames yellow-neon-border row m-4 d-flex justify-content-center">
-        <h4 className="col-12">Recently Played Games</h4>
+        <h4 className="col-12 text-center mt-2">Recently Played Games</h4>
         {playedGames.map(game => (
           <div className="m-2 col-12 col-sm-3">
+            <img id="game icon" src={'http://media.steampowered.com/steamcommunity/public/images/apps/' + game.appid + '/' + game.img_icon_url + '.jpg'} 
+              alt={'Game icon:' + game.name} />
             {game.name}
           </div>
         ))}
