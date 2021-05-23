@@ -8,13 +8,13 @@ const Main = ({usernameSearch, searchClick}) => {
   const [onlineTest, setOnline] = useState("");
   const [steamLevel, setLevel] = useState("");
   const [timeLogOff, setTime] = useState("");
+
+  // TODO this works as a proxy website for CORS to allow the api to get fetched.
+  //Perhaps there is a more elegent way to do this
+  const proxy = "https://still-tor-77449.herokuapp.com/"
+
 async function grabData (event)
 {
-    //event.preventDefault();
-    // TODO this works as a proxy website for CORS to allow the api to get fetched.
-    //Perhaps there is a more elegent way to do this
-    const proxy = "https://still-tor-77449.herokuapp.com/"
-
     //Max's api steam key. Use it for this project
     const key = "386540A52F687754D4E1767230822EDE";
     const headers =
@@ -48,6 +48,7 @@ async function grabData (event)
       console.log("Found user " + steamid + " from " + vanityURL)
     }
 
+    let appFullName;
     if (appName)
     {
       //get the appid from the game name that the user enters
@@ -64,8 +65,13 @@ async function grabData (event)
       if (appObject)
       {
         console.log(appObject)
+        appFullName = appObject.name;
         console.log("Found game " + appObject.appid + " from " + appName)
         appid = appObject.appid;
+      }
+      else
+      {
+        console.log("No game found with: " + appName)
       }
     }
 
@@ -81,34 +87,32 @@ async function grabData (event)
     //if both a user and game is searched and valid
     if (steamid && appid)
     {
-      let appTitle;
       console.log("\tappid AND steamid searched")
 
       console.log("ISteamUserStats/GetPlayerAchievements")
       var playerAchievementsResponse = await fetchJSON(proxy +
         'https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?key=' + 
         key + '&steamid=' + steamid + '&appid=' + appid + '&format=json', headers)
-      //console.log(playerAchievementsResponse.playerstats);
+      console.log(playerAchievementsResponse);
 
       //global stats
       console.log("ISteamUserStats/GetGlobalAchievementPercentagesForApp")
       var globalAchievementPercentagesResponse = await fetchJSON(proxy +
         'https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v2/?key=' + 
         key + '&gameid=' + appid + '&format=json', headers)
-      //console.log(globalAchievementPercentagesResponse.achievementpercentages);
+      console.log(globalAchievementPercentagesResponse);
 
       console.log("ISteamUserStats/GetNumberOfCurrentPlayers")
       var numCurrentPlayersResponse = await fetchJSON(proxy +
         'https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?key=' + 
         key + '&appid=' + appid + '&format=json', headers)
-      //console.log(numCurrentPlayersResponse.response);
+      console.log(numCurrentPlayersResponse);
       
       console.log("ISteamUserStats/GetSchemaForGame")
       var gameSchemaResponse = await fetchJSON(proxy +
         'https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key=' + 
         key + '&appid=' + appid + '&format=json', headers)
       console.log(gameSchemaResponse.game);
-      appTitle = gameSchemaResponse.game.gameName;
       
       //var gameStats = gameSchemaResponse.game.availableGameStats.stats;
       //the inputs to this one must come from the previous API call
@@ -124,7 +128,7 @@ async function grabData (event)
         'https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/?key=' + 
         key + '&appid=' + appid + '&steamid=' + steamid + '&format=json', headers)
       //userStatsForGameResponse.playerstats yields stats and acheivements, but achievements was retrieved earlier
-      console.log(userStatsForGameResponse.playerstats.stats);
+      //console.log(userStatsForGameResponse.playerstats.stats);
 
       console.log("ISteamUser/GetPlayerSummaries")
       var playerSummeryResponse = await fetchJSON(proxy + 
@@ -141,10 +145,22 @@ async function grabData (event)
       setPlayer(playerSummeryResponse.response.players[0]);
       setLevel(steamLevelResponse.response.player_level.toString());
 
-      createAppTitleHTML(appTitle, numCurrentPlayersResponse.response.player_count);
-      createAchievementTableHTML(playerAchievementsResponse.playerstats.achievements,
-        globalAchievementPercentagesResponse.achievementpercentages.achievements,
-        gameSchemaResponse.game.availableGameStats.achievements);
+      createAppTitleHTML(appFullName, numCurrentPlayersResponse.response.player_count,
+        playerAchievementsResponse.playerstats.achievements, appid);
+
+      try
+      {
+        if (gameSchemaResponse.game.availableGameStats.achievements)
+        {
+          createAchievementTableHTML(playerAchievementsResponse.playerstats.achievements,
+          globalAchievementPercentagesResponse.achievementpercentages.achievements,
+          gameSchemaResponse.game.availableGameStats.achievements);
+        }
+      }
+      catch(error)
+      {
+        console.error("Something in gameSchemaResponse.game.availableGameStats is undefined")
+      }
     }
     //if only the username is valid
     else if (steamid && !appid)
@@ -222,24 +238,84 @@ async function grabData (event)
     }
 }
 
-function createAppTitleHTML(title, playerCount)
+function createAppTitleHTML(title, playerCount, achievements, appid)
 {
+  let height = "75px";
+  //entire banner
   let titleRow = document.createElement("div");
-  titleRow.className = "row col-xs-12 col-md-12";
+  titleRow.className = "row game-banner";
 
-  let titleDiv = document.createElement("div");
-  var titleText = document.createElement("h2");
-  var playerCountText = document.createElement("p");
+  //div containing the title text and background(?)
+  let titleBox = document.createElement("div");
+  titleBox.className = "col-xs-12 col-md-8 game-banner-title m-0 p-0";
 
-  titleDiv.className = "col-xs-12 col-md-12 p-2 app-title border border-warning";
+  //attempt to fetch and use a high-quality background image for the game title
+  let bannerURL = "https://steamcdn-a.akamaihd.net/steam/apps/" + appid + "/page_bg_generated.jpg"
+  fetch(proxy + bannerURL)
+  .then(response => {
+    if (response.ok)
+    {
+      console.log("Found good image for title background");
+      return response;
+    }
+    else if(response.status === 404)
+    {
+      return Promise.reject('error 404')
+    }
+    else
+    {
+      return Promise.reject('some other error: ' + response.status)
+    }
+  })
+  .catch(error => {
+    console.log("Error getting high-quality game image, using default, low-res header img instead");
+    bannerURL = "https://steamcdn-a.akamaihd.net/steam/apps/" + appid + "/header.jpg";
+  })
+  .finally(function() {
+    titleBox.style.backgroundImage = "url(" + bannerURL + ")";
+  });
+  titleRow.appendChild(titleBox);
+
+  //game title text
+  let titleText = document.createElement("h2");
   titleText.innerText = title;
-  titleText.className = "text-light text-center";
-  playerCountText.innerText = playerCount + " current active players";
-  playerCountText.className = "text-light text-center";
+  titleText.className = "text-light text-left align-middle";
+  titleText.style.lineHeight = height;
+  titleBox.appendChild(titleText);
+  
+  //right side div containing game stats
+  let gameStatBox = document.createElement("div");
+  gameStatBox.className = "col-xs-12 col-md-4 game-banner-info";
+  titleRow.appendChild(gameStatBox);
 
-  titleDiv.appendChild(titleText);
-  titleDiv.appendChild(playerCountText);
-  titleRow.appendChild(titleDiv);
+  //current player count
+  let playerCountText = document.createElement("p");
+  playerCountText.innerText = playerCount + " players online";
+  playerCountText.className = "text-light game-banner-info-playercount";
+  gameStatBox.appendChild(playerCountText);
+
+
+  let achievementCountText = document.createElement("p");
+
+  if (achievements)
+  {
+    //achivements obtained so far
+    let userAchievementCount = 0;
+    for (let i = 0; i < achievements.length; i++)
+    {
+      if (achievements[i].achieved) userAchievementCount++;
+    }
+    achievementCountText.innerText = userAchievementCount + " out of " + achievements.length + " achievements obtained";
+  }
+  else
+  {
+    achievementCountText.innerText = title + " does not have achievements";
+  }
+  
+  achievementCountText.className = "text-light text-center game-banner-info-achievement";
+  gameStatBox.appendChild(achievementCountText);
+
+  //put all this stuff into the HTML tree
   document.getElementById("user-app-content").appendChild(titleRow);
 }
 
@@ -248,7 +324,7 @@ function createAchievementTableHTML(userAchievements, globalAchievements, achiev
   let achievementRow = document.createElement("div");
   achievementRow.className = "row col-xs-12";
   let achievementGrid = document.createElement("div");
-  achievementGrid.className = "d-flex flex-row flex-wrap";
+  achievementGrid.className = "achievement-grid d-flex flex-row flex-wrap d-flex justify-content-between";
 
   console.log(userAchievements);
   console.log(globalAchievements);
@@ -258,7 +334,7 @@ function createAchievementTableHTML(userAchievements, globalAchievements, achiev
   {
     let iconSize = 75;
     let square = document.createElement("div");
-    square.className = "achievement-square border border-warning col-xs-12 col-sm-6 col-md-4 col-lg-3";
+    square.className = "achievement-square flex-fill col-xs-12 col-sm-6 col-md-4 col-lg-3";
 
     
     let icon = document.createElement("img");
@@ -270,23 +346,30 @@ function createAchievementTableHTML(userAchievements, globalAchievements, achiev
     square.appendChild(icon);
 
     let globalRate = document.createElement("p");
-    globalRate.className = "achievement-global-percent text-light text-center m-0 p-0";
+    globalRate.className = "achievement-global-percent text-light";
     globalRate.innerText = globalAchievements[i].percent.toFixed(2) + "% of players have this achievement.";
     square.appendChild(globalRate);
 
+    //get a time string
+    let unlockTime = new Date(userAchievements[i].unlocktime*1000);
+    let timeString = unlockTime.toDateString() + " at " + 
+      unlockTime.getUTCHours().toString().padStart(2, '0') + ":" + 
+      unlockTime.getUTCMinutes().toString().padStart(2, '0') + " UTC";
+
     let unlocked = document.createElement("p");
-    unlocked.className = "achievement-unlock text-light text-center m-0 p-0";
-    unlocked.innerText = userAchievements[i].achieved ? ("Unlocked " + userAchievements[i].unlocktime) : "Locked";
+    unlocked.className = "achievement-unlock text-light";
+    unlocked.innerText = userAchievements[i].achieved ?
+      ("Unlocked " + convertSteamTimeToUTC(userAchievements[i].unlocktime)) : "Locked";
     square.appendChild(unlocked);
 
     let name = document.createElement("h3");
-    name.className = "achievement-title text-light text-center fs-4";
+    name.className = "achievement-title text-light";
     name.innerText = achievementSchemas[i].displayName;
     square.appendChild(name);
     
     let description = document.createElement("p");
-    description.className = "achievement-description text-light text-center fs-6";
-    description.innerText = achievementSchemas[i].description ? achievementSchemas[i].description : "No description provided";
+    description.className = "achievement-description text-light";
+    description.innerText = achievementSchemas[i].description ? achievementSchemas[i].description : "";
     square.appendChild(description);
     
     achievementGrid.appendChild(square);
@@ -296,16 +379,23 @@ function createAchievementTableHTML(userAchievements, globalAchievements, achiev
   document.getElementById("user-app-content").appendChild(achievementRow);
 }
 
+function convertSteamTimeToUTC(seconds)
+{
+  //https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
+  let unlockTime = new Date(seconds*1000);
+  let timeString = unlockTime.toDateString() + " at " + 
+    unlockTime.getUTCHours().toString().padStart(2, '0') + ":" + 
+    unlockTime.getUTCMinutes().toString().padStart(2, '0') + " UTC";
+    
+  return timeString;
+}
+
 async function fetchJSON(apiURL, headers)
 {
   var response = await fetch(apiURL, headers);
-  if (response.status === 403)
+  if (!response.ok)
   {
-    console.error("User profile is likely set to private.");
-  }
-  else if (!response.ok)
-  {
-    console.error("Oops! Something went wrong when getting API. Usually the case if a user input is not good. Error code " + response.status);
+    console.error("There was an error: " + response.status);
   }
   var data = await response.json();
   return data;
@@ -345,16 +435,7 @@ useEffect( () => {
   }
   console.log(onlineTest)
 
-  //https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
-  let time = new Date(playerinfo.lastlogoff * 1000);
-  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  var year = time.getFullYear();
-  var month = months[time.getMonth()];
-  let date = time.getDate();
-  let hours = time.getHours();
-  let min = "0" + time.getMinutes();
-  setTime(month + "/" + date + "/" + year+ "~" + hours + ':' + min.substr(-2))
-  console.log(playerinfo.lastlogoff)
+  setTime(convertSteamTimeToUTC(playerinfo.lastlogoff))
 }, [playerinfo])
 
 return(
@@ -388,6 +469,8 @@ return(
     </div>
     }
     <Redirect to ="/" />
+    {/* A little extra padding... */}
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
   </div>
 );
 
