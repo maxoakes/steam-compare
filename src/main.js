@@ -1,5 +1,6 @@
 import {Redirect} from 'react-router-dom';
 import {useEffect, useState} from "react";
+import GamesGraph from './GamesGraph.js'
 
 const Main = ({usernameSearch, searchClick}) => {
 
@@ -10,6 +11,7 @@ const Main = ({usernameSearch, searchClick}) => {
   const [steamLevel, setLevel] = useState("");
   const [timeLogOff, setTime] = useState("");
   const [hasPrivate, setPrivate] = useState(null);
+  const [allGames, setGames] = useState(null);
 
   // TODO this works as a proxy website for CORS to allow the api to get fetched.
   //Perhaps there is a more elegent way to do this
@@ -176,6 +178,7 @@ const Main = ({usernameSearch, searchClick}) => {
         'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=' + 
         key + '&steamid=' + steamid + '&format=json&include_appinfo=1', headers)
       console.log(ownedGamesResponse.response)
+      setGames(ownedGamesResponse.response.games)
 
       console.log("IPlayerService/GetRecentlyPlayedGames")
       let recentlyPlayedGamesResponse = await fetchJSON(proxy + 
@@ -531,6 +534,12 @@ const Main = ({usernameSearch, searchClick}) => {
           </div>
         </div>
       </div>
+      {allGames &&
+        <div>
+          <GamesGraph games={allGames}></GamesGraph>
+        </div>
+      }
+
     <div className="footer-space"></div>
       <Redirect to ="/" />
       {/* A little extra padding... */}
