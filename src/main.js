@@ -8,6 +8,7 @@ const Main = ({usernameSearch, searchClick}) => {
   const [onlineTest, setOnline] = useState("");
   const [steamLevel, setLevel] = useState("");
   const [timeLogOff, setTime] = useState("");
+  const [hasPrivate, setPrivate] = useState(null);
 
   // TODO this works as a proxy website for CORS to allow the api to get fetched.
   //Perhaps there is a more elegent way to do this
@@ -223,8 +224,7 @@ async function grabData (event)
         key + '&steamid=' + steamid + '&format=json', headers)
       console.log(groupListResponse.response)
 
-      //global stats
-
+      createRecentlyPlayedGamesHTML(recentlyPlayedGamesResponse.response.games)
     }
     //if only a game was searched
     else if (!steamid && appid)
@@ -379,6 +379,55 @@ function createAchievementTableHTML(userAchievements, globalAchievements, achiev
   document.getElementById("user-app-content").appendChild(achievementRow);
 }
 
+function createRecentlyPlayedGamesHTML(games)
+{
+//   {playedGames && 
+//     <div className="profile-info recentGames yellow-neon-border row mx-4 d-flex justify-content-center">
+//         <h4 className="col-12 text-center mt-2">Recently Played Games</h4>
+//         {playedGames.map(game => (
+//           <div key={game.appid} className="m-2 col-11 col-sm-3 bg-secondary p-2 rounded the-game">
+//             <img id="game-icon" className="mr-3" src={'http://media.steampowered.com/steamcommunity/public/images/apps/' + game.appid + '/' + game.img_icon_url + '.jpg'} 
+//               alt={'Game icon:' + game.name} />
+//             <span className="ml-2">{game.name}</span>
+//             <span className="game-facts m-2 p-2">Playtime: {game.playtime_forever} Minutes</span>
+//           </div>
+//         ))}
+
+  let gameListContainer = document.createElement("div");
+  gameListContainer.className = "profile-info recentGames yellow-neon-border row mx-4 d-flex justify-content-center";
+
+  let containerTitle = document.createElement("h4");
+  containerTitle.className = "col-12 text-center mt-2";
+  containerTitle.innerText = "Recently Played Games";
+  gameListContainer.appendChild(containerTitle);
+
+  for (let i = 0; i < games.length; i++)
+  {
+    let singleGame = document.createElement("div");
+    singleGame.key = games[i].appid;
+    singleGame.className = "m-2 col-11 col-sm-3 bg-secondary p-2 rounded the-game";
+
+    let gameIcon = document.createElement("img");
+    gameIcon.id="game-icon";
+    gameIcon.className="mr-3";
+    gameIcon.src = "http://media.steampowered.com/steamcommunity/public/images/apps/" + games[i].appid + "/" + games[i].img_icon_url + ".jpg";
+    gameIcon.alt = "Game icon: " + games[i].name;
+    singleGame.appendChild(gameIcon);
+
+    let gameTitle = document.createElement("span");
+    gameTitle.className = "ml-2";
+    gameTitle.innerText = games[i].name;
+    singleGame.appendChild(gameTitle);
+
+    let gamePlayTime = document.createElement("span");
+    gamePlayTime.className = "game-facts m-2 p-2";
+    gamePlayTime.innerText = "Playtime: " + games[i].playtime_forever + " min";
+    singleGame.appendChild(gamePlayTime);
+    gameListContainer.appendChild(singleGame);
+  }
+  document.getElementById("user-app-content").appendChild(gameListContainer);
+}
+
 function convertSteamTimeToUTC(seconds)
 {
   //https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
@@ -393,7 +442,12 @@ function convertSteamTimeToUTC(seconds)
 async function fetchJSON(apiURL, headers)
 {
   var response = await fetch(apiURL, headers);
-  if (!response.ok)
+  if (response.status == 403)
+  {
+    console.error("User profile is likely set to private.");
+    setPrivate(1);
+  }
+  else if (!response.ok)
   {
     console.error("There was an error: " + response.status);
   }
@@ -438,27 +492,28 @@ useEffect( () => {
   setTime(convertSteamTimeToUTC(playerinfo.lastlogoff))
 }, [playerinfo])
 
+
 return(
   <div>
-    {playerinfo &&
     <div className="row">
- 
       <div className="col-xs-12 col-md-12">
-        
-        <div className="row "> 
+        <div className="row"> 
           <div className="user-info col-xs-8 col-md-8 d-flex justify-content-center">
-            <div className="profile-info yellow-neon-border">
-              <div className="d-flex justify-content-center">
+            <div className="profile-info yellow-neon-border mb-4 mt-2">
+              <div className="d-flex justify-content-center mt-2">
                 <img id="profile-image" src={playerinfo.avatarfull} height="100px" width="100px" alt="Avatar"></img>
               </div>
               <p className="profile-text">
                 <span id="profile-display-name">{playerinfo.personaname} | </span>
+                {playerinfo.loccountrycode &&
                   <span id="profile-country">{playerinfo.loccountrycode} | </span>
+                }
                   <span id="profile-status">{onlineTest}</span> 
                   <br />
                   <span id="profile-level">Level {steamLevel}</span> | 
-                  <span id="profile-steamid">Steam ID {playerinfo.steamid}</span> | 
-                  <span id="profile-steamid">Last Time Online {timeLogOff}</span> 
+                  <span id="profile-steamid"> Steam ID: {playerinfo.steamid}</span> | 
+                  {}
+                  <span id="profile-steamid"> Last Time Online: {timeLogOff}</span> 
               </p>
             </div>
           </div>
@@ -467,7 +522,7 @@ return(
         </div>
       </div>
     </div>
-    }
+  <div className="footer-space"></div>
     <Redirect to ="/" />
     {/* A little extra padding... */}
     <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>

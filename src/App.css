@@ -15,6 +15,7 @@ body {
 
 .body {
   height: 78vh;
+  padding-bottom: 100px;
 }
 
 .form-body {
@@ -35,8 +36,6 @@ body {
   padding-bottom: 25px;
 }
 
-.user-info > div {
-}
 .search-box {
   border: 1px green solid;
 }
@@ -84,6 +83,29 @@ body {
   box-shadow: 0 0 10px yellow;
   background-color: black;
 }
+.red-border {
+  border: 1px solid white;
+  box-shadow: 0 0 7px red;
+  border-radius: 5px;
+}
+
+.the-game {
+  display: inline-block;
+  position: relative;
+}
+
+.game-facts {
+  visibility: hidden;
+  position: absolute;
+  color: white;
+  background-color: black;
+  z-index: 6;
+  width: 100px;
+}
+.the-game:hover .game-facts {
+  visibility: visible;
+}
+
 .profile-info {
   border-radius: 10px;
   color: white;
@@ -237,7 +259,12 @@ body {
   font-size: small;
   height: 12vh;
   position: fixed;
+  bottom: 0px;
   z-index: 4;
+}
+
+.footer-space {
+  padding: 20vh;
 }
 
 .footer p {
