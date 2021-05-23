@@ -100,7 +100,6 @@ body {
   color: white;
   background-color: black;
   z-index: 6;
-  width: 100px;
 }
 .the-game:hover .game-facts {
   visibility: visible;

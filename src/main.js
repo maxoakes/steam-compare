@@ -17,225 +17,228 @@ const Main = ({usernameSearch, searchClick}) => {
 
   async function grabData (event)
   {
-      //Max's api steam key. Use it for this project
-      const key = "386540A52F687754D4E1767230822EDE";
-      const headers =
-      {
-          mode: 'cors',
-          cache: 'no-cache',
-          credentials: 'same-origin',
-          headers: {'Content-Type': 'application/json'},
-          redirect: 'follow',
-          referrerPolicy: 'no-referrer',
-      };
+    //Max's api steam key. Use it for this project
+    const key = "386540A52F687754D4E1767230822EDE";
+    const headers =
+    {
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {'Content-Type': 'application/json'},
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+    };
 
-      //get the form seach boxes
-      let appName = document.getElementById("game").value;
-      let vanityURL = document.getElementById("username").value;
-      let steamid = 0;
-      let appid = 0;
+    //get the form seach boxes
+    let appName = document.getElementById("game").value;
+    let vanityURL = document.getElementById("username").value;
+    let steamid = 0;
 
-      //check if the user entered a username to search for
-      if (vanityURL)
-      {
-        //get a steamid from a 'vanity' url. This is the one for your steam profile
-        //Max's is "scouteriv" from https://steamcommunity.com/id/scouteriv/
-        console.log("ISteamUser/ResolveVanityURL")
-        let steamidResponse = await fetchJSON(proxy + 
-          'https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/?key=' + 
-          key + '&vanityurl=' + vanityURL + '&format=json', headers)
-        console.log(steamidResponse.response)
-        steamid = steamidResponse.response.steamid;
-        console.log("Found user " + steamid + " from " + vanityURL)
-      }
+    //game/app name
+    let appFullName;
+    let appid = 0;
 
-      let appFullName;
-      if (appName)
-      {
-        //get the appid from the game name that the user enters
-        //this requests takes a few seconds. Likely(?) no way to get around it if we are not making a backend
-        console.log("ISteamApps/GetAppList")
-        let appListResponse = await fetchJSON(proxy + 
-          'http://api.steampowered.com/ISteamApps/GetAppList/v0002/', headers)
-        //console.log(appListResponse.applist.apps)
+    //check if the user entered a username to search for
+    if (vanityURL)
+    {
+      //get a steamid from a 'vanity' url. This is the one for your steam profile
+      //Max's is "scouteriv" from https://steamcommunity.com/id/scouteriv/
+      console.log("ISteamUser/ResolveVanityURL")
+      let steamidResponse = await fetchJSON(proxy + 
+        'https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/?key=' + 
+        key + '&vanityurl=' + vanityURL + '&format=json', headers)
+      console.log(steamidResponse.response)
+      steamid = steamidResponse.response.steamid;
+      console.log("Found user " + steamid + " from " + vanityURL)
+    }
 
-        //go through each game and see if the name of the game matches what the user entered
-        let appObject = appListResponse.applist.apps.find(app => app.name.toLowerCase() === appName.toLowerCase());
-        
-        //set the appid only if the game is found
-        if (appObject)
-        {
-          console.log(appObject)
-          appFullName = appObject.name;
-          console.log("Found game " + appObject.appid + " from " + appName)
-          appid = appObject.appid;
-        }
-        else
-        {
-          console.log("No game found with: " + appName)
-        }
-      }
+    
+    if (appName)
+    {
+      //get the appid from the game name that the user enters
+      //this requests takes a few seconds. Likely(?) no way to get around it if we are not making a backend
+      console.log("ISteamApps/GetAppList")
+      let appListResponse = await fetchJSON(proxy + 
+        'http://api.steampowered.com/ISteamApps/GetAppList/v0002/', headers)
+      //console.log(appListResponse.applist.apps)
 
-      let contentHead = document.getElementById("user-app-content")
-      if (contentHead)
-      {
-        while (contentHead.firstChild)
-        {
-          contentHead.removeChild(contentHead.firstChild);
-        }
-      }
-
-      //if both a user and game is searched and valid
-      if (steamid && appid)
-      {
-        console.log("\tappid AND steamid searched")
-
-        console.log("ISteamUserStats/GetPlayerAchievements")
-        let playerAchievementsResponse = await fetchJSON(proxy +
-          'https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?key=' + 
-          key + '&steamid=' + steamid + '&appid=' + appid + '&format=json', headers)
-        console.log(playerAchievementsResponse);
-
-        //global stats
-        console.log("ISteamUserStats/GetGlobalAchievementPercentagesForApp")
-        let globalAchievementPercentagesResponse = await fetchJSON(proxy +
-          'https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v2/?key=' + 
-          key + '&gameid=' + appid + '&format=json', headers)
-        console.log(globalAchievementPercentagesResponse);
-
-        console.log("ISteamUserStats/GetNumberOfCurrentPlayers")
-        let numCurrentPlayersResponse = await fetchJSON(proxy +
-          'https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?key=' + 
-          key + '&appid=' + appid + '&format=json', headers)
-        console.log(numCurrentPlayersResponse);
-        
-        console.log("ISteamUserStats/GetSchemaForGame")
-        let gameSchemaResponse = await fetchJSON(proxy +
-          'https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key=' + 
-          key + '&appid=' + appid + '&format=json', headers)
-        console.log(gameSchemaResponse.game);
-        
-        //let gameStats = gameSchemaResponse.game.availableGameStats.stats;
-        //the inputs to this one must come from the previous API call
-        //not a lot of games implement this. not sure if we want to call it
-        // console.log("ISteamUserStats/GetSchemaForGame")
-        // let globalGameStatsResponse = await fetchJSON(proxy +
-        //   'https://api.steampowered.com/ISteamUserStats/GetGlobalStatsForGame/v1/?key=' + 
-        //   key + '&appid=' + appid + '&count=' + gameStats.length + '&name[0]=' + gameStats[0].name + '&format=json', headers)
-        // console.log(globalGameStatsResponse);
-
-        console.log("ISteamUserStats/GetUserStatsForGame")
-        let userStatsForGameResponse = await fetchJSON(proxy +
-          'https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/?key=' + 
-          key + '&appid=' + appid + '&steamid=' + steamid + '&format=json', headers)
-        //userStatsForGameResponse.playerstats yields stats and acheivements, but achievements was retrieved earlier
-        //console.log(userStatsForGameResponse.playerstats.stats);
-
-        console.log("ISteamUser/GetPlayerSummaries")
-        let playerSummeryResponse = await fetchJSON(proxy + 
-          'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=' + 
-          key + '&steamids=' + steamid + '&format=json', headers)
-        //console.log(playerSummeryResponse.response.players[0])
-        
-        console.log("IPlayerService/GetSteamLevel")
-        let steamLevelResponse = await fetchJSON(proxy + 
-          'https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=' + 
-          key + '&steamid=' + steamid + '&format=json', headers)
-        //console.log(steamLevelResponse.response)
-        
-        setPlayer(playerSummeryResponse.response.players[0]);
-        setLevel(steamLevelResponse.response.player_level.toString());
-
-        createAppTitleHTML(appFullName, numCurrentPlayersResponse.response.player_count,
-          playerAchievementsResponse.playerstats.achievements, appid);
-
-        try
-        {
-          if (gameSchemaResponse.game.availableGameStats.achievements)
-          {
-            createAchievementTableHTML(playerAchievementsResponse.playerstats.achievements,
-            globalAchievementPercentagesResponse.achievementpercentages.achievements,
-            gameSchemaResponse.game.availableGameStats.achievements);
-          }
-        }
-        catch(error)
-        {
-          console.error("Something in gameSchemaResponse.game.availableGameStats is undefined")
-        }
-      }
-      //if only the username is valid
-      else if (steamid && !appid)
-      {
-        console.log("\tONLY steamid searched")
-
-        console.log("IPlayerService/GetOwnedGames")
-        let ownedGamesResponse = await fetchJSON(proxy + 
-          'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=' + 
-          key + '&steamid=' + steamid + '&format=json&include_appinfo=1', headers)
-        console.log(ownedGamesResponse.response)
-
-        console.log("IPlayerService/GetRecentlyPlayedGames")
-        let recentlyPlayedGamesResponse = await fetchJSON(proxy + 
-          'https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key=' + 
-          key + '&steamid=' + steamid + '&format=json', headers)
-        console.log(recentlyPlayedGamesResponse.response)
-
-        console.log("IPlayerService/GetSteamLevel")
-        let steamLevelResponse = await fetchJSON(proxy + 
-          'https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=' + 
-          key + '&steamid=' + steamid + '&format=json', headers)
-        console.log(steamLevelResponse.response)
-        setLevel(steamLevelResponse.response.player_level.toString());
-        console.log(steamLevel);
-
-        console.log("IPlayerService/GetCommunityBadgeProgress")
-        let communityBadgeProgressResponse = await fetchJSON(proxy + 
-          'https://api.steampowered.com/IPlayerService/GetCommunityBadgeProgress/v1/?key=' + 
-          key + '&steamid=' + steamid + '&format=json', headers)
-        console.log(communityBadgeProgressResponse.response)
-
-        console.log("ISteamUser/GetFriendList")
-        let friendsListResponse = await fetchJSON(proxy + 
-          'https://api.steampowered.com/ISteamUser/GetFriendList/v1/?key=' + 
-          key + '&steamid=' + steamid + ',&format=json', headers)
-        console.log(friendsListResponse)
-
-        console.log("ISteamUser/GetPlayerBans")
-        let playerBansResponse = await fetchJSON(proxy + 
-          'https://api.steampowered.com/ISteamUser/GetPlayerBans/v1/?key=' + 
-          key + '&steamids=' + steamid + '&format=json', headers)
-        console.log(playerBansResponse.players[0])
-
-        console.log("ISteamUser/GetPlayerSummaries")
-        let playerSummeryResponse = await fetchJSON(proxy + 
-          'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=' + 
-          key + '&steamids=' + steamid + '&format=json', headers)
-        console.log(playerSummeryResponse.response.players[0])
-        setPlayer(playerSummeryResponse.response.players[0]);
-        //console.log(playerinfo.loccountrycode);
-        //console.log(profPic);
+      //go through each game and see if the name of the game matches what the user entered
+      let appObject = appListResponse.applist.apps.find(app => app.name.toLowerCase() === appName.toLowerCase());
       
-        console.log(playerinfo.personastate)
-  
-
-        console.log("ISteamUser/GetUserGroupList")
-        let groupListResponse = await fetchJSON(proxy + 
-          'https://api.steampowered.com/ISteamUser/GetUserGroupList/v1/?key=' + 
-          key + '&steamid=' + steamid + '&format=json', headers)
-        console.log(groupListResponse.response)
-
-        createRecentlyPlayedGamesHTML(recentlyPlayedGamesResponse.response.games)
-      }
-      //if only a game was searched
-      else if (!steamid && appid)
+      //set the appid only if the game is found
+      if (appObject)
       {
-        console.log("\tONLY appid searched")
+        console.log(appObject)
+        appFullName = appObject.name;
+        console.log("Found game " + appObject.appid + " from " + appName)
+        appid = appObject.appid;
       }
-      //if nothing was searched?
       else
       {
-        console.log("\tNO item searched");
+        console.log("No game found with: " + appName)
       }
+    }
+
+    let contentHead = document.getElementById("user-app-content")
+    if (contentHead)
+    {
+      while (contentHead.firstChild)
+      {
+        contentHead.removeChild(contentHead.firstChild);
+      }
+    }
+
+    //if both a user and game is searched and valid
+    if (steamid && appid)
+    {
+      console.log("\tappid AND steamid searched")
+
+      console.log("ISteamUserStats/GetPlayerAchievements")
+      let playerAchievementsResponse = await fetchJSON(proxy +
+        'https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?key=' + 
+        key + '&steamid=' + steamid + '&appid=' + appid + '&format=json', headers)
+      console.log(playerAchievementsResponse);
+
+      //global stats
+      console.log("ISteamUserStats/GetGlobalAchievementPercentagesForApp")
+      let globalAchievementPercentagesResponse = await fetchJSON(proxy +
+        'https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v2/?key=' + 
+        key + '&gameid=' + appid + '&format=json', headers)
+      console.log(globalAchievementPercentagesResponse);
+
+      console.log("ISteamUserStats/GetNumberOfCurrentPlayers")
+      let numCurrentPlayersResponse = await fetchJSON(proxy +
+        'https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?key=' + 
+        key + '&appid=' + appid + '&format=json', headers)
+      console.log(numCurrentPlayersResponse);
+      
+      console.log("ISteamUserStats/GetSchemaForGame")
+      let gameSchemaResponse = await fetchJSON(proxy +
+        'https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key=' + 
+        key + '&appid=' + appid + '&format=json', headers)
+      console.log(gameSchemaResponse.game);
+      
+      //let gameStats = gameSchemaResponse.game.availableGameStats.stats;
+      //the inputs to this one must come from the previous API call
+      //not a lot of games implement this. not sure if we want to call it
+      // console.log("ISteamUserStats/GetSchemaForGame")
+      // let globalGameStatsResponse = await fetchJSON(proxy +
+      //   'https://api.steampowered.com/ISteamUserStats/GetGlobalStatsForGame/v1/?key=' + 
+      //   key + '&appid=' + appid + '&count=' + gameStats.length + '&name[0]=' + gameStats[0].name + '&format=json', headers)
+      // console.log(globalGameStatsResponse);
+
+      console.log("ISteamUserStats/GetUserStatsForGame")
+      let userStatsForGameResponse = await fetchJSON(proxy +
+        'https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/?key=' + 
+        key + '&appid=' + appid + '&steamid=' + steamid + '&format=json', headers)
+      //userStatsForGameResponse.playerstats yields stats and acheivements, but achievements was retrieved earlier
+      //console.log(userStatsForGameResponse.playerstats.stats);
+
+      console.log("ISteamUser/GetPlayerSummaries")
+      let playerSummeryResponse = await fetchJSON(proxy + 
+        'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=' + 
+        key + '&steamids=' + steamid + '&format=json', headers)
+      //console.log(playerSummeryResponse.response.players[0])
+      
+      console.log("IPlayerService/GetSteamLevel")
+      let steamLevelResponse = await fetchJSON(proxy + 
+        'https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=' + 
+        key + '&steamid=' + steamid + '&format=json', headers)
+      //console.log(steamLevelResponse.response)
+      
+      setPlayer(playerSummeryResponse.response.players[0]);
+      setLevel(steamLevelResponse.response.player_level.toString());
+
+      createAppTitleHTML(appFullName, numCurrentPlayersResponse.response.player_count,
+        playerAchievementsResponse.playerstats.achievements, appid);
+
+      try
+      {
+        if (gameSchemaResponse.game.availableGameStats.achievements)
+        {
+          createAchievementTableHTML(playerAchievementsResponse.playerstats.achievements,
+          globalAchievementPercentagesResponse.achievementpercentages.achievements,
+          gameSchemaResponse.game.availableGameStats.achievements);
+        }
+      }
+      catch(error)
+      {
+        console.error("Something in gameSchemaResponse.game.availableGameStats is undefined")
+      }
+    }
+    //if only the username is valid
+    else if (steamid && !appid)
+    {
+      console.log("\tONLY steamid searched")
+
+      console.log("IPlayerService/GetOwnedGames")
+      let ownedGamesResponse = await fetchJSON(proxy + 
+        'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=' + 
+        key + '&steamid=' + steamid + '&format=json&include_appinfo=1', headers)
+      console.log(ownedGamesResponse.response)
+
+      console.log("IPlayerService/GetRecentlyPlayedGames")
+      let recentlyPlayedGamesResponse = await fetchJSON(proxy + 
+        'https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key=' + 
+        key + '&steamid=' + steamid + '&format=json', headers)
+      console.log(recentlyPlayedGamesResponse.response)
+
+      console.log("IPlayerService/GetSteamLevel")
+      let steamLevelResponse = await fetchJSON(proxy + 
+        'https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=' + 
+        key + '&steamid=' + steamid + '&format=json', headers)
+      console.log(steamLevelResponse.response)
+      setLevel(steamLevelResponse.response.player_level.toString());
+      console.log(steamLevel);
+
+      console.log("IPlayerService/GetCommunityBadgeProgress")
+      let communityBadgeProgressResponse = await fetchJSON(proxy + 
+        'https://api.steampowered.com/IPlayerService/GetCommunityBadgeProgress/v1/?key=' + 
+        key + '&steamid=' + steamid + '&format=json', headers)
+      console.log(communityBadgeProgressResponse.response)
+
+      console.log("ISteamUser/GetFriendList")
+      let friendsListResponse = await fetchJSON(proxy + 
+        'https://api.steampowered.com/ISteamUser/GetFriendList/v1/?key=' + 
+        key + '&steamid=' + steamid + ',&format=json', headers)
+      console.log(friendsListResponse)
+
+      console.log("ISteamUser/GetPlayerBans")
+      let playerBansResponse = await fetchJSON(proxy + 
+        'https://api.steampowered.com/ISteamUser/GetPlayerBans/v1/?key=' + 
+        key + '&steamids=' + steamid + '&format=json', headers)
+      console.log(playerBansResponse.players[0])
+
+      console.log("ISteamUser/GetPlayerSummaries")
+      let playerSummeryResponse = await fetchJSON(proxy + 
+        'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=' + 
+        key + '&steamids=' + steamid + '&format=json', headers)
+      console.log(playerSummeryResponse.response.players[0])
+      setPlayer(playerSummeryResponse.response.players[0]);
+      //console.log(playerinfo.loccountrycode);
+      //console.log(profPic);
+    
+      console.log(playerinfo.personastate)
+
+
+      console.log("ISteamUser/GetUserGroupList")
+      let groupListResponse = await fetchJSON(proxy + 
+        'https://api.steampowered.com/ISteamUser/GetUserGroupList/v1/?key=' + 
+        key + '&steamid=' + steamid + '&format=json', headers)
+      console.log(groupListResponse.response)
+
+      createRecentlyPlayedGamesHTML(recentlyPlayedGamesResponse.response.games)
+    }
+    //if only a game was searched
+    else if (!steamid && appid)
+    {
+      console.log("\tONLY appid searched")
+    }
+    //if nothing was searched?
+    else
+    {
+      console.log("\tNO item searched");
+    }
   }
 
   function createAppTitleHTML(title, playerCount, achievements, appid)
@@ -324,7 +327,7 @@ const Main = ({usernameSearch, searchClick}) => {
     let achievementRow = document.createElement("div");
     achievementRow.className = "row col-xs-12";
     let achievementGrid = document.createElement("div");
-    achievementGrid.className = "achievement-grid d-flex flex-row flex-wrap d-flex justify-content-between";
+    achievementGrid.className = "achievement-grid flex-row flex-wrap d-flex justify-content-between";
 
     console.log(userAchievements);
     console.log(globalAchievements);
@@ -336,7 +339,6 @@ const Main = ({usernameSearch, searchClick}) => {
       let square = document.createElement("div");
       square.className = "achievement-square flex-fill col-xs-12 col-sm-6 col-md-4 col-lg-3";
 
-      
       let icon = document.createElement("img");
       icon.className = "achievement-icon mx-auto";
       icon.width = iconSize;
@@ -381,15 +383,19 @@ const Main = ({usernameSearch, searchClick}) => {
 
   function createRecentlyPlayedGamesHTML(games)
   {
+    let gameRow = document.createElement("div");
+    gameRow.className = "container";
+
     let gameListContainer = document.createElement("div");
-    gameListContainer.className = "profile-info recentGames yellow-neon-border row mx-4 d-flex justify-content-center";
+    gameListContainer.className = "profile-info yellow-neon-border mx-auto pb-2 flex-row flex-wrap d-flex";
+    gameRow.appendChild(gameListContainer);
 
     let containerTitle = document.createElement("h4");
     containerTitle.className = "col-12 text-center mt-2";
     containerTitle.innerText = "Recently Played Games";
     gameListContainer.appendChild(containerTitle);
 
-    document.getElementById("user-app-content").appendChild(gameListContainer);
+    document.getElementById("user-app-content").appendChild(gameRow);
 
     if (!games)
     {
@@ -404,7 +410,7 @@ const Main = ({usernameSearch, searchClick}) => {
     {
       let singleGame = document.createElement("div");
       singleGame.key = games[i].appid;
-      singleGame.className = "m-2 col-11 col-sm-3 bg-secondary p-2 rounded the-game";
+      singleGame.className = "rounded the-game bg-secondary flex-fill m-2 p-2 col-xs-12 col-sm-6 col-md-4";
 
       let gameIcon = document.createElement("img");
       gameIcon.id="game-icon";
@@ -419,8 +425,9 @@ const Main = ({usernameSearch, searchClick}) => {
       singleGame.appendChild(gameTitle);
 
       let gamePlayTime = document.createElement("span");
-      gamePlayTime.className = "game-facts m-2 p-2";
-      gamePlayTime.innerText = "Playtime: " + games[i].playtime_forever + " min";
+      let playTime = Math.floor(games[i].playtime_forever/60) + " hr " + (games[i].playtime_forever % 60) + " min";
+      gamePlayTime.className = "game-facts rounded border border-light m-2 p-2";
+      gamePlayTime.innerText = "Playtime: " + playTime;
       singleGame.appendChild(gamePlayTime);
       gameListContainer.appendChild(singleGame);
     }
@@ -444,10 +451,10 @@ const Main = ({usernameSearch, searchClick}) => {
   async function fetchJSON(apiURL, headers)
   {
     let response = await fetch(apiURL, headers);
-    if (response.status == 403)
+    if ((response.status >= 400) && (response.status < 500))
     {
-      console.error("User profile is likely set to private.");
-      setPrivate(1);
+      console.error("client error. returning undefined to be caught later on");
+      return undefined;
     }
     else if (!response.ok)
     {
