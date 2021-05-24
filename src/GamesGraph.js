@@ -19,11 +19,17 @@ import {
 
 const GamesGraph = ({games}) => {
     console.log(games[0]);
+    let gamesSort = games;
+    //https://stackoverflow.com/questions/979256/sorting-an-array-of-objects-by-property-values
+    gamesSort.sort((a, b) => (b.playtime_forever) - (a.playtime_forever));
+
     let gameNames = [];
     let playTime = []
-    for(let i = 0; i<games.length; i++){
-        gameNames.push(games[i].name)
-        playTime.push(games[i].playtime_forever)
+    for(let i = 0; i<gamesSort.length && i < 30; i++){
+        if(gamesSort[i].playtime_forever > 100){
+        gameNames.push(gamesSort[i].name)
+        playTime.push(gamesSort[i].playtime_forever)
+        }
     }
     console.log(gameNames)
 
@@ -34,6 +40,7 @@ const GamesGraph = ({games}) => {
             data={{
                 labels: gameNames,
                 datasets: [{
+                  label: 'Playtime',
                   data: playTime,
                   backgroundColor: 'rgb(0,0,0)',
                 }]
