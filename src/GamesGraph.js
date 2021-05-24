@@ -1,22 +1,6 @@
+import { text } from 'express';
 import {Bar} from 'react-chartjs-2';
-import {
-    Chart,
-    BarElement,
-    PointElement,
-    BarController,
-    CategoryScale,
-    LinearScale,
-    LogarithmicScale,
-    RadialLinearScale,
-    TimeScale,
-    TimeSeriesScale,
-    Decimation,
-    Filler,
-    Legend,
-    Title,
-    Tooltip,
-    registerables
-  } from 'chart.js';
+
 
 const GamesGraph = ({games}) => {
     console.log(games[0]);
@@ -26,9 +10,11 @@ const GamesGraph = ({games}) => {
 
     let gameNames = [];
     let playTime = []
+    let min2Hours = "";
     for(let i = 0; i<gamesSort.length && i < 10; i++){
         if(gamesSort[i].playtime_forever > 100){
         gameNames.push(gamesSort[i].name)
+        min2Hours = Math.floor(gamesSort[i].playtime_forever/60) + " hr " + (gamesSort[i].playtime_forever % 60) + " min";
         playTime.push(gamesSort[i].playtime_forever)
         }
     }
@@ -42,6 +28,9 @@ const GamesGraph = ({games}) => {
             text: 'Top 10 Most Played Games',
             color: 'white',
             position: 'top'
+        },
+        legend: {
+            display: false
         }
     },
         scales: {
@@ -55,7 +44,12 @@ const GamesGraph = ({games}) => {
             },
             y:{
                 ticks: {
-                    color: 'white'
+                    color: 'white',
+                },
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Minutes'
+                    //This doesnt work
                 }
             }
         }
