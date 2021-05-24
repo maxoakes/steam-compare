@@ -288,6 +288,10 @@ const Main = ({usernameSearch, searchClick}) => {
   //and user stats and combine them into one array a unified object
   function mergeAchievementObjects(userAchievements, globalAchievements, achievementSchemas)
   {
+    console.log(userAchievements)
+    console.log(globalAchievements)
+    console.log(achievementSchemas)
+
     let achievementObjectList = [];
     for (let i = 0; i < achievementSchemas.length; i++)
     {
@@ -303,6 +307,7 @@ const Main = ({usernameSearch, searchClick}) => {
         icon: achievementSchemas[i].icon,
         icongray: achievementSchemas[i].icongray,
         name: achievementSchemas[i].name,
+        description: achievementSchemas[i].description,
       }
       achievementObjectList.push(achievementObject);
     }
