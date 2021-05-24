@@ -1,4 +1,3 @@
-import { text } from 'express';
 import {Bar} from 'react-chartjs-2';
 
 
