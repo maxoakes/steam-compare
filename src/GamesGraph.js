@@ -14,7 +14,8 @@ import {
     Filler,
     Legend,
     Title,
-    Tooltip
+    Tooltip,
+    registerables
   } from 'chart.js';
 
 const GamesGraph = ({games}) => {
@@ -25,7 +26,7 @@ const GamesGraph = ({games}) => {
 
     let gameNames = [];
     let playTime = []
-    for(let i = 0; i<gamesSort.length && i < 30; i++){
+    for(let i = 0; i<gamesSort.length && i < 10; i++){
         if(gamesSort[i].playtime_forever > 100){
         gameNames.push(gamesSort[i].name)
         playTime.push(gamesSort[i].playtime_forever)
@@ -33,20 +34,31 @@ const GamesGraph = ({games}) => {
     }
     console.log(gameNames)
 
-    return(
-        <div className="bg-light">
-            {games &&
-            <Bar
-            data={{
-                labels: gameNames,
-                datasets: [{
-                  label: 'Playtime',
-                  data: playTime,
-                  backgroundColor: 'rgb(0,0,0)',
-                }]
-              }
-              }
+    const options = {
+        scales: {
+            xAxes: [{
+                ticks: {
+                    autoSkip: false,
+                    maxRotation: 100,
+                    minRotation: 50,
+                    color: 'rgb(50,30,70)'
+                }
+            }]
+        }
+    };
+    const data = {
+        labels: gameNames,
+        datasets: [{
+          label: 'Playtime',
+          data: playTime,
+          backgroundColor: 'rgb(0,0,0)',
+        }]
+    };
 
+    return(
+        <div className="bg-light table-responsive">
+            {games &&
+            <Bar data={data} options = {options}
             />
 }
         </div>

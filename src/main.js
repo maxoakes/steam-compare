@@ -535,7 +535,9 @@ const Main = ({usernameSearch, searchClick}) => {
         </div>
       </div>
       {allGames &&
+
         <div>
+          <br></br>
           <GamesGraph games={allGames}></GamesGraph>
         </div>
       }
