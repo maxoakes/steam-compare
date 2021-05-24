@@ -205,12 +205,12 @@ const Main = ({usernameSearch, searchClick}) => {
       try {
         if (gameSchemaResponse.game.availableGameStats.achievements)
         {
-          let mergedAchivementList = mergeAchievementObjects(
+          let mergedAchievementList = mergeAchievementObjects(
             playerAchievementsResponse.playerstats.achievements,
             globalAchievementPercentagesResponse.achievementpercentages.achievements,
             gameSchemaResponse.game.availableGameStats.achievements);
-          console.log(mergedAchivementList);
-          setGameAchievements(mergedAchivementList);
+          console.log(mergedAchievementList);
+          setGameAchievements(mergedAchievementList);
         }
       }
       catch(error) {
@@ -284,7 +284,7 @@ const Main = ({usernameSearch, searchClick}) => {
     fetchGameBannerURL(generatedAppid);
   }
 
-  //take the arrays of the achivement schema, global stats
+  //take the arrays of the achievement schema, global stats
   //and user stats and combine them into one array a unified object
   function mergeAchievementObjects(userAchievements, globalAchievements, achievementSchemas)
   {
@@ -368,18 +368,18 @@ const Main = ({usernameSearch, searchClick}) => {
     setGameBannerURL(bannerURL);
   }
 
-  //take in an array of achivements and return what percent are 'achieved'
-  function getAchivementPercent(achivementList)
+  //take in an array of achievements and return what percent are 'achieved'
+  function getAchievementPercent(achievementList)
   {
-    if (achivementList)
+    if (achievementList)
     {
-      //achivements obtained so far
+      //achievements obtained so far
       let userAchievementCount = 0;
-      for (let i = 0; i < achivementList.length; i++)
+      for (let i = 0; i < achievementList.length; i++)
       {
-        if (achivementList[i].achieved) userAchievementCount++;
+        if (achievementList[i].achieved) userAchievementCount++;
       }
-      return (userAchievementCount + " out of " + achivementList.length + " achievements obtained");
+      return (userAchievementCount + " out of " + achievementList.length + " achievements obtained");
     }
     else
     {
@@ -451,11 +451,11 @@ const Main = ({usernameSearch, searchClick}) => {
               </div>
               <div className="col-xs-12 col-md-4 game-banner-info">
                 <p className="text-light game-banner-info-playercount">{playerCount + " players online"}</p>
-                <p className="text-light game-banner-info-achievement">{getAchivementPercent(gameAchievements)}</p>
+                <p className="text-light game-banner-info-achievement">{getAchievementPercent(gameAchievements)}</p>
               </div>
             </div>
           }
-            {/* Game achivement grid */}
+            {/* Game achievement grid */}
           {gameAchievements &&
             <div className="row col-xs-12">
               <div className="achievement-grid flex-row flex-wrap d-flex justify-content-between">
