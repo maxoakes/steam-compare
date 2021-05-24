@@ -35,13 +35,27 @@ const GamesGraph = ({games}) => {
     console.log(gameNames)
 
     const options = {
+        responsive: true,
+        plugins: {
+        title: {
+            display: true,
+            text: 'Top 10 Most Played Games',
+            color: 'white',
+            position: 'top'
+        }
+    },
         scales: {
             x: {
                 ticks: {
                     autoSkip: false,
                     maxRotation: 90,
                     minRotation: 90,
-                    color: 'blue'
+                    color: 'white'
+                }
+            },
+            y:{
+                ticks: {
+                    color: 'white'
                 }
             }
         }
@@ -51,14 +65,14 @@ const GamesGraph = ({games}) => {
         datasets: [{
           label: 'Playtime',
           data: playTime,
-          backgroundColor: 'rgb(0,0,0)',
+          backgroundColor: '#6c757d',
         }]
     };
 
     return(
-        <div className="bg-light table-responsive">
+        <div className="bg-light table-responsive yellow-neon-border profile-info bg-dark">
             {games &&
-            <Bar data={data} options = {options} className=""/>
+            <Bar data={data} options = {options}/>
             }
         </div>
 
