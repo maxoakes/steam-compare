@@ -36,14 +36,14 @@ const GamesGraph = ({games}) => {
 
     const options = {
         scales: {
-            xAxes: [{
+            x: {
                 ticks: {
                     autoSkip: false,
-                    maxRotation: 100,
-                    minRotation: 50,
-                    color: 'rgb(50,30,70)'
+                    maxRotation: 90,
+                    minRotation: 90,
+                    color: 'blue'
                 }
-            }]
+            }
         }
     };
     const data = {
@@ -58,9 +58,8 @@ const GamesGraph = ({games}) => {
     return(
         <div className="bg-light table-responsive">
             {games &&
-            <Bar data={data} options = {options}
-            />
-}
+            <Bar data={data} options = {options} className=""/>
+            }
         </div>
 
     );
