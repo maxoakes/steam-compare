@@ -18,7 +18,6 @@ const MostPlayed = ({games}) =>{
         }
     }
     console.log(gameNames)
-
     const options = {
         responsive: true,
         plugins: {
