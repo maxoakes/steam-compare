@@ -13,12 +13,14 @@ const GamesGraph = ({games}) => {
 
 
     return(
-        <div className="bg-light table-responsive yellow-neon-border profile-info bg-dark">
+        <div className="bg-light table-responsive yellow-neon-border profile-info bg-dark col-md-8 col-sm-10 col-lg-5">
             {games &&
             <div>
             <Router>
-                <Link to="/mostPlayed">Most Played</Link>
-                <Link to="/timePlayed">Time Percentage</Link>
+
+                <Link to="/mostPlayed" className="m-4">Most Played</Link>
+                <Link to="/timePlayed" className="m-4">Time Percentage</Link>
+                
                 <Switch>
                     <Route path='/mostPlayed'>
                         <MostPlayed games={games}/>

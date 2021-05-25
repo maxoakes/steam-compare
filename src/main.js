@@ -416,7 +416,7 @@ const Main = ({usernameSearch, searchClick}) => {
         <div className="col-xs-12 col-md-12">
           <div className="row"> 
             <div className="user-info col-xs-8 col-md-8 d-flex justify-content-center">
-              <div className="profile-info yellow-neon-border mb-4 mt-2">
+              <div className="profile-info yellow-neon-border m-2">
                 <div className="d-flex justify-content-center mt-2">
                   <img id="profile-image" src={playerinfo.avatarfull} height="100px" width="100px" alt="Avatar"></img>
                 </div>
@@ -438,7 +438,7 @@ const Main = ({usernameSearch, searchClick}) => {
           <div id="user-app-content" className="row justify-content-center">
           {/* USER-ONLY SEARCH CONTENT */}
           {playedGames &&
-          <div className="container">
+          <div className="container m-2">
             <div className="profile-info yellow-neon-border mx-auto pb-2 flex-row flex-wrap d-flex">
               <h4 className="col-12 text-center mt-2">Recently Played Games</h4>
               {playedGames.map(game => (
@@ -487,7 +487,7 @@ const Main = ({usernameSearch, searchClick}) => {
       </div>
       {allGames &&
 
-        <div>
+        <div className="row d-flex justify-content-center m-4">
           <br></br>
           <GamesGraph games={allGames}></GamesGraph>
         </div>

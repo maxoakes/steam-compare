@@ -34,6 +34,7 @@ const MostPlayed = ({games}) =>{
         scales: {
             x: {
                 ticks: {
+                    //display: false,
                     autoSkip: false,
                     maxRotation: 90,
                     minRotation: 90,
@@ -45,7 +46,7 @@ const MostPlayed = ({games}) =>{
                     color: 'white',
                 },
                 scaleLabel: {
-                    display: true,
+                    display: false,
                     labelString: 'Minutes'
                     //This doesnt work
                 }
