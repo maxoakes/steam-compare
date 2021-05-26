@@ -316,11 +316,9 @@ const Main = ({usernameSearch, searchClick}) => {
     return achievementObjectList;
   }
 
+  //combine the stat schema and the stats of the player
   function makeStatObjects(statSchema, playerStats)
   {
-    // console.log(statSchema);
-    // console.log(playerStats);
-
     for (let i = 0; i < statSchema.length; i++)
     {
       for (let j = 0; j < playerStats.length; j++)
@@ -333,9 +331,7 @@ const Main = ({usernameSearch, searchClick}) => {
       if (!('value' in statSchema[i])) statSchema[i].value = 0;
       if (!(statSchema[i].displayName)) statSchema[i].displayName = statSchema[i].name;
     }
-
     statSchema = statSchema.filter(stat => stat.value != 0);
-    console.log(statSchema);
     return statSchema;
   }
 
