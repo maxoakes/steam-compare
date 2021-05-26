@@ -1,4 +1,4 @@
-import {Pie} from 'react-chartjs-2';
+import {Doughnut} from 'react-chartjs-2';
 const TimePlayed = ({games}) =>{
     console.log(games)
     let backgroundColors = [
@@ -74,7 +74,7 @@ const TimePlayed = ({games}) =>{
 
     return(
         <div>
-            <Pie data={data} options={options} />
+            <Doughnut data={data} options={options} />
         </div>
     );
 }
