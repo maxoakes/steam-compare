@@ -189,12 +189,6 @@ const Main = ({usernameSearch, searchClick}) => {
       try {
         gameStats = gameSchemaResponse.game.availableGameStats.stats;
 
-        console.log("ISteamUserStats/GetGlobalStatsForGame")
-        let globalGameStatsResponse = await fetchJSON(proxy +
-          'https://api.steampowered.com/ISteamUserStats/GetGlobalStatsForGame/v1/?key=' + 
-          key + '&appid=' + generatedAppid + '&count=' + gameStats.length + '&name[0]=' + gameStats[0].name + '&format=json', headers)
-        console.log(globalGameStatsResponse);
-
         console.log("ISteamUserStats/GetUserStatsForGame")
         let userStatsForGameResponse = await fetchJSON(proxy +
           'https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/?key=' + 
