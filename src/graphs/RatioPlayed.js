@@ -3,11 +3,11 @@ import {Doughnut} from 'react-chartjs-2';
 const RatioPlayed = ({games}) => {
     let colors = [
         'hsl(214, 100%, 50%)',
-        'hsl(214, 75%, 20%)',
+        'hsl(250, 75%, 20%)',
         'hsl(214, 20%, 20%)',
-        'hsl(214, 20%, 75%)',
+        'hsl(230, 20%, 75%)',
         'hsl(214, 60%, 5%)',
-        'hsl(214, 60%, 75%)',
+        'hsl(190, 60%, 75%)',
         'hsl(214, 30%, 50%)',
     ]
 
