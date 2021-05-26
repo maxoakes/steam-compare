@@ -6,6 +6,10 @@ const RatioPlayed = ({games}) => {
         totalTime += games[i].playtime_forever;
     }
     console.log(totalTime)
+    let gamesSort = games;
+    //https://stackoverflow.com/questions/979256/sorting-an-array-of-objects-by-property-values
+    gamesSort.sort((a, b) => (b.playtime_forever) - (a.playtime_forever));
+
 
 
     return(
