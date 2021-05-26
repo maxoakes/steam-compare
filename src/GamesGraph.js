@@ -13,25 +13,15 @@ const GamesGraph = ({games}) => {
 
 
     return(
-        <div className="bg-light table-responsive yellow-neon-border profile-info bg-dark col-md-8 col-sm-10 col-lg-5">
-            {games &&
-            <div>
-            <Router>
-
-                <Link to="/mostPlayed" className="m-4">Most Played</Link>
-                <Link to="/timePlayed" className="m-4">Time Percentage</Link>
+        <div className="bg-light table-responsive profile-info bg-dark col-md-12 col-sm-10 row">
+            <div className="col-md-5 m-2">
                 
-                <Switch>
-                    <Route path='/mostPlayed'>
                         <MostPlayed games={games}/>
-                    </Route>
-                    <Route path='/timePlayed'>
+</div>
+<div className="col-md-5 m-2">
                         <TimePlayed games={games}/>
-                    </Route>
-                </Switch>
-            </Router>
             </div>
-            }
+            
             
         </div>
 
