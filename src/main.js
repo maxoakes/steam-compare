@@ -422,7 +422,7 @@ const Main = ({usernameSearch, searchClick}) => {
 
   return(
     <div>
-      <div className="row">
+      <div className="row d-flex justify-content-center">
         <div className="col-xs-12 col-md-12">
           <div className="row"> 
             <div className="user-info col-xs-8 col-md-8 d-flex justify-content-center">
@@ -514,7 +514,7 @@ const Main = ({usernameSearch, searchClick}) => {
           }
           </div>
         </div>
-      </div>
+      
       {allGames &&
 
         <div className="row d-flex justify-content-center m-4">
@@ -522,7 +522,7 @@ const Main = ({usernameSearch, searchClick}) => {
           <GamesGraph games={allGames}></GamesGraph>
         </div>
       }
-
+</div>
     <div className="footer-space"></div>
       <Redirect to ="/" />
       {/* A little extra padding... */}
