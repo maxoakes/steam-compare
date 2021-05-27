@@ -14,7 +14,7 @@ const GamesGraph = ({games}) => {
 
 
     return(
-        <div className="table-responsive profile-info bg-dark col-md-12 col-sm-10 row d-flex justify-content-center">
+        <div className="table-responsive profile-info col-md-12 col-sm-10 row d-flex justify-content-center">
             <div className="col-md-5 col-sm-10 m-2">
                         <MostPlayed games={games}/>
             </div>
