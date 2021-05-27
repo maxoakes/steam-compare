@@ -452,7 +452,7 @@ const Main = ({usernameSearch, searchClick}) => {
             <div className="profile-info mx-auto flex-row flex-wrap d-flex">
               <h4 className="col-12 text-center mt-2">Recently Played Games</h4>
               {playedGames.map(game => (
-              <div key={game.appid} className="rounded the-game flex-fill m-2 p-2 col-xs-12 col-sm-6 col-md-2">
+              <div key={game.appid} className="rounded the-game flex-fill m-2 p-2 col-xs-12 col-sm-6 col-md-3">
                 <img id="game-icon" className="mr-3" src={'http://media.steampowered.com/steamcommunity/public/images/apps/' + game.appid + '/' + game.img_icon_url + '.jpg'} 
                   alt={'Game icon:' + game.name} height="50px" width="50px" />
                 <span className="ml-2">{game.name}</span>

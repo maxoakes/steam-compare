@@ -90,6 +90,8 @@ body {
 }
 
 .the-game {
+  display: inline-block;
+  position: relative;
 }
 #game-icon {
   border-radius: 10px;
