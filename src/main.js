@@ -33,6 +33,7 @@ const Main = ({usernameSearch, searchClick}) => {
   //user content
   const [steamid, setSteamid] = useState(0);
   const [playedGames, setPlayedGames] = useState([]);
+  const [friendsList, setFriendsList] = useState([]);
 
   //game content
   const [appid, setAppid] = useState(0);
@@ -40,7 +41,7 @@ const Main = ({usernameSearch, searchClick}) => {
   const [gameTitle, setGameTitle] = useState("");
   const [playerCount, setPlayerCount] = useState(0);
   const [gameAchievements, setGameAchievements] = useState([]);
-  const [gameStats, setGameStats] = useState([]);
+  const [playerGameStats, setPlayerGameStats] = useState([]);
   
 
   //React things
@@ -84,7 +85,7 @@ const Main = ({usernameSearch, searchClick}) => {
     setPlayedGames(null);
     setGameTitle(null);
     setGameAchievements(null);
-    setGameStats(null);
+    setPlayerGameStats(null);
     setGames(null);
 
     //get the form seach boxes
@@ -134,23 +135,38 @@ const Main = ({usernameSearch, searchClick}) => {
       }
     }
 
+    let friendsListResponse;
+    let playerSummeryResponse;
     //stats for player summary
     if (generatedSteamid)
     {
       console.log("ISteamUser/GetPlayerSummaries")
-      let playerSummeryResponse = await fetchJSON(proxy + 
+      playerSummeryResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=' + 
         key + '&steamids=' + generatedSteamid + '&format=json', headers)
-      //console.log(playerSummeryResponse.response.players[0])
+      console.log(playerSummeryResponse.response.players[0])
       
       console.log("IPlayerService/GetSteamLevel")
       let steamLevelResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=' + 
         key + '&steamid=' + generatedSteamid + '&format=json', headers)
-      //console.log(steamLevelResponse.response)
+      console.log(steamLevelResponse.response)
       
+      console.log("ISteamUser/GetFriendList")
+      friendsListResponse = await fetchJSON(proxy + 
+        'https://api.steampowered.com/ISteamUser/GetFriendList/v1/?key=' + 
+        key + '&steamid=' + generatedSteamid + ',&format=json', headers)
+      console.log(friendsListResponse)
+
+      console.log("ISteamUser/GetUserGroupList")
+      let groupListResponse = await fetchJSON(proxy + 
+        'https://api.steampowered.com/ISteamUser/GetUserGroupList/v1/?key=' + 
+        key + '&steamid=' + generatedSteamid + '&format=json', headers)
+      console.log(groupListResponse.response)
+
       setPlayer(playerSummeryResponse.response.players[0]);
       setLevel(steamLevelResponse.response.player_level);
+      setFriendsList(friendsListResponse.friendslist);
     }
 
     //if both a user and game is searched and valid
@@ -186,11 +202,12 @@ const Main = ({usernameSearch, searchClick}) => {
       // the inputs to this one must come from the previous API call
       // not a lot of games implement this. not sure if we want to call it
       let gameStats;
+      let userStatsForGameResponse;
       try {
         gameStats = gameSchemaResponse.game.availableGameStats.stats;
 
         console.log("ISteamUserStats/GetUserStatsForGame")
-        let userStatsForGameResponse = await fetchJSON(proxy +
+        userStatsForGameResponse = await fetchJSON(proxy +
           'https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/?key=' + 
           key + '&appid=' + generatedAppid + '&steamid=' + generatedSteamid + '&format=json', headers)
         // userStatsForGameResponse.playerstats yields stats and acheivements, but achievements was retrieved earlier
@@ -209,6 +226,10 @@ const Main = ({usernameSearch, searchClick}) => {
             gameSchemaResponse.game.availableGameStats.achievements);
           console.log(mergedAchievementList);
           setGameAchievements(mergedAchievementList);
+
+          let fullStatObject = makeStatObjects(gameSchemaResponse.game.availableGameStats.stats,
+            userStatsForGameResponse.playerstats.stats);
+          setPlayerGameStats(fullStatObject);
         }
       }
       catch(error) {
@@ -239,58 +260,34 @@ const Main = ({usernameSearch, searchClick}) => {
         key + '&steamid=' + generatedSteamid + '&format=json', headers)
       console.log(communityBadgeProgressResponse.response)
 
-      console.log("ISteamUser/GetFriendList")
-      let friendsListResponse = await fetchJSON(proxy + 
-        'https://api.steampowered.com/ISteamUser/GetFriendList/v1/?key=' + 
-        key + '&steamid=' + generatedSteamid + ',&format=json', headers)
-      console.log(friendsListResponse)
-
       console.log("ISteamUser/GetPlayerBans")
       let playerBansResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/ISteamUser/GetPlayerBans/v1/?key=' + 
         key + '&steamids=' + generatedSteamid + '&format=json', headers)
       console.log(playerBansResponse.players[0])
 
-      console.log("ISteamUser/GetPlayerSummaries")
-      let playerSummeryResponse = await fetchJSON(proxy + 
-        'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=' + 
-        key + '&steamids=' + generatedSteamid + '&format=json', headers)
-      console.log(playerSummeryResponse.response.players[0])
-      setPlayer(playerSummeryResponse.response.players[0]);
-
-      console.log("ISteamUser/GetUserGroupList")
-      let groupListResponse = await fetchJSON(proxy + 
-        'https://api.steampowered.com/ISteamUser/GetUserGroupList/v1/?key=' + 
-        key + '&steamid=' + generatedSteamid + '&format=json', headers)
-      console.log(groupListResponse.response)
-
       setPlayedGames(recentlyPlayedGamesResponse.response.games);
     }
-    //if only a game was searched
     else if (!generatedSteamid && generatedAppid)
     {
-      console.log("\tONLY appid searched")
+      console.log("\tONLY valid appid searched")
     }
-    //if nothing was searched?
     else
     {
-      console.log("\tNO item searched");
+      console.log("\tNO valid item searched");
     }
 
     setSteamid(generatedSteamid);
     setAppid(generatedAppid);
     setGameTitle(generatedAppTitle);
     fetchGameBannerURL(generatedAppid);
+    
   }
 
   //take the arrays of the achievement schema, global stats
   //and user stats and combine them into one array a unified object
   function mergeAchievementObjects(userAchievements, globalAchievements, achievementSchemas)
   {
-    console.log(userAchievements)
-    console.log(globalAchievements)
-    console.log(achievementSchemas)
-
     let achievementObjectList = [];
     for (let i = 0; i < achievementSchemas.length; i++)
     {
@@ -313,6 +310,25 @@ const Main = ({usernameSearch, searchClick}) => {
     return achievementObjectList;
   }
 
+  //combine the stat schema and the stats of the player
+  function makeStatObjects(statSchema, playerStats)
+  {
+    for (let i = 0; i < statSchema.length; i++)
+    {
+      for (let j = 0; j < playerStats.length; j++)
+      {
+        if (statSchema[i].name === playerStats[j].name)
+        {
+          statSchema[i].value = playerStats[j].value;
+        }
+      }
+      if (!('value' in statSchema[i])) statSchema[i].value = 0;
+      if (!(statSchema[i].displayName)) statSchema[i].displayName = statSchema[i].name;
+    }
+    statSchema = statSchema.filter(stat => stat.value != 0);
+    return statSchema;
+  }
+    
   //convert the time that is recieved from steam api into a date and time
   function convertSteamTimeToUTC(seconds)
   {
@@ -476,6 +492,26 @@ const Main = ({usernameSearch, searchClick}) => {
             </div>
           }
             {/* Game stats table */}
+          {playerGameStats &&
+          <div className="container">
+            <table class="table table-dark table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Stat Name</th>
+                  <th scope="col">{playerinfo.personaname}'s Stat</th>
+                </tr>
+              </thead>
+              {playerGameStats.map(stat => (
+              <tbody key={stat.name} className="table-striped">
+                <tr>
+                  <th scope="row">{stat.displayName}</th>
+                  <td>{stat.value}</td>
+                </tr>
+              </tbody>
+              ))}
+            </table>
+          </div>
+          }
           </div>
         </div>
       </div>
