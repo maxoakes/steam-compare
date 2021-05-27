@@ -230,12 +230,6 @@ const Main = ({usernameSearch, searchClick}) => {
           let fullStatObject = makeStatObjects(gameSchemaResponse.game.availableGameStats.stats,
             userStatsForGameResponse.playerstats.stats);
           setPlayerGameStats(fullStatObject);
-
-          // let combinedGameStats = combineStats(gameSchemaResponse.game.availableGameStats.stats,
-          //   playerSummeryResponse.response.players[0],
-          //   userStatsForGameResponse.playerstats.stats,
-          //   friendsListResponse.friendslist.friends,
-          //   generatedAppid);
         }
       }
       catch(error) {
@@ -334,54 +328,6 @@ const Main = ({usernameSearch, searchClick}) => {
     statSchema = statSchema.filter(stat => stat.value != 0);
     return statSchema;
   }
-
-  async function combineStats(statSchema, player, playerStats, friends, game)
-  {
-    console.log(statSchema);
-    console.log(player);
-    console.log(playerStats);
-    console.log(friends);
-
-    let friendsListString = "";
-    for (let i = 0; i < friends.length; i++)
-    {
-      friendsListString = friendsListString.concat(friends[i].steamid + ",");
-    }
-
-    let friendSummariesResponse = await fetchJSON(proxy + 
-      'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=' + 
-      key + '&steamids=' + friendsListString + '&format=json', headers)
-    let friendSummaries = friendSummariesResponse.response.players
-    console.log(friendSummaries);
-
-    let friendStatList = [];
-    for (let i = 0; i < friendSummaries.length; i++)
-    {
-      let ownedGamesResponse = await fetchJSON(proxy + 
-        'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=' + 
-        key + '&steamid=' + friendSummaries[i].steamid + '&format=json&appids_filter=' + game, headers)
-      console.log(ownedGamesResponse.response)
-
-      let ownsGame = -1;
-      for (let j = 0; j < ownedGamesResponse.response.length; j++)
-      {
-        if (ownedGamesResponse.response[i].appid)
-        {
-          ownsGame = j;
-          continue;
-        }
-      }
-      if (ownsGame == -1) continue;
-
-    }
-
-    
-    //player
-      //name
-      //id
-      //avatar url
-      //full stat list
-    }
     
   //convert the time that is recieved from steam api into a date and time
   function convertSteamTimeToUTC(seconds)
