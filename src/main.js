@@ -494,7 +494,7 @@ const Main = ({usernameSearch, searchClick}) => {
             {/* Game stats table */}
           {playerGameStats &&
           <div className="container">
-            <table class="table table-dark table-hover">
+            <table className="table table-dark table-hover">
               <thead>
                 <tr>
                   <th scope="col">Stat Name</th>
