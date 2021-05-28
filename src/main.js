@@ -230,6 +230,12 @@ const Main = ({usernameSearch, searchClick}) => {
           let fullStatObject = makeStatObjects(gameSchemaResponse.game.availableGameStats.stats,
             userStatsForGameResponse.playerstats.stats);
           setPlayerGameStats(fullStatObject);
+
+          // let combinedGameStats = combineStats(gameSchemaResponse.game.availableGameStats.stats,
+          //   playerSummeryResponse.response.players[0],
+          //   userStatsForGameResponse.playerstats.stats,
+          //   friendsListResponse.friendslist.friends,
+          //   generatedAppid);
         }
       }
       catch(error) {
@@ -308,6 +314,86 @@ const Main = ({usernameSearch, searchClick}) => {
       achievementObjectList.push(achievementObject);
     }
     return achievementObjectList;
+  }
+
+  async function combineStats(statSchema, player, playerStats, friends, gameid)
+  {
+    var t0 = performance.now()
+    console.log(statSchema);
+    console.log(player);
+    console.log(playerStats);
+    console.log(friends);
+
+    let friendsListString = "";
+    for (const friend of friends)
+    {
+      friendsListString = friendsListString.concat(friend.steamid + ",");
+    }
+
+    //get the names of steam friends
+    let friendSummariesResponse = await fetchJSON(proxy + 
+      'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=' + 
+      key + '&steamids=' + friendsListString + '&format=json', headers)
+    let friendSummaries = friendSummariesResponse.response.players
+
+    //fetch all of their games concurrently
+    let friendsGameList = [];
+    try {
+      var list = await Promise.all(
+        friendSummaries.map(friend => 
+          fetch(proxy +
+              'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=' + 
+              key + '&steamid=' + friend.steamid + '&format=json', headers)
+            .then(response =>
+              response = response.json())));
+      friendsGameList = list;
+    }
+    catch (error)
+    {
+        console.log(error)
+        throw (error)
+    }
+
+    //add the steamid to the game list so they have an accompanying person
+    let friendsWithGame = []
+    friendsWithGame.unshift(player);
+    for (let i = 0; i < friendsGameList.length; i++)
+    {
+      if (!(friendsGameList[i].response['games'])) continue;
+      for (let j = 0; j < friendsGameList[i].response.games.length; j++)
+      {
+        if (friendsGameList[i].response.games[j].appid === gameid)
+        {
+          friendsWithGame.push(friendSummaries[i]);
+          break;
+        }
+      }
+    }
+    console.log(friendsWithGame)
+
+    //fetch all stats concurrently
+    let friendsStats = []
+    try {
+      var list = await Promise.all(
+        friendsWithGame.map(friend => 
+          fetch(proxy +
+              'https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/?key=' + 
+              key + '&appid=' + gameid + '&steamid=' + friend.steamid + '&format=json', headers)
+            .then(response =>
+              response = response.json())))
+            .catch((error) => {
+              console.error('Error:', error);
+            })
+        friendsStats = list;
+    }
+    catch (error)
+    {
+      console.log("Data is set to private for a friend")
+    }
+
+    console.log(friendsStats)
+    var t1 = performance.now();
+    console.log("Call to combineStats took " + ((t1 - t0)/1000).toFixed(1) + " seconds.");
   }
 
   //combine the stat schema and the stats of the player
