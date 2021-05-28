@@ -93,6 +93,9 @@ body {
   display: inline-block;
   position: relative;
 }
+#game-icon {
+  border-radius: 10px;
+}
 
 .game-facts {
   visibility: hidden;
@@ -109,6 +112,8 @@ body {
   border-radius: 10px;
   color: white;
   z-index: 1;
+  box-shadow: 3px 3px 10px #000000;
+  background-color: rgb(24, 24, 24);
 }
 .profile-text {
   margin: 10px;

@@ -508,7 +508,7 @@ const Main = ({usernameSearch, searchClick}) => {
 
   return(
     <div>
-      <div className="row">
+      <div className="row d-flex justify-content-center">
         <div className="col-xs-12 col-md-12">
           <div className="row"> 
             <div className="user-info col-xs-8 col-md-8 d-flex justify-content-center">
@@ -534,13 +534,13 @@ const Main = ({usernameSearch, searchClick}) => {
           <div id="user-app-content" className="row justify-content-center">
           {/* USER-ONLY SEARCH CONTENT */}
           {playedGames &&
-          <div className="container m-2">
-            <div className="profile-info yellow-neon-border mx-auto pb-2 flex-row flex-wrap d-flex">
+          <div className="container m-4">
+            <div className="profile-info mx-auto flex-row flex-wrap d-flex">
               <h4 className="col-12 text-center mt-2">Recently Played Games</h4>
               {playedGames.map(game => (
-              <div key={game.appid} className="rounded the-game bg-secondary flex-fill m-2 p-2 col-xs-12 col-sm-6 col-md-4">
+              <div key={game.appid} className="rounded the-game flex-fill m-2 p-2 col-xs-12 col-sm-6 col-md-3">
                 <img id="game-icon" className="mr-3" src={'http://media.steampowered.com/steamcommunity/public/images/apps/' + game.appid + '/' + game.img_icon_url + '.jpg'} 
-                  alt={'Game icon:' + game.name} />
+                  alt={'Game icon:' + game.name} height="50px" width="50px" />
                 <span className="ml-2">{game.name}</span>
                 <span className="game-facts rounded border border-light m-2 p-2">Playtime: {minutesToHours(game.playtime_forever)}</span>
               </div>
@@ -600,7 +600,7 @@ const Main = ({usernameSearch, searchClick}) => {
           }
           </div>
         </div>
-      </div>
+      
       {allGames &&
 
         <div className="row d-flex justify-content-center m-4">
@@ -608,7 +608,7 @@ const Main = ({usernameSearch, searchClick}) => {
           <GamesGraph games={allGames}></GamesGraph>
         </div>
       }
-
+</div>
     <div className="footer-space"></div>
       <Redirect to ="/" />
       {/* A little extra padding... */}
