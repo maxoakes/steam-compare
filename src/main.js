@@ -23,12 +23,8 @@ const Main = ({usernameSearch, searchClick}) => {
   console.log("SEARCH:", usernameSearch)
 
   const [playerSummary, setPlayerSummary] = useState(null);
-  const [onlineStatus, setOnlineStatus] = useState("");
   const [steamLevel, setLevel] = useState("");
   const [allGames, setGames] = useState(null);
-
-  const [timeLogOff, setLastLogin] = useState("");
-  const [isPrivate, setPrivate] = useState(false);
 
   //user content
   const [steamid, setSteamid] = useState(0);
@@ -51,12 +47,19 @@ const Main = ({usernameSearch, searchClick}) => {
 
   async function grabData(event)
   {
+    //reset values
     setPlayerSummary(null);
+    setLevel("");
+    setGames(null);
+
+    setSteamid(0);
     setPlayedGames(null);
+    setFriendsList(null);
+    
     setGameTitle(null);
     setGameAchievements(null);
     setPlayerGameStats(null);
-    setGames(null);
+    
 
     //get the form seach boxes
     let appName = document.getElementById("game").value;
@@ -128,12 +131,6 @@ const Main = ({usernameSearch, searchClick}) => {
         key + '&steamid=' + generatedSteamid + ',&format=json', headers)
       console.log(friendsListResponse)
 
-      console.log("ISteamUser/GetUserGroupList")
-      let groupListResponse = await fetchJSON(proxy + 
-        'https://api.steampowered.com/ISteamUser/GetUserGroupList/v1/?key=' + 
-        key + '&steamid=' + generatedSteamid + '&format=json', headers)
-      console.log(groupListResponse.response)
-
       console.log("IPlayerService/GetOwnedGames")
       let ownedGamesResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=' + 
@@ -143,7 +140,7 @@ const Main = ({usernameSearch, searchClick}) => {
       setGames(ownedGamesResponse.response.games)
       setPlayerSummary(playerSummeryResponse.response.players[0]);
       setLevel(steamLevelResponse.response.player_level);
-      setFriendsList(friendsListResponse.friendslist);
+      if (friendsListResponse) setFriendsList(friendsListResponse.friendslist.friends);
     }
 
     //if both a user and game is searched and valid
@@ -448,20 +445,37 @@ const Main = ({usernameSearch, searchClick}) => {
     if (!seconds)
       return "Private";
 
-    let unlockTime = new Date(seconds*1000);
-    let timeString = unlockTime.toDateString() + " at " + 
-      unlockTime.getUTCHours().toString().padStart(2, '0') + ":" + 
-      unlockTime.getUTCMinutes().toString().padStart(2, '0') + " UTC";
+    let time = new Date(seconds * 1000);
       
-    return timeString;
+    let options = {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric'
+    };
+    return time.toLocaleDateString('en-US', options);
   }
 
   function getTimeDifferenceString(timeInSeconds)
   {
     let then = new Date(timeInSeconds*1000)
     let differenceInMinutes = Math.abs(Date.now() - then) / (1000 * 60);
+    let minutes = Math.floor(differenceInMinutes % 60);
+
+    let differenceInHours = (differenceInMinutes / 60);
+    let hours = Math.floor(differenceInHours % 24);
+
+    let differenceInDays = (differenceInMinutes / (60 * 24));
+    let days = Math.floor(differenceInDays % 365);
     let differenceInYears = (differenceInMinutes / (60 * 24 * 365));
-    let timeDifference = differenceInYears + " years ago";
+    let years = Math.floor(differenceInYears);
+
+    let timeDifference = (years ? (years + " years, ") : "")  + 
+      (days ? (days + " days, ") : "") + 
+      (hours ? (hours + " hours, ") : "") + 
+      (minutes ? (minutes + " minutes ") : "") + "ago";
     return timeDifference;
   }
 
@@ -470,6 +484,11 @@ const Main = ({usernameSearch, searchClick}) => {
   {
     return convertSteamTimeToUTC(timeInMilliseconds) +
       " (" + getTimeDifferenceString(timeInMilliseconds) + ")";
+  }
+
+  function getLocationString(state, country)
+  {
+    return (state ? state : "") + (state ? ", " : "") + (country ? country : "")
   }
 
   //take in an appid and return a url of an image of that appid's game/app
@@ -537,20 +556,28 @@ const Main = ({usernameSearch, searchClick}) => {
                 <img id="profile-image" src={playerSummary.avatarfull} alt={playerSummary.personaname + "'s avatar"}></img>
               </a>
               <div className="player-summary-persona fs-2">
-                <span className="player-summary-tiny-font">Persona</span>{playerSummary.personaname}
+                <span className="player-summary-tiny-font">Full Persona Name</span>{playerSummary.personaname}
               </div>
               <div className="player-summary-steamid fs-6">
                 <span className="player-summary-tiny-font">SteamID</span>{playerSummary.steamid}
               </div>
-              <div className="player-summary-status fs-4">
+              <div className="player-summary-status fs-6">
                 <span className="player-summary-tiny-font">Status</span>{getStatusString(playerSummary.personastate)}
               </div>
+              {friendsList &&
+              <div className="player-summary-friends fs-6">
+                <span className="player-summary-tiny-font">Friends</span>{friendsList.length}
+              </div>
+              }
+              {playerSummary.realname &&
               <div className="player-summary-real-name fs-6">
-              <span className="player-summary-tiny-font">Real Name</span>{playerSummary.realname}
-                </div>
-              {playerSummary.locstatecode &&
+                <span className="player-summary-tiny-font">Real Name</span>{playerSummary.realname}
+              </div>
+              }
+              {(playerSummary.locstatecode || playerSummary.loccountrycode) &&
               <div className="player-summary-location fs-6">
-                <span className="player-summary-tiny-font">Location</span>{playerSummary.locstatecode + ", " + playerSummary.loccountrycode}
+                <span className="player-summary-tiny-font">Location</span>{getLocationString(playerSummary.locstatecode,playerSummary.loccountrycode)}
+                <img className="player-summary-flag" src={"https://www.countryflags.io/" + playerSummary.loccountrycode + "/shiny/64.png"}></img>
               </div>
               }
               <div className="player-summary-last-online fs-6">
@@ -637,7 +664,7 @@ const Main = ({usernameSearch, searchClick}) => {
         </div>
         }
         </div>      
-        {!appid &&
+        {(!appid) &&
 
           <div className="row d-flex justify-content-center m-4">
             <br></br>
