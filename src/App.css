@@ -29,8 +29,7 @@ body {
 
 /* User and game page styles */
 /* Player Summary box */
-.player-summary-flag
-{
+.player-summary-flag {
   display: inline;
   vertical-align: bottom;
   margin-left: 12px;
@@ -38,8 +37,7 @@ body {
   width: 22px;
 }
 
-.player-summary-tiny-font
-{
+.player-summary-tiny-font {
   font-size: 9pt;
   margin: 0px;
   padding: 0px;
@@ -50,8 +48,7 @@ body {
   display: table;
 }
 
-.player-summary
-{
+.player-summary {
   display: grid;
   grid-template-columns: 184px 1fr 2fr;
   grid-template-rows: auto auto auto auto auto auto;
@@ -59,14 +56,12 @@ body {
   margin: auto auto 20px auto;
   gap: 8px;
 
-  border: 1px solid white;
   border-radius: 2px;
   box-shadow: 3px 3px 10px #000000;
   background-color: rgb(24, 24, 24);
 }
 
-.player-summary > *
-{
+.player-summary > * {
   color: white;
   padding: 0px;
   margin: 0px;
@@ -129,7 +124,6 @@ body {
   grid-column: 2 / span 1;
   grid-row: 4 / span 1;
 }
-
 
 /* User info and search bar */
 .user-info {

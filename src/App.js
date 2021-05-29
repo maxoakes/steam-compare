@@ -13,6 +13,7 @@ function App()
     const [appSearch, setAppSearch] = useState("");
     const [isMainMenuSearch, setIsMainMenuSearch] = useState(true);
     const [searchClick, setClick] = useState(0);
+    const [loading, setLoad] = useState(0);
   
     useEffect(() => {
       console.log("Searched name: " + usernameSearch + ". Searched app: "+ appSearch);
@@ -56,7 +57,7 @@ function App()
           <br></br>
           {/* the content that is fetched form the Steam API and main.js will be created here */}
           <Router>
-            <Main usernameSearch={usernameSearch} searchClick={searchClick}></Main>
+            <Main usernameSearch={usernameSearch} searchClick={searchClick} loading={loading}></Main>
           </Router>      
         </div>
       </div>

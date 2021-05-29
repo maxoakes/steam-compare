@@ -1,6 +1,7 @@
 import {Redirect} from 'react-router-dom';
 import {useEffect, useState} from "react";
 import GamesGraph from './GamesGraph.js'
+import Loading from './Loading.js'
 
 const Main = ({usernameSearch, searchClick}) => {
 
@@ -21,6 +22,7 @@ const Main = ({usernameSearch, searchClick}) => {
   };
 
   console.log("SEARCH:", usernameSearch)
+  const [loading, setLoad] = useState(null);
 
   const [playerSummary, setPlayerSummary] = useState(null);
   const [steamLevel, setLevel] = useState("");
@@ -42,7 +44,9 @@ const Main = ({usernameSearch, searchClick}) => {
 
   //React things
   useEffect( () => {
+    setLoad(loading + 1);
     grabData();
+    setLoad(null);
   }, [searchClick]);
 
   async function grabData(event)
@@ -118,12 +122,15 @@ const Main = ({usernameSearch, searchClick}) => {
         'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=' + 
         key + '&steamids=' + generatedSteamid + '&format=json', headers)
       console.log(playerSummeryResponse.response.players[0])
-      
+      setLoad(loading+1)
       console.log("IPlayerService/GetSteamLevel")
       let steamLevelResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=' + 
         key + '&steamid=' + generatedSteamid + '&format=json', headers)
       console.log(steamLevelResponse.response)
+
+      setLoad(loading+1)
+      console.log(loading);
       
       console.log("ISteamUser/GetFriendList")
       friendsListResponse = await fetchJSON(proxy + 
@@ -131,11 +138,14 @@ const Main = ({usernameSearch, searchClick}) => {
         key + '&steamid=' + generatedSteamid + ',&format=json', headers)
       console.log(friendsListResponse)
 
+      setLoad(loading+1)
+
       console.log("IPlayerService/GetOwnedGames")
       let ownedGamesResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=' + 
         key + '&steamid=' + generatedSteamid + '&format=json&include_appinfo=1', headers)
       console.log(ownedGamesResponse.response)
+      setLoad(loading+1)
 
       setGames(ownedGamesResponse.response.games)
       setPlayerSummary(playerSummeryResponse.response.players[0]);
@@ -227,17 +237,24 @@ const Main = ({usernameSearch, searchClick}) => {
         key + '&steamid=' + generatedSteamid + '&format=json', headers)
       console.log(recentlyPlayedGamesResponse.response)
 
+
+      setLoad(loading+1)
+
       console.log("IPlayerService/GetCommunityBadgeProgress")
       let communityBadgeProgressResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/IPlayerService/GetCommunityBadgeProgress/v1/?key=' + 
         key + '&steamid=' + generatedSteamid + '&format=json', headers)
       console.log(communityBadgeProgressResponse.response)
 
+      setLoad(loading+1)
+
       console.log("ISteamUser/GetPlayerBans")
       let playerBansResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/ISteamUser/GetPlayerBans/v1/?key=' + 
         key + '&steamids=' + generatedSteamid + '&format=json', headers)
       console.log(playerBansResponse.players[0])
+
+      setLoad(loading+1)
 
       setPlayedGames(recentlyPlayedGamesResponse.response.games);
     }
@@ -255,6 +272,7 @@ const Main = ({usernameSearch, searchClick}) => {
     setGameTitle(generatedAppTitle);
     fetchGameBannerURL(generatedAppid);
     
+    setLoad(null);
   }
 
   //take the arrays of the achievement schema, global stats
@@ -547,8 +565,16 @@ const Main = ({usernameSearch, searchClick}) => {
       return achievement.description ? achievement.description : "";
   }
 
-  return(
+  return (loading) ? (
     <div>
+      <Loading loading={loading} />
+    </div>
+  ) :
+    (
+
+    <div>
+
+
       {playerSummary &&
       <div className="row d-flex justify-content-center">
         {/* PLAYER SUMMARY THAT IS ALWAYS PRESENT */}
@@ -673,8 +699,10 @@ const Main = ({usernameSearch, searchClick}) => {
             <GamesGraph games={allGames}></GamesGraph>
           </div>
         }
-</div>
-}
+   </div>
+      }
+      
+     
     <div className="footer-space"></div>
       <Redirect to ="/" />
       {/* A little extra padding... */}
