@@ -22,8 +22,8 @@ const Main = ({usernameSearch, searchClick}) => {
 
   console.log("SEARCH:", usernameSearch)
 
-  const [playerinfo, setPlayer] = useState("");
-  const [onlineTest, setOnline] = useState("");
+  const [playerSummary, setPlayerSummary] = useState(null);
+  const [onlineStatus, setOnlineStatus] = useState("");
   const [steamLevel, setLevel] = useState("");
   const [allGames, setGames] = useState(null);
 
@@ -48,40 +48,10 @@ const Main = ({usernameSearch, searchClick}) => {
   useEffect( () => {
     grabData();
   }, [searchClick]);
-  
-  useEffect( () => {
-    switch(playerinfo.personastate)
-    {
-      case 0:
-        setOnline("Offline")
-        break;
-      case 1:
-        setOnline("Online")
-        break;
-      case 2:
-        setOnline("Busy")
-        break;
-      case 3:
-        setOnline("Away")
-        break;
-      case 4:
-        setOnline("Snooze")
-        break;
-      case 5:
-        setOnline("Looking to Trade")
-        break;
-      case 6:
-        setOnline("Looking to Play")
-        break;
-      default:
-        setOnline("Private")
-        break;
-    }
-    setLastLogin(convertSteamTimeToUTC(playerinfo.lastlogoff));
-  }, [playerinfo])
 
   async function grabData(event)
   {
+    setPlayerSummary(null);
     setPlayedGames(null);
     setGameTitle(null);
     setGameAchievements(null);
@@ -164,7 +134,14 @@ const Main = ({usernameSearch, searchClick}) => {
         key + '&steamid=' + generatedSteamid + '&format=json', headers)
       console.log(groupListResponse.response)
 
-      setPlayer(playerSummeryResponse.response.players[0]);
+      console.log("IPlayerService/GetOwnedGames")
+      let ownedGamesResponse = await fetchJSON(proxy + 
+        'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=' + 
+        key + '&steamid=' + generatedSteamid + '&format=json&include_appinfo=1', headers)
+      console.log(ownedGamesResponse.response)
+
+      setGames(ownedGamesResponse.response.games)
+      setPlayerSummary(playerSummeryResponse.response.players[0]);
       setLevel(steamLevelResponse.response.player_level);
       setFriendsList(friendsListResponse.friendslist);
     }
@@ -246,13 +223,6 @@ const Main = ({usernameSearch, searchClick}) => {
     else if (generatedSteamid && !generatedAppid)
     {
       console.log("\tONLY steamid searched")
-
-      console.log("IPlayerService/GetOwnedGames")
-      let ownedGamesResponse = await fetchJSON(proxy + 
-        'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=' + 
-        key + '&steamid=' + generatedSteamid + '&format=json&include_appinfo=1', headers)
-      console.log(ownedGamesResponse.response)
-      setGames(ownedGamesResponse.response.games)
 
       console.log("IPlayerService/GetRecentlyPlayedGames")
       let recentlyPlayedGamesResponse = await fetchJSON(proxy + 
@@ -414,20 +384,6 @@ const Main = ({usernameSearch, searchClick}) => {
     statSchema = statSchema.filter(stat => stat.value != 0);
     return statSchema;
   }
-    
-  //convert the time that is recieved from steam api into a date and time
-  function convertSteamTimeToUTC(seconds)
-  {
-    if (!seconds)
-      return "Private";
-
-    let unlockTime = new Date(seconds*1000);
-    let timeString = unlockTime.toDateString() + " at " + 
-      unlockTime.getUTCHours().toString().padStart(2, '0') + ":" + 
-      unlockTime.getUTCMinutes().toString().padStart(2, '0') + " UTC";
-      
-    return timeString;
-  }
 
   //fetch from an API URL and return the resulting JSON
   async function fetchJSON(apiURL, headers)
@@ -450,6 +406,70 @@ const Main = ({usernameSearch, searchClick}) => {
   function minutesToHours(minutes)
   {
     return Math.floor(minutes/60) + " hr " + (minutes % 60) + " min";
+  }
+
+  //convert steam status if to a string
+  function getStatusString(statusCode)
+  {
+    let status = "Unknown";
+    switch(statusCode)
+    {
+      case 0:
+        status = "Offline"
+        break;
+      case 1:
+        status = "Online"
+        break;
+      case 2:
+        status = "Busy"
+        break;
+      case 3:
+        status = "Away"
+        break;
+      case 4:
+        status = "Snooze"
+        break;
+      case 5:
+        status = "Looking to Trade"
+        break;
+      case 6:
+        status = "Looking to Play"
+        break;
+      default:
+        status = "Private"
+        break;
+    }
+    return status;
+  }
+
+  //convert the time that is recieved from steam api into a date and time
+  function convertSteamTimeToUTC(seconds)
+  {
+    if (!seconds)
+      return "Private";
+
+    let unlockTime = new Date(seconds*1000);
+    let timeString = unlockTime.toDateString() + " at " + 
+      unlockTime.getUTCHours().toString().padStart(2, '0') + ":" + 
+      unlockTime.getUTCMinutes().toString().padStart(2, '0') + " UTC";
+      
+    return timeString;
+  }
+
+  function getTimeDifferenceString(timeInSeconds)
+  {
+    let then = new Date(timeInSeconds*1000)
+    let differenceInMinutes = Math.abs(Date.now() - then) / (1000 * 60);
+    let differenceInYears = (differenceInMinutes / (60 * 24 * 365));
+    let timeDifference = differenceInYears + " years ago";
+    return timeDifference;
+  }
+
+  //bundled function to return a string with time, and how long ago that time was
+  function fullTimeWithDifference(timeInMilliseconds)
+  {
+    return convertSteamTimeToUTC(timeInMilliseconds) +
+      " (" + getTimeDifferenceString(timeInMilliseconds) + ")";
   }
 
   //take in an appid and return a url of an image of that appid's game/app
@@ -508,107 +528,124 @@ const Main = ({usernameSearch, searchClick}) => {
 
   return(
     <div>
+      {playerSummary &&
       <div className="row d-flex justify-content-center">
-        <div className="col-xs-12 col-md-12">
-          <div className="row"> 
-            <div className="user-info col-xs-8 col-md-8 d-flex justify-content-center">
-              <div className="profile-info yellow-neon-border m-2">
-                <div className="d-flex justify-content-center mt-2">
-                  <img id="profile-image" src={playerinfo.avatarfull} height="100px" width="100px" alt="Avatar"></img>
+        {/* PLAYER SUMMARY THAT IS ALWAYS PRESENT */}
+        <div className="container"> 
+          <div className="player-summary col-xs-12 col-md-12 col-lg-8 justify-content-between">
+              <a className="player-summary-avatar" href={playerSummary.profileurl}>
+                <img id="profile-image" src={playerSummary.avatarfull} alt={playerSummary.personaname + "'s avatar"}></img>
+              </a>
+              <div className="player-summary-persona fs-2">
+                <span className="player-summary-tiny-font">Persona</span>{playerSummary.personaname}
+              </div>
+              <div className="player-summary-steamid fs-6">
+                <span className="player-summary-tiny-font">SteamID</span>{playerSummary.steamid}
+              </div>
+              <div className="player-summary-status fs-4">
+                <span className="player-summary-tiny-font">Status</span>{getStatusString(playerSummary.personastate)}
+              </div>
+              <div className="player-summary-real-name fs-6">
+              <span className="player-summary-tiny-font">Real Name</span>{playerSummary.realname}
                 </div>
-                <p className="profile-text">
-                  <span id="profile-display-name">{playerinfo.personaname} | </span>
-                  {playerinfo.loccountrycode &&
-                    <span id="profile-country">{playerinfo.loccountrycode} | </span>
-                  }
-                    <span id="profile-status">{onlineTest}</span> 
-                    <br />
-                    <span id="profile-level">Level {steamLevel}</span> | 
-                    <span id="profile-steamid"> Steam ID: {playerinfo.steamid}</span> | 
-                    {}
-                    <span id="profile-steamid"> Last Time Online: {timeLogOff}</span> 
-                </p>
+              {playerSummary.locstatecode &&
+              <div className="player-summary-location fs-6">
+                <span className="player-summary-tiny-font">Location</span>{playerSummary.locstatecode + ", " + playerSummary.loccountrycode}
               </div>
-            </div>
-          </div>
-          <div id="user-app-content" className="row justify-content-center">
-          {/* USER-ONLY SEARCH CONTENT */}
-          {playedGames &&
-          <div className="container m-4">
-            <div className="profile-info mx-auto flex-row flex-wrap d-flex">
-              <h4 className="col-12 text-center mt-2">Recently Played Games</h4>
-              {playedGames.map(game => (
-              <div key={game.appid} className="rounded the-game flex-fill m-2 p-2 col-xs-12 col-sm-6 col-md-3">
-                <img id="game-icon" className="mr-3" src={'http://media.steampowered.com/steamcommunity/public/images/apps/' + game.appid + '/' + game.img_icon_url + '.jpg'} 
-                  alt={'Game icon:' + game.name} height="50px" width="50px" />
-                <span className="ml-2">{game.name}</span>
-                <span className="game-facts rounded border border-light m-2 p-2">Playtime: {minutesToHours(game.playtime_forever)}</span>
+              }
+              <div className="player-summary-last-online fs-6">
+                <span className="player-summary-tiny-font">Last Logoff</span>{fullTimeWithDifference(playerSummary.lastlogoff)}
               </div>
-              ))}
-            </div>
-          </div>
-          }
-          {/* USER-GAME SEARCH CONTENT */}
-            {/* Game banner */}
-          {gameTitle &&
-            <div className="row game-banner">
-              <div className="col-xs-12 col-md-8 game-banner-title m-0 p-0" style={{backgroundImage: `url(${gameBannerURL})`}}>
-              <h2 className="text-light text-left align-middle" style={{lineHeight: "75px"}}>{gameTitle}</h2>
+              <div className="player-summary-created fs-6">
+                <span className="player-summary-tiny-font">Account Created</span>{fullTimeWithDifference(playerSummary.timecreated)}
               </div>
-              <div className="col-xs-12 col-md-4 game-banner-info">
-                <p className="text-light game-banner-info-playercount">{playerCount + " players online"}</p>
-                <p className="text-light game-banner-info-achievement">{getAchievementPercent(gameAchievements)}</p>
+              <div className="player-summary-level fs-6">
+                <span className="player-summary-tiny-font">Steam Level</span>{steamLevel}
               </div>
-            </div>
-          }
-            {/* Game achievement grid */}
-          {gameAchievements &&
-            <div className="row col-xs-12">
-              <div className="achievement-grid flex-row flex-wrap d-flex justify-content-between">
-              {gameAchievements.map(achievement => (
-                <div key={achievement.name} className="achievement-square flex-fill col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                  <img className="achievement-icon mx-auto" src={achievement.icon} alt={achievement.name} width="75px" height="75px"/>
-                  <p className="achievement-global-percent text-light">{achievement.percent.toFixed(2)}% of players have this achievement.</p>
-                  <p className="achievement-unlock text-light">{getAchievementStatus(achievement)}</p>
-                  <h3 className="achievement-title text-light">{achievement.displayName}</h3>
-                  <p className="achievement-description text-light">{getAchievementDescription(achievement)}</p>
-                </div>
-              ))}
+              {allGames &&
+              <div className="player-summary-games fs-6">
+                <span className="player-summary-tiny-font">Owned Games</span>{allGames.length}
               </div>
-            </div>
-          }
-            {/* Game stats table */}
-          {playerGameStats &&
-          <div className="container">
-            <table className="table table-dark table-hover">
-              <thead>
-                <tr>
-                  <th scope="col">Stat Name</th>
-                  <th scope="col">{playerinfo.personaname}'s Stat</th>
-                </tr>
-              </thead>
-              {playerGameStats.map(stat => (
-              <tbody key={stat.name} className="table-striped">
-                <tr>
-                  <th scope="row">{stat.displayName}</th>
-                  <td>{stat.value}</td>
-                </tr>
-              </tbody>
-              ))}
-            </table>
-          </div>
-          }
+              }
           </div>
         </div>
-      
-      {allGames &&
+        <div id="user-app-content" className="row justify-content-center">
+        {/* USER-ONLY SEARCH CONTENT */}
+        {playedGames &&
+        <div className="container m-4">
+          <div className="profile-info mx-auto flex-row flex-wrap d-flex">
+            <h4 className="col-12 text-center mt-2">Recently Played Games</h4>
+            {playedGames.map(game => (
+            <div key={game.appid} className="rounded the-game flex-fill m-2 p-2 col-xs-12 col-sm-6 col-md-3">
+              <img id="game-icon" className="mr-3" src={'http://media.steampowered.com/steamcommunity/public/images/apps/' + game.appid + '/' + game.img_icon_url + '.jpg'} 
+                alt={'Game icon:' + game.name} height="50px" width="50px" />
+              <span className="ml-2">{game.name}</span>
+              <span className="game-facts rounded border border-light m-2 p-2">Playtime: {minutesToHours(game.playtime_forever)}</span>
+            </div>
+            ))}
+          </div>
+        </div>
+        }
+        {/* USER-GAME SEARCH CONTENT */}
+          {/* Game banner */}
+        {gameTitle &&
+          <div className="row game-banner">
+            <div className="col-xs-12 col-md-8 game-banner-title m-0 p-0" style={{backgroundImage: `url(${gameBannerURL})`}}>
+            <h2 className="text-light text-left align-middle" style={{lineHeight: "75px"}}>{gameTitle}</h2>
+            </div>
+            <div className="col-xs-12 col-md-4 game-banner-info">
+              <p className="text-light game-banner-info-playercount">{playerCount + " players online"}</p>
+              <p className="text-light game-banner-info-achievement">{getAchievementPercent(gameAchievements)}</p>
+            </div>
+          </div>
+        }
+          {/* Game achievement grid */}
+        {gameAchievements &&
+          <div className="row col-xs-12">
+            <div className="achievement-grid flex-row flex-wrap d-flex justify-content-between">
+            {gameAchievements.map(achievement => (
+              <div key={achievement.name} className="achievement-square flex-fill col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                <img className="achievement-icon mx-auto" src={achievement.icon} alt={achievement.name} width="75px" height="75px"/>
+                <p className="achievement-global-percent text-light">{achievement.percent.toFixed(2)}% of players have this achievement.</p>
+                <p className="achievement-unlock text-light">{getAchievementStatus(achievement)}</p>
+                <h3 className="achievement-title text-light">{achievement.displayName}</h3>
+                <p className="achievement-description text-light">{getAchievementDescription(achievement)}</p>
+              </div>
+            ))}
+            </div>
+          </div>
+        }
+          {/* Game stats table */}
+        {playerGameStats &&
+        <div className="container">
+          <table className="table table-dark table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Stat Name</th>
+                <th scope="col">{playerSummary.personaname}'s Stat</th>
+              </tr>
+            </thead>
+            {playerGameStats.map(stat => (
+            <tbody key={stat.name} className="table-striped">
+              <tr>
+                <th scope="row">{stat.displayName}</th>
+                <td>{stat.value}</td>
+              </tr>
+            </tbody>
+            ))}
+          </table>
+        </div>
+        }
+        </div>      
+        {!appid &&
 
-        <div className="row d-flex justify-content-center m-4">
-          <br></br>
-          <GamesGraph games={allGames}></GamesGraph>
-        </div>
-      }
+          <div className="row d-flex justify-content-center m-4">
+            <br></br>
+            <GamesGraph games={allGames}></GamesGraph>
+          </div>
+        }
 </div>
+}
     <div className="footer-space"></div>
       <Redirect to ="/" />
       {/* A little extra padding... */}

@@ -48,7 +48,7 @@ function App()
                 onChange={e => setAppSearch(e.target.value)}
                 />
               </div>
-              <div className="col-sm-2 mt-4">
+              <div className="col-xs-12 col-sm-2 mt-4">
                   <button type="submit" id="entry-submit" className="btn btn-primary bg-dark" onClick={handleClick}>Search!</button>
               </div>
             </div>
