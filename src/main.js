@@ -24,6 +24,7 @@ const Main = ({usernameSearch, searchClick}) => {
 
   console.log("SEARCH:", usernameSearch)
   const [loading, setLoad] = useState(null);
+  const [loadMsg, setLoadMsg] = useState("");
 
   const [playerSummary, setPlayerSummary] = useState(null);
   const [steamLevel, setLevel] = useState("");
@@ -88,6 +89,7 @@ const Main = ({usernameSearch, searchClick}) => {
       console.log("Found user " + generatedSteamid + " from " + vanityURL)
 
       setLoad(1)
+      setLoadMsg("finding user " + generatedSteamid)
     }
     
     if (appName)
@@ -97,6 +99,9 @@ const Main = ({usernameSearch, searchClick}) => {
       console.log("ISteamApps/GetAppList")
       let appListResponse = await fetchJSON(proxy + 
         'http://api.steampowered.com/ISteamApps/GetAppList/v0002/', headers)
+
+        setLoad(8)
+        setLoadMsg("searching for " + appName);
       //console.log(appListResponse.applist.apps)
 
       //go through each game and see if the name of the game matches what the user entered
@@ -127,6 +132,7 @@ const Main = ({usernameSearch, searchClick}) => {
       console.log(playerSummeryResponse.response.players[0])
 
       setLoad(15)
+      setLoadMsg("fetching player summary")
 
       console.log("IPlayerService/GetSteamLevel")
       let steamLevelResponse = await fetchJSON(proxy + 
@@ -135,7 +141,6 @@ const Main = ({usernameSearch, searchClick}) => {
       console.log(steamLevelResponse.response)
 
       setLoad(27)
-      console.log(loading);
       
       console.log("ISteamUser/GetFriendList")
       friendsListResponse = await fetchJSON(proxy + 
@@ -163,11 +168,15 @@ const Main = ({usernameSearch, searchClick}) => {
     {
       console.log("\tappid AND steamid searched")
 
+      setLoad(42)
+      setLoadMsg("searching player achievements")
       console.log("ISteamUserStats/GetPlayerAchievements")
       let playerAchievementsResponse = await fetchJSON(proxy +
         'https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?key=' + 
         key + '&steamid=' + generatedSteamid + '&appid=' + generatedAppid + '&format=json', headers)
       console.log(playerAchievementsResponse);
+
+      setLoad(57)
 
       console.log("ISteamUserStats/GetGlobalAchievementPercentagesForApp")
       let globalAchievementPercentagesResponse = await fetchJSON(proxy +
@@ -175,18 +184,24 @@ const Main = ({usernameSearch, searchClick}) => {
         key + '&gameid=' + generatedAppid + '&format=json', headers)
       console.log(globalAchievementPercentagesResponse);
 
+      setLoad(69)
+
       console.log("ISteamUserStats/GetNumberOfCurrentPlayers")
       let numCurrentPlayersResponse = await fetchJSON(proxy +
         'https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?key=' + 
         key + '&appid=' + generatedAppid + '&format=json', headers)
       console.log(numCurrentPlayersResponse);
       setPlayerCount(numCurrentPlayersResponse.response.player_count);
+
+      setLoad(77)
       
       console.log("ISteamUserStats/GetSchemaForGame")
       let gameSchemaResponse = await fetchJSON(proxy +
         'https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key=' + 
         key + '&appid=' + generatedAppid + '&format=json', headers)
       console.log(gameSchemaResponse.game);
+
+      setLoad(100)
       
       // the inputs to this one must come from the previous API call
       // not a lot of games implement this. not sure if we want to call it
@@ -242,7 +257,8 @@ const Main = ({usernameSearch, searchClick}) => {
         key + '&steamid=' + generatedSteamid + '&format=json', headers)
       console.log(recentlyPlayedGamesResponse.response)
 
-      setLoad(64)
+      setLoad(72)
+      setLoadMsg("finding user stats")
 
       console.log("IPlayerService/GetCommunityBadgeProgress")
       let communityBadgeProgressResponse = await fetchJSON(proxy + 
@@ -250,7 +266,7 @@ const Main = ({usernameSearch, searchClick}) => {
         key + '&steamid=' + generatedSteamid + '&format=json', headers)
       console.log(communityBadgeProgressResponse.response)
 
-      setLoad(78)
+      setLoad(99)
 
       console.log("ISteamUser/GetPlayerBans")
       let playerBansResponse = await fetchJSON(proxy + 
@@ -258,7 +274,6 @@ const Main = ({usernameSearch, searchClick}) => {
         key + '&steamids=' + generatedSteamid + '&format=json', headers)
       console.log(playerBansResponse.players[0])
 
-      setLoad(99)
 
       setPlayedGames(recentlyPlayedGamesResponse.response.games);
     }
@@ -572,7 +587,7 @@ const Main = ({usernameSearch, searchClick}) => {
   return (loading) ? (
     <div>
       <Router>
-        <Loading loading={loading} />
+        <Loading loading={loading} loadingMsg={loadMsg} />
       </Router>
     </div>
   ) :
