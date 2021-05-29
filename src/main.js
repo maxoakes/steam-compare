@@ -402,7 +402,7 @@ const Main = ({usernameSearch, searchClick}) => {
   //convert minutes to hours and minutes
   function minutesToHours(minutes)
   {
-    return Math.floor(minutes/60) + " hr " + (minutes % 60) + " min";
+    return Math.floor(minutes / 60) + " hr " + (minutes % 60) + " min";
   }
 
   //convert steam status if to a string
@@ -482,6 +482,8 @@ const Main = ({usernameSearch, searchClick}) => {
   //bundled function to return a string with time, and how long ago that time was
   function fullTimeWithDifference(timeInMilliseconds)
   {
+    if (!timeInMilliseconds) return "Private";
+
     return convertSteamTimeToUTC(timeInMilliseconds) +
       " (" + getTimeDifferenceString(timeInMilliseconds) + ")";
   }
@@ -581,7 +583,7 @@ const Main = ({usernameSearch, searchClick}) => {
               </div>
               }
               <div className="player-summary-last-online fs-6">
-                <span className="player-summary-tiny-font">Last Logoff</span>{fullTimeWithDifference(playerSummary.lastlogoff)}
+                <span className="player-summary-tiny-font">Last Log off</span>{fullTimeWithDifference(playerSummary.lastlogoff)}
               </div>
               <div className="player-summary-created fs-6">
                 <span className="player-summary-tiny-font">Account Created</span>{fullTimeWithDifference(playerSummary.timecreated)}
