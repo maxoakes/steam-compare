@@ -11,8 +11,6 @@ import RatioPlayed from './graphs/RatioPlayed'
 
 
 const GamesGraph = ({games}) => {
-
-
     return(
         <div>
         {games && 
@@ -27,9 +25,6 @@ const GamesGraph = ({games}) => {
             <div className="col-md-5 col-sm-10 m-2">
                 <RatioPlayed games={games}/>
             </div>
-              
-            
-            
         </div>
             }
             </div>

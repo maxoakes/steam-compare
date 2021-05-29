@@ -2,6 +2,7 @@ import {Redirect} from 'react-router-dom';
 import {useEffect, useState} from "react";
 import GamesGraph from './GamesGraph.js'
 import Loading from './Loading.js'
+import { BrowserRouter as Router } from "react-router-dom";
 
 const Main = ({usernameSearch, searchClick}) => {
 
@@ -44,10 +45,10 @@ const Main = ({usernameSearch, searchClick}) => {
 
   //React things
   useEffect( () => {
-    setLoad(loading + 1);
     grabData();
     setLoad(null);
   }, [searchClick]);
+
 
   async function grabData(event)
   {
@@ -85,6 +86,8 @@ const Main = ({usernameSearch, searchClick}) => {
       console.log(steamidResponse.response)
       generatedSteamid = steamidResponse.response.steamid;
       console.log("Found user " + generatedSteamid + " from " + vanityURL)
+
+      setLoad(1)
     }
     
     if (appName)
@@ -122,14 +125,16 @@ const Main = ({usernameSearch, searchClick}) => {
         'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=' + 
         key + '&steamids=' + generatedSteamid + '&format=json', headers)
       console.log(playerSummeryResponse.response.players[0])
-      setLoad(loading+1)
+
+      setLoad(15)
+
       console.log("IPlayerService/GetSteamLevel")
       let steamLevelResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=' + 
         key + '&steamid=' + generatedSteamid + '&format=json', headers)
       console.log(steamLevelResponse.response)
 
-      setLoad(loading+1)
+      setLoad(27)
       console.log(loading);
       
       console.log("ISteamUser/GetFriendList")
@@ -138,14 +143,14 @@ const Main = ({usernameSearch, searchClick}) => {
         key + '&steamid=' + generatedSteamid + ',&format=json', headers)
       console.log(friendsListResponse)
 
-      setLoad(loading+1)
+      setLoad(32)
 
       console.log("IPlayerService/GetOwnedGames")
       let ownedGamesResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=' + 
         key + '&steamid=' + generatedSteamid + '&format=json&include_appinfo=1', headers)
       console.log(ownedGamesResponse.response)
-      setLoad(loading+1)
+      setLoad(41)
 
       setGames(ownedGamesResponse.response.games)
       setPlayerSummary(playerSummeryResponse.response.players[0]);
@@ -237,8 +242,7 @@ const Main = ({usernameSearch, searchClick}) => {
         key + '&steamid=' + generatedSteamid + '&format=json', headers)
       console.log(recentlyPlayedGamesResponse.response)
 
-
-      setLoad(loading+1)
+      setLoad(64)
 
       console.log("IPlayerService/GetCommunityBadgeProgress")
       let communityBadgeProgressResponse = await fetchJSON(proxy + 
@@ -246,7 +250,7 @@ const Main = ({usernameSearch, searchClick}) => {
         key + '&steamid=' + generatedSteamid + '&format=json', headers)
       console.log(communityBadgeProgressResponse.response)
 
-      setLoad(loading+1)
+      setLoad(78)
 
       console.log("ISteamUser/GetPlayerBans")
       let playerBansResponse = await fetchJSON(proxy + 
@@ -254,7 +258,7 @@ const Main = ({usernameSearch, searchClick}) => {
         key + '&steamids=' + generatedSteamid + '&format=json', headers)
       console.log(playerBansResponse.players[0])
 
-      setLoad(loading+1)
+      setLoad(99)
 
       setPlayedGames(recentlyPlayedGamesResponse.response.games);
     }
@@ -567,7 +571,9 @@ const Main = ({usernameSearch, searchClick}) => {
 
   return (loading) ? (
     <div>
-      <Loading loading={loading} />
+      <Router>
+        <Loading loading={loading} />
+      </Router>
     </div>
   ) :
     (

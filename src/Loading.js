@@ -1,5 +1,6 @@
 
 const Loading = ({loading}) => {
+    console.log(loading);
 
     return(
         <div>
