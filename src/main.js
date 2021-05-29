@@ -592,10 +592,7 @@ const Main = ({usernameSearch, searchClick}) => {
     </div>
   ) :
     (
-
     <div>
-
-
       {playerSummary &&
       <div className="row d-flex justify-content-center">
         {/* PLAYER SUMMARY THAT IS ALWAYS PRESENT */}
