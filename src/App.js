@@ -140,7 +140,7 @@ function App()
       <div className="container-fluid">
         <div className="row">
           <div className="header col-xs-12 col-md-12">
-            <h1>Title</h1>
+            <h1>SteamCompare</h1>
           </div>
         </div>
         <BodyHTML></BodyHTML>
