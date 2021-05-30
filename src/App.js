@@ -70,7 +70,6 @@ function App()
           <div className="form-body">
             <form id="entry-form" onSubmit={handleSubmit}>
               <div className="form-group">
-                <label htmlFor="username">Steam ID</label>
                 <label className="blue-glow" htmlFor="username">Steam ID</label>
                       <input type="text"
                       className="form-control dark-bg"
@@ -84,7 +83,7 @@ function App()
                 <small id="username-help" className="form-text">Enter a Steam 'vanity' URL of a user.</small>
               </div>
               <div className="form-group">
-                <label htmlFor="game">Steam Game</label>
+                <label htmlFor="game" className="green-glow">Steam Game</label>
                 <input type="text"
                       className="form-control"
                       id="game"
