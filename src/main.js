@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import GamesGraph from './GamesGraph.js'
 import Loading from './Loading.js'
 import { BrowserRouter as Router } from "react-router-dom";
+import RandomGame from './RandomGame.js';
 
 const Main = ({usernameSearch, searchClick}) => {
 
@@ -710,11 +711,12 @@ const Main = ({usernameSearch, searchClick}) => {
         </div>
         }
         </div>      
-        {(!appid) &&
+        {(!appid) && allGames &&
 
           <div className="row d-flex justify-content-center col-12">
             <br></br>
             <GamesGraph games={allGames}></GamesGraph>
+            <RandomGame games={allGames}></RandomGame>
           </div>
         }
    </div>
