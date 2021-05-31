@@ -34,13 +34,13 @@ const RandomGame = ({games}) => {
         <div className="profile-info mt-4 row text-center d-flex justify-content-center">
             <h3 className="text-light col-sm-10 m-2">Revisit one of your unplayed games:</h3>
             {rngGame &&
-                <div className="text-center">
-                     <img src={'http://media.steampowered.com/steamcommunity/public/images/apps/' + rngGame.appid + '/' + rngGame.img_logo_url + '.jpg'} 
-                        alt={'Game icon:' + rngGame.name}  height="150px"/>
+                <div className="text-center row d-flex justify-content-center">
+                     <img className="col-md-5 col-10" src={'http://media.steampowered.com/steamcommunity/public/images/apps/' + rngGame.appid + '/' + rngGame.img_logo_url + '.jpg'} 
+                        alt={'Game icon:' + rngGame.name} />
                     <h5>{rngGame.name}</h5>
                 </div>
             }
-            <button className="btn btn-primary m-2 col-2" onClick={handleClick}>Random Game Search</button>
+            <button className="btn btn-outline-light m-2 col-3 btn-sm " onClick={handleClick}>New Game</button>
         </div>
     );
 }
