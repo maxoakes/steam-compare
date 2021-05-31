@@ -24,7 +24,6 @@ body {
   align-items: center;
 
   height: 100%;
-  border: 1px solid red;
 }
 
 /* User and game page styles */
@@ -127,40 +126,38 @@ body {
 
 /* To accomidate to small screens */
 @media only screen and (max-width: 576px) {
-  .player-summary
-  {
+  .player-summary {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto auto auto auto auto;
     padding: 8px;
     margin: auto auto 20px auto;
     gap: 8px;
-  
+
     border: 1px solid white;
     border-radius: 2px;
     box-shadow: 3px 3px 10px #000000;
     background-color: rgb(24, 24, 24);
   }
-  
-  .player-summary > *
-  {
+
+  .player-summary > * {
     color: white;
     padding: 0px;
     margin: 0px;
   }
-  
+
   .player-summary-avatar {
     grid-column: 1 / span 2;
     grid-row: 1 / span 1;
     margin: auto;
   }
-  
+
   .player-summary-persona {
     grid-column: 1 / span 2;
     grid-row: 2 / span 1;
     overflow-wrap: break-word;
   }
-  
+
   .player-summary-status {
     grid-column: 1 / span 1;
     grid-row: 3 / span 1;
@@ -170,7 +167,7 @@ body {
     grid-column: 2 / span 1;
     grid-row: 3 / span 1;
   }
-  
+
   .player-summary-friends {
     grid-column: 1 / span 1;
     grid-row: 4 / span 1;
@@ -185,17 +182,17 @@ body {
     grid-column: 1 / span 1;
     grid-row: 5 / span 1;
   }
-  
+
   .player-summary-real-name {
     grid-column: 2 / span 1;
     grid-row: 5 / span 1;
   }
-  
+
   .player-summary-last-online {
     grid-column: 1 / span 2;
     grid-row: 6 / span 1;
   }
-  
+
   .player-summary-created {
     grid-column: 1 / span 2;
     grid-row: 7 / span 1;
@@ -467,4 +464,25 @@ body {
 /* Chart */
 .chart {
   background-color: black;
+}
+
+/* Loading message */
+.loading-window {
+  background-color: rgb(24, 24, 24);
+  border-radius: 2px;
+  box-shadow: 3px 3px 10px #000000;
+  margin: auto;
+  padding: 8px;
+  width: 50%;
+}
+
+.loading-window h1, .loading-window h2 {
+  font-size: medium;
+  font-weight: normal;
+  text-transform: capitalize;
+}
+
+.loading-window h1 {
+  font-size: large;
+  margin-top: 1em;
 }

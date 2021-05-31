@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import GamesGraph from './GamesGraph.js'
 import Loading from './Loading.js'
 import { BrowserRouter as Router } from "react-router-dom";
+import RandomGame from './RandomGame.js';
 
 const Main = ({usernameSearch, searchClick}) => {
 
@@ -652,7 +653,7 @@ const Main = ({usernameSearch, searchClick}) => {
             <div key={game.appid} className="rounded the-game flex-fill m-2 p-2 col-xs-12 col-sm-6 col-md-3">
               <img id="game-icon" className="mr-3" src={'http://media.steampowered.com/steamcommunity/public/images/apps/' + game.appid + '/' + game.img_icon_url + '.jpg'} 
                 alt={'Game icon:' + game.name} height="50px" width="50px" />
-              <span className="ml-2">{game.name}</span>
+              <span className="ml-2"> {game.name}</span>
               <span className="game-facts rounded border border-light m-2 p-2">Playtime: {minutesToHours(game.playtime_forever)}</span>
             </div>
             ))}
@@ -710,11 +711,12 @@ const Main = ({usernameSearch, searchClick}) => {
         </div>
         }
         </div>      
-        {(!appid) &&
+        {(!appid) && allGames &&
 
-          <div className="row d-flex justify-content-center m-4">
+          <div className="row d-flex justify-content-center col-12">
             <br></br>
             <GamesGraph games={allGames}></GamesGraph>
+            <RandomGame games={allGames}></RandomGame>
           </div>
         }
    </div>
