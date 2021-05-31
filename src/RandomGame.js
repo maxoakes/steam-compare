@@ -36,7 +36,7 @@ const RandomGame = ({games}) => {
             {rngGame &&
                 <div className="text-center">
                      <img src={'http://media.steampowered.com/steamcommunity/public/images/apps/' + rngGame.appid + '/' + rngGame.img_logo_url + '.jpg'} 
-                        alt={'Game icon:' + rngGame.name}  />
+                        alt={'Game icon:' + rngGame.name}  height="150px"/>
                     <h5>{rngGame.name}</h5>
                 </div>
             }
