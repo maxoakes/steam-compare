@@ -24,7 +24,6 @@ body {
   align-items: center;
 
   height: 100%;
-  border: 1px solid red;
 }
 
 /* User and game page styles */
@@ -465,4 +464,25 @@ body {
 /* Chart */
 .chart {
   background-color: black;
+}
+
+/* Loading message */
+.loading-window {
+  background-color: rgb(24, 24, 24);
+  border-radius: 2px;
+  box-shadow: 3px 3px 10px #000000;
+  margin: auto;
+  padding: 8px;
+  width: 50%;
+}
+
+.loading-window h1, .loading-window h2 {
+  font-size: medium;
+  font-weight: normal;
+  text-transform: capitalize;
+}
+
+.loading-window h1 {
+  font-size: large;
+  margin-top: 1em;
 }
