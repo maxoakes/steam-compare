@@ -22,7 +22,7 @@ const RandomGame = ({games}) => {
         let rng = Math.floor(Math.random() * (unplayed.length-1 - 0) + 0);
         console.log(rng , unplayed.length)
         setGame(unplayed[rng]);
-    }, [click])
+    }, [click, unplayed])
 
     if(unplayed.length === 0){
         return(
