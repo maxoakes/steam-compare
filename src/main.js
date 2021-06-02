@@ -74,7 +74,6 @@ const Main = ({usernameSearch, searchClick}) => {
     let generatedSteamid;
     let generatedAppid;
     let generatedAppTitle;
-
     //game/app name
     //check if the user entered a username to search for
     if (vanityURL)
@@ -87,7 +86,14 @@ const Main = ({usernameSearch, searchClick}) => {
         key + '&vanityurl=' + vanityURL + '&format=json', headers)
       console.log(steamidResponse.response)
       generatedSteamid = steamidResponse.response.steamid;
-      console.log("Found user " + generatedSteamid + " from " + vanityURL)
+      
+      //backup to check if the entered profile name is a steamid
+      if (!generatedSteamid && /^\d+$/.test(vanityURL))
+      {
+        console.log("checking if it is a steamid")
+        generatedSteamid = vanityURL;
+      }
+      console.log("Found user " + generatedSteamid + " from " + vanityURL);
 
       setLoad(1)
       setLoadMsg("finding user " + generatedSteamid)
@@ -103,10 +109,15 @@ const Main = ({usernameSearch, searchClick}) => {
 
         setLoad(8)
         setLoadMsg("searching for " + appName);
-      //console.log(appListResponse.applist.apps)
+      console.log(appListResponse.applist.apps)
 
       //go through each game and see if the name of the game matches what the user entered
       let appObject = appListResponse.applist.apps.find(app => app.name.toLowerCase() === appName.toLowerCase());
+      if (!appObject && /^\d+$/.test(appName))
+      {
+        console.log("checking if it is a appid")
+        appObject = appListResponse.applist.apps.find(app => app.appid.toString() === appName);
+      }
       
       //set the appid only if the game is found
       if (appObject)
