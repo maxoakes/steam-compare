@@ -225,7 +225,7 @@ body {
 }
 
 .search-bar + input[type="text"] {
-  background-color: black;
+  background-color: #1b2838;
   color: #66c0f4;
   text-shadow: none;
 }
@@ -233,7 +233,7 @@ body {
   color: #c7d5e0;
 }
 input[type="text"]:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 100px black inset;
+  -webkit-box-shadow: 0 0 0 100px #1b2838 inset;
   -webkit-text-fill-color: #66c0f4;
   text-shadow: none;
 }

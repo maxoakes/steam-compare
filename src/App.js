@@ -94,7 +94,7 @@ function App()
                   />
                 <small id="game-help" className="form-text">Enter an app name or ID that is available on Steam.</small>
               </div>
-              <button type="submit" id="entry-submit" className="btn btn-primary" >Search!</button>
+              <button type="submit" id="entry-submit" className="btn btn-primary bg-dark" >Search!</button>
             </form>
           </div>
         </div>
