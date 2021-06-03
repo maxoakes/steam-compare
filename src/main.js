@@ -69,37 +69,37 @@ const Main = ({usernameSearch, searchClick}) => {
     
 
     //get the form seach boxes
-    let appName = document.getElementById("game").value;
-    let vanityURL = document.getElementById("username").value;
+    let searchedApp = document.getElementById("game").value;
+    let searchedProfile = document.getElementById("username").value;
     let generatedSteamid;
     let generatedAppid;
     let generatedAppTitle;
     //game/app name
     //check if the user entered a username to search for
-    if (vanityURL)
+    if (searchedProfile)
     {
       //get a steamid from a 'vanity' url. This is the one for your steam profile
       //Max's is "scouteriv" from https://steamcommunity.com/id/scouteriv/
       console.log("ISteamUser/ResolveVanityURL")
       let steamidResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/?key=' + 
-        key + '&vanityurl=' + vanityURL + '&format=json', headers)
+        key + '&vanityurl=' + searchedProfile + '&format=json', headers)
       console.log(steamidResponse.response)
       generatedSteamid = steamidResponse.response.steamid;
       
       //backup to check if the entered profile name is a steamid
-      if (!generatedSteamid && /^\d+$/.test(vanityURL))
+      if (!generatedSteamid && /^\d+$/.test(searchedProfile))
       {
         console.log("checking if it is a steamid")
-        generatedSteamid = vanityURL;
+        generatedSteamid = searchedProfile;
       }
-      console.log("Found user " + generatedSteamid + " from " + vanityURL);
+      console.log("Found user " + generatedSteamid + " from " + searchedProfile);
 
       setLoad(1)
       setLoadMsg("finding user " + generatedSteamid)
     }
     
-    if (appName)
+    if (searchedApp)
     {
       //get the appid from the game name that the user enters
       //this requests takes a few seconds. Likely(?) no way to get around it if we are not making a backend
@@ -108,15 +108,15 @@ const Main = ({usernameSearch, searchClick}) => {
         'http://api.steampowered.com/ISteamApps/GetAppList/v0002/', headers)
 
         setLoad(8)
-        setLoadMsg("searching for " + appName);
+        setLoadMsg("searching for " + searchedApp);
       console.log(appListResponse.applist.apps)
 
       //go through each game and see if the name of the game matches what the user entered
-      let appObject = appListResponse.applist.apps.find(app => app.name.toLowerCase() === appName.toLowerCase());
-      if (!appObject && /^\d+$/.test(appName))
+      let appObject = appListResponse.applist.apps.find(app => app.name.toLowerCase() === searchedApp.toLowerCase());
+      if (!appObject && /^\d+$/.test(searchedApp))
       {
         console.log("checking if it is a appid")
-        appObject = appListResponse.applist.apps.find(app => app.appid.toString() === appName);
+        appObject = appListResponse.applist.apps.find(app => app.appid.toString() === searchedApp);
       }
       
       //set the appid only if the game is found
@@ -124,11 +124,11 @@ const Main = ({usernameSearch, searchClick}) => {
       {
         generatedAppid = appObject.appid;
         generatedAppTitle = appObject.name;
-        console.log("Found game " + appObject.appid + " from " + appName)
+        console.log("Found game " + appObject.appid + " from " + searchedApp)
       }
       else
       {
-        console.log("No game found with: " + appName)
+        console.log("No game found with: " + searchedApp)
       }
     }
 

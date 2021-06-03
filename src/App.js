@@ -26,12 +26,12 @@ function App()
           <form onSubmit={handleSubmit}>
             <div className="form-group row">
               <div className="col-sm-5">
-                <label className="blue-glow" htmlFor="username">Steam ID</label>
+                <label className="blue-glow" htmlFor="username">User Profile</label>
                 <input type="text"
                 className="form-control dark-bg"
                 id="username"
                 aria-describedby="username-help"
-                placeholder="Enter a Steam ID"
+                placeholder="Enter a Steam ID or vanity URL"
                 name="username"
                 value={usernameSearch}
                 onChange={e => setUsernameSearch(e.target.value)}
@@ -43,7 +43,7 @@ function App()
                 className="form-control"
                 id="game"
                 aria-describedby="game-help"
-                placeholder="Enter a Steam Game"
+                placeholder="Enter a Steam game name or ID"
                 name="game"
                 value={appSearch}
                 onChange={e => setAppSearch(e.target.value)}
@@ -70,17 +70,17 @@ function App()
           <div className="form-body">
             <form id="entry-form" onSubmit={handleSubmit}>
               <div className="form-group">
-                <label className="blue-glow" htmlFor="username">Steam ID</label>
+                <label className="blue-glow" htmlFor="username">User Profile</label>
                       <input type="text"
                       className="form-control dark-bg"
                       id="username"
                       aria-describedby="username-help"
-                      placeholder="Enter a Steam ID"
+                      placeholder="Enter a Steam ID or vanity URL"
                       name="username"
                       value={usernameSearch}
                       onChange={e => setUsernameSearch(e.target.value)}
                       required/>
-                <small id="username-help" className="form-text">Enter a Steam 'vanity' URL of a user.</small>
+                <small id="username-help" className="form-text">Enter a Steam 'vanity' URL from a Steam profile, or enter the ID of a user.</small>
               </div>
               <div className="form-group">
                 <label htmlFor="game" className="green-glow">Steam Game</label>
@@ -88,12 +88,12 @@ function App()
                       className="form-control"
                       id="game"
                       aria-describedby="game-help"
-                      placeholder="Enter a Steam Game"
+                      placeholder="Enter a Steam game or ID"
                       name="game"
                       value={appSearch}
                       onChange={e => setAppSearch(e.target.value)}
                       />
-                <small id="game-help" className="form-text">Enter a game or app that is available on Steam.</small>
+                <small id="game-help" className="form-text">Enter an app name or ID that is available on Steam.</small>
               </div>
               <button type="submit" id="entry-submit" className="btn btn-primary" >Search!</button>
             </form>
