@@ -1,5 +1,5 @@
 import './App.css'
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.css'
 import { BrowserRouter as Router } from "react-router-dom";
 import Main from './main.js'
@@ -28,25 +28,25 @@ function App()
               <div className="col-sm-5">
                 <label className="blue-glow" htmlFor="username">User Profile</label>
                 <input type="text"
-                className="form-control dark-bg"
-                id="username"
-                aria-describedby="username-help"
-                placeholder="Enter a Steam ID or vanity URL"
-                name="username"
-                value={usernameSearch}
-                onChange={e => setUsernameSearch(e.target.value)}
+                  className="form-control dark-bg"
+                  id="username"
+                  aria-describedby="username-help"
+                  placeholder="Enter a Steam ID or vanity URL"
+                  name="username"
+                  value={usernameSearch}
+                  onChange={e => setUsernameSearch(e.target.value)}
                 />
               </div>
               <div className="col-sm-5">
                 <label className="green-glow" htmlFor="game">Steam Game</label>
                 <input type="text"
-                className="form-control"
-                id="game"
-                aria-describedby="game-help"
-                placeholder="Enter a Steam game name or ID"
-                name="game"
-                value={appSearch}
-                onChange={e => setAppSearch(e.target.value)}
+                  className="form-control"
+                  id="game"
+                  aria-describedby="game-help"
+                  placeholder="Enter a Steam game name or ID"
+                  name="game"
+                  value={appSearch}
+                  onChange={e => setAppSearch(e.target.value)}
                 />
               </div>
               <div className="col-xs-12 col-sm-2 mt-4">
@@ -71,28 +71,28 @@ function App()
             <form id="entry-form" onSubmit={handleSubmit}>
               <div className="form-group">
                 <label className="blue-glow" htmlFor="username">User Profile</label>
-                      <input type="text"
-                      className="form-control dark-bg"
-                      id="username"
-                      aria-describedby="username-help"
-                      placeholder="Enter a Steam ID or vanity URL"
-                      name="username"
-                      value={usernameSearch}
-                      onChange={e => setUsernameSearch(e.target.value)}
-                      required/>
+                  <input type="text"
+                    className="form-control dark-bg"
+                    id="username"
+                    aria-describedby="username-help"
+                    placeholder="Enter a Steam ID or vanity URL"
+                    name="username"
+                    value={usernameSearch}
+                    onChange={e => setUsernameSearch(e.target.value)}
+                    required/>
                 <small id="username-help" className="form-text">Enter a Steam 'vanity' URL from a Steam profile, or enter the ID of a user.</small>
               </div>
               <div className="form-group">
                 <label htmlFor="game" className="green-glow">Steam Game</label>
                 <input type="text"
-                      className="form-control"
-                      id="game"
-                      aria-describedby="game-help"
-                      placeholder="Enter a Steam game or ID"
-                      name="game"
-                      value={appSearch}
-                      onChange={e => setAppSearch(e.target.value)}
-                      />
+                  className="form-control"
+                  id="game"
+                  aria-describedby="game-help"
+                  placeholder="Enter a Steam game or ID"
+                  name="game"
+                  value={appSearch}
+                  onChange={e => setAppSearch(e.target.value)}
+                  />
                 <small id="game-help" className="form-text">Enter an app name or ID that is available on Steam.</small>
               </div>
               <button type="submit" id="entry-submit" className="btn btn-primary" >Search!</button>
@@ -111,7 +111,6 @@ function App()
       event.preventDefault();
       if (appSearch || usernameSearch)
       {
-        console.log("there is a search present");
         if (!isMainMenuSearch)
         {
           console.log("stats window already open, calling grabData() manually.");
@@ -122,7 +121,6 @@ function App()
       }
       else
       {
-        console.log("there is not a search present")
         setIsMainMenuSearch(true);
       };
     };

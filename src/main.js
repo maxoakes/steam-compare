@@ -23,7 +23,6 @@ const Main = ({usernameSearch, searchClick}) => {
       referrerPolicy: 'no-referrer',
   };
 
-  console.log("SEARCH:", usernameSearch)
   const [loading, setLoad] = useState(null);
   const [loadMsg, setLoadMsg] = useState("");
 
@@ -51,7 +50,6 @@ const Main = ({usernameSearch, searchClick}) => {
     setLoad(null);
   }, [searchClick]);
 
-
   async function grabData(event)
   {
     //reset values
@@ -67,13 +65,13 @@ const Main = ({usernameSearch, searchClick}) => {
     setGameAchievements(null);
     setPlayerGameStats(null);
     
-
     //get the form seach boxes
     let searchedApp = document.getElementById("game").value;
     let searchedProfile = document.getElementById("username").value;
     let generatedSteamid;
     let generatedAppid;
     let generatedAppTitle;
+
     //game/app name
     //check if the user entered a username to search for
     if (searchedProfile)
@@ -84,19 +82,17 @@ const Main = ({usernameSearch, searchClick}) => {
       let steamidResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/?key=' + 
         key + '&vanityurl=' + searchedProfile + '&format=json', headers)
-      console.log(steamidResponse.response)
+      //console.log(steamidResponse.response)
       generatedSteamid = steamidResponse.response.steamid;
       
       //backup to check if the entered profile name is a steamid
       if (!generatedSteamid && /^\d+$/.test(searchedProfile))
       {
-        console.log("checking if it is a steamid")
         generatedSteamid = searchedProfile;
       }
       console.log("Found user " + generatedSteamid + " from " + searchedProfile);
 
-      setLoad(1)
-      setLoadMsg("finding user " + generatedSteamid)
+      setLoadingMessage(1, "Finding user " + generatedSteamid)
     }
     
     if (searchedApp)
@@ -107,15 +103,16 @@ const Main = ({usernameSearch, searchClick}) => {
       let appListResponse = await fetchJSON(proxy + 
         'http://api.steampowered.com/ISteamApps/GetAppList/v0002/', headers)
 
-        setLoad(8)
-        setLoadMsg("searching for " + searchedApp);
-      console.log(appListResponse.applist.apps)
+      setLoadingMessage(8, "Searching for " + searchedApp)
+      //console.log(appListResponse.applist.apps)
 
       //go through each game and see if the name of the game matches what the user entered
       let appObject = appListResponse.applist.apps.find(app => app.name.toLowerCase() === searchedApp.toLowerCase());
+
+      //check if the game is an appid
       if (!appObject && /^\d+$/.test(searchedApp))
       {
-        console.log("checking if it is a appid")
+        console.log("Checking if the entered game is a valid appid")
         appObject = appListResponse.applist.apps.find(app => app.appid.toString() === searchedApp);
       }
       
@@ -128,12 +125,13 @@ const Main = ({usernameSearch, searchClick}) => {
       }
       else
       {
-        console.log("No game found with: " + searchedApp)
+        console.log("No game found with query " + searchedApp)
       }
     }
 
     let friendsListResponse;
     let playerSummeryResponse;
+
     //stats for player summary
     if (generatedSteamid)
     {
@@ -143,31 +141,28 @@ const Main = ({usernameSearch, searchClick}) => {
         key + '&steamids=' + generatedSteamid + '&format=json', headers)
       console.log(playerSummeryResponse.response.players[0])
 
-      setLoad(15)
-      setLoadMsg("fetching player summary")
+      setLoadingMessage(15, "fetching player summary")
 
       console.log("IPlayerService/GetSteamLevel")
       let steamLevelResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=' + 
         key + '&steamid=' + generatedSteamid + '&format=json', headers)
       console.log(steamLevelResponse.response)
-
-      setLoad(27)
+      setLoadingMessage(27, "")
       
       console.log("ISteamUser/GetFriendList")
       friendsListResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/ISteamUser/GetFriendList/v1/?key=' + 
         key + '&steamid=' + generatedSteamid + ',&format=json', headers)
       console.log(friendsListResponse)
-
-      setLoad(32)
+      setLoadingMessage(32, "")
 
       console.log("IPlayerService/GetOwnedGames")
       let ownedGamesResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=' + 
         key + '&steamid=' + generatedSteamid + '&format=json&include_appinfo=1', headers)
       console.log(ownedGamesResponse.response)
-      setLoad(41)
+      setLoadingMessage(41, "")
 
       setGames(ownedGamesResponse.response.games)
       setPlayerSummary(playerSummeryResponse.response.players[0]);
@@ -175,28 +170,24 @@ const Main = ({usernameSearch, searchClick}) => {
       if (friendsListResponse) setFriendsList(friendsListResponse.friendslist.friends);
     }
 
-    //if both a user and game is searched and valid
-    if (generatedSteamid && generatedAppid)
+    if (generatedSteamid && generatedAppid) //if both a user and game is searched and valid
     {
       console.log("\tappid AND steamid searched")
 
-      setLoad(42)
-      setLoadMsg("searching player achievements")
+      setLoadingMessage(42, "Searching player achievements")
       console.log("ISteamUserStats/GetPlayerAchievements")
       let playerAchievementsResponse = await fetchJSON(proxy +
         'https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?key=' + 
         key + '&steamid=' + generatedSteamid + '&appid=' + generatedAppid + '&format=json', headers)
       console.log(playerAchievementsResponse);
-
-      setLoad(57)
+      setLoadingMessage(57, "")
 
       console.log("ISteamUserStats/GetGlobalAchievementPercentagesForApp")
       let globalAchievementPercentagesResponse = await fetchJSON(proxy +
         'https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v2/?key=' + 
         key + '&gameid=' + generatedAppid + '&format=json', headers)
       console.log(globalAchievementPercentagesResponse);
-
-      setLoad(69)
+      setLoadingMessage(69, "")
 
       console.log("ISteamUserStats/GetNumberOfCurrentPlayers")
       let numCurrentPlayersResponse = await fetchJSON(proxy +
@@ -204,19 +195,17 @@ const Main = ({usernameSearch, searchClick}) => {
         key + '&appid=' + generatedAppid + '&format=json', headers)
       console.log(numCurrentPlayersResponse);
       setPlayerCount(numCurrentPlayersResponse.response.player_count);
-
-      setLoad(77)
+      setLoadingMessage(77, "")
       
       console.log("ISteamUserStats/GetSchemaForGame")
       let gameSchemaResponse = await fetchJSON(proxy +
         'https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key=' + 
         key + '&appid=' + generatedAppid + '&format=json', headers)
       console.log(gameSchemaResponse.game);
-
-      setLoad(100)
+      setLoadingMessage(100, "")
       
       // the inputs to this one must come from the previous API call
-      // not a lot of games implement this. not sure if we want to call it
+      // not a lot of games implement this
       let gameStats;
       let userStatsForGameResponse;
       try {
@@ -247,6 +236,7 @@ const Main = ({usernameSearch, searchClick}) => {
             userStatsForGameResponse.playerstats.stats);
           setPlayerGameStats(fullStatObject);
 
+          /* experimental concurrent API pull */
           // let combinedGameStats = combineStats(gameSchemaResponse.game.availableGameStats.stats,
           //   playerSummeryResponse.response.players[0],
           //   userStatsForGameResponse.playerstats.stats,
@@ -254,12 +244,11 @@ const Main = ({usernameSearch, searchClick}) => {
           //   generatedAppid);
         }
       }
-      catch(error) {
-        console.error("Something in gameSchemaResponse.game.availableGameStats is undefined");
+      catch(unused) {
+        console.log("Something in gameSchemaResponse.game.availableGameStats is undefined");
       }
     }
-    //if only the username is valid
-    else if (generatedSteamid && !generatedAppid)
+    else if (generatedSteamid && !generatedAppid) //if only the username is valid
     {
       console.log("\tONLY steamid searched")
 
@@ -268,26 +257,21 @@ const Main = ({usernameSearch, searchClick}) => {
         'https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key=' + 
         key + '&steamid=' + generatedSteamid + '&format=json', headers)
       console.log(recentlyPlayedGamesResponse.response)
-
-      setLoad(72)
-      setLoadMsg("finding user stats")
+      setPlayedGames(recentlyPlayedGamesResponse.response.games);
+      setLoadingMessage(72, "Finding user stats")
 
       console.log("IPlayerService/GetCommunityBadgeProgress")
       let communityBadgeProgressResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/IPlayerService/GetCommunityBadgeProgress/v1/?key=' + 
         key + '&steamid=' + generatedSteamid + '&format=json', headers)
       console.log(communityBadgeProgressResponse.response)
-
-      setLoad(99)
+      setLoadingMessage(99, "")
 
       console.log("ISteamUser/GetPlayerBans")
       let playerBansResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/ISteamUser/GetPlayerBans/v1/?key=' + 
         key + '&steamids=' + generatedSteamid + '&format=json', headers)
       console.log(playerBansResponse.players[0])
-
-
-      setPlayedGames(recentlyPlayedGamesResponse.response.games);
     }
     else if (!generatedSteamid && generatedAppid)
     {
@@ -332,6 +316,7 @@ const Main = ({usernameSearch, searchClick}) => {
     return achievementObjectList;
   }
 
+  //experimental concurrent function. Not working yet
   async function combineStats(statSchema, player, playerStats, friends, gameid)
   {
     var t0 = performance.now()
@@ -412,6 +397,13 @@ const Main = ({usernameSearch, searchClick}) => {
     console.log("Call to combineStats took " + ((t1 - t0)/1000).toFixed(1) + " seconds.");
   }
 
+  //set the loading message
+  function setLoadingMessage(percent, message)
+  {
+    setLoad(percent)
+    if (message) setLoadMsg(message)
+  }
+
   //combine the stat schema and the stats of the player
   function makeStatObjects(statSchema, playerStats)
   {
@@ -448,12 +440,6 @@ const Main = ({usernameSearch, searchClick}) => {
     return data;
   }
 
-  //convert minutes to hours and minutes
-  function minutesToHours(minutes)
-  {
-    return Math.floor(minutes / 60) + " hr " + (minutes % 60) + " min";
-  }
-
   //convert steam status if to a string
   function getStatusString(statusCode)
   {
@@ -488,6 +474,12 @@ const Main = ({usernameSearch, searchClick}) => {
     return status;
   }
 
+  //convert minutes to hours and minutes
+  function minutesToHours(minutes)
+  {
+    return Math.floor(minutes / 60) + " hr " + (minutes % 60) + " min";
+  }
+
   //convert the time that is recieved from steam api into a date and time
   function convertSteamTimeToUTC(seconds)
   {
@@ -507,6 +499,7 @@ const Main = ({usernameSearch, searchClick}) => {
     return time.toLocaleDateString('en-US', options);
   }
 
+  //return a pretty string saying the duration that the parameter is
   function getTimeDifferenceString(timeInSeconds)
   {
     let then = new Date(timeInSeconds*1000)
@@ -537,6 +530,7 @@ const Main = ({usernameSearch, searchClick}) => {
       " (" + getTimeDifferenceString(timeInMilliseconds) + ")";
   }
 
+  //print the state and country, or just state, or just country, depending on what is defined
   function getLocationString(state, country)
   {
     return (state ? state : "") + (state ? ", " : "") + (country ? country : "")
@@ -596,6 +590,7 @@ const Main = ({usernameSearch, searchClick}) => {
       return achievement.description ? achievement.description : "";
   }
 
+  //return HTML/JSX statement
   return (loading) ? (
     <div>
       <Router>
@@ -730,10 +725,8 @@ const Main = ({usernameSearch, searchClick}) => {
             <RandomGame games={allGames}></RandomGame>
           </div>
         }
-   </div>
-      }
-      
-     
+    </div>
+      }     
     <div className="footer-space"></div>
       <Redirect to ="/" />
       {/* A little extra padding... */}
