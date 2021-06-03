@@ -25,7 +25,7 @@ function App()
           <form onSubmit={handleSubmit}>
             <div className="form-group row">
               <div className="col-sm-5">
-                <label className="search-bar text-light" htmlFor="username">User Profile</label>
+                <label className="search-bar" htmlFor="username">User Profile</label>
                 <input type="text"
                   className="form-control dark-bg"
                   id="username"
@@ -37,7 +37,7 @@ function App()
                 />
               </div>
               <div className="col-sm-5">
-                <label className="search-bar text-light" htmlFor="game">Steam Game</label>
+                <label className="search-bar" htmlFor="game">Steam Game</label>
                 <input type="text"
                   className="form-control"
                   id="game"
@@ -69,7 +69,7 @@ function App()
           <div className="form-body">
             <form id="entry-form" onSubmit={handleSubmit}>
               <div className="form-group">
-                <label className="search-bar text-light h5" htmlFor="username">User Profile</label>
+                <label className="search-bar h5" htmlFor="username">User Profile</label>
                   <input type="text"
                     className="form-control dark-bg"
                     id="username"
@@ -82,7 +82,7 @@ function App()
                 <small id="username-help" className="form-text">Enter a Steam 'vanity' URL from a Steam profile, or enter the ID of a user.</small>
               </div>
               <div className="form-group">
-                <label htmlFor="game" className="search-bar text-light h5">Steam Game</label>
+                <label htmlFor="game" className="search-bar h5">Steam Game</label>
                 <input type="text"
                   className="form-control"
                   id="game"
