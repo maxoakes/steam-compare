@@ -46,6 +46,7 @@ const Main = ({usernameSearch, searchClick}) => {
 
   //React things
   useEffect( () => {
+    setLoad(1);
     grabData();
     setLoad(null);
   }, [searchClick]);

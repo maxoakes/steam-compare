@@ -17,24 +17,25 @@ const RatioPlayed = ({games}) => {
     }
     console.log(totalTime)
     let avgTime = totalTime/games.length;
-    avgTime = avgTime/3; //determines what qualifies to be graphed
+    avgTime = avgTime/1.3; //determines what qualifies to be graphed
     let gamesSort = games;
     //https://stackoverflow.com/questions/979256/sorting-an-array-of-objects-by-property-values
     gamesSort.sort((a, b) => (b.playtime_forever) - (a.playtime_forever));
     let gameNames = [];
     let playTime = [];
     for(let i=0; i<gamesSort.length; i++){
-        if(gamesSort[i].playtime_forever >= avgTime){
+        if(gamesSort[i].playtime_forever >= avgTime && gameNames.length < 25){
             gameNames.push(gamesSort[i].name);
             playTime.push(gamesSort[i].playtime_forever);
         }
     }
+    console.log(gameNames.length);
     const options = {
         responsive: true,
         plugins: {
         title: {
             display: true,
-            text: 'Favorite Games(?)',
+            text: 'Most Played Games',
             color: 'white',
             position: 'top'
         },
