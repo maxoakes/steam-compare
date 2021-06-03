@@ -238,9 +238,9 @@ body {
   color: white;
   text-shadow: none;
 }
-.green-glow + input[type="text"] {
+.search-bar + input[type="text"] {
   background-color: black;
-  color: greenyellow;
+  color: #c7d5e0;
   text-shadow: none;
 }
 .green-glow + input[type="text"]:focus {
@@ -476,7 +476,8 @@ body {
   width: 50%;
 }
 
-.loading-window h1, .loading-window h2 {
+.loading-window h1,
+.loading-window h2 {
   font-size: medium;
   font-weight: normal;
   text-transform: capitalize;
