@@ -155,7 +155,7 @@ const Main = ({usernameSearch, searchClick}) => {
       friendsListResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/ISteamUser/GetFriendList/v1/?key=' + 
         key + '&steamid=' + generatedSteamid + ',&format=json', headers)
-      console.log(friendsListResponse)
+      console.log(friendsListResponse.friendslist)
       setLoadingMessage(32, "")
 
       console.log("IPlayerService/GetOwnedGames")

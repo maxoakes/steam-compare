@@ -1,7 +1,4 @@
-
 const Loading = ({loading, loadingMsg}) => {
-    console.log(loading);
-
     return(
         <div className="loading-window">
             <span className="player-summary-tiny-font">LOADING</span>

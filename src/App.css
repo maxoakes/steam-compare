@@ -1,5 +1,5 @@
 body {
-  background: rgb(45,49,54) !important;
+  background: #212529 !important;
 }
 
 /* General Styling for the three title page sections */
@@ -407,7 +407,7 @@ input[type="text"]:-webkit-autofill {
   position: fixed;
   bottom: 0px;
   z-index: 4;
-  background-color: rgb(45,49,54);
+  background-color: #212529;
 }
 
 .footer-space {
@@ -445,6 +445,12 @@ input[type="text"]:-webkit-autofill {
 /* Chart */
 .chart {
   background-color: black;
+}
+
+/* Random Game */
+.random-game
+{
+  max-width: 250px;
 }
 
 /* Loading message */

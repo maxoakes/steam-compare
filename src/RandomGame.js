@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 const RandomGame = ({games}) => {
     const [rngGame, setGame] = useState(null);
     let unplayed = [];
-    console.log(games)
+
     for(let i = 0; i < games.length; i++){
         unplayed.push(games[i]);
     }
-    console.log(typeof(unplayed))
+
     for(let i = unplayed.length-1; i >= 0; --i){
         if(unplayed[i].playtime_forever > 10){
             unplayed.splice(i, 1);
@@ -16,11 +16,12 @@ const RandomGame = ({games}) => {
 
     const [click, setClick] = useState(0);
     function handleClick(event){
-        setClick(click+1)
+        setClick(click + 1)
     }
+
     useEffect(() => {
         let rng = Math.floor(Math.random() * (unplayed.length-1 - 0) + 0);
-        console.log(rng , unplayed.length)
+
         setGame(unplayed[rng]);
     }, [click])
 

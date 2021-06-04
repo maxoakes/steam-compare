@@ -15,7 +15,7 @@ const RatioPlayed = ({games}) => {
     for(let i=0; i<games.length; i++){
         totalTime += games[i].playtime_forever;
     }
-    console.log(totalTime)
+
     let avgTime = totalTime/games.length;
     avgTime = avgTime/1.3; //determines what qualifies to be graphed
     let gamesSort = games;
@@ -29,7 +29,6 @@ const RatioPlayed = ({games}) => {
             playTime.push(gamesSort[i].playtime_forever);
         }
     }
-    console.log(gameNames.length);
     const options = {
         responsive: true,
         plugins: {
@@ -52,8 +51,6 @@ const RatioPlayed = ({games}) => {
           backgroundColor: colors,
         }]
     };
-
-
 
     return(
         <div>

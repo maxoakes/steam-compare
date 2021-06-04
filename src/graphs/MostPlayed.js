@@ -1,8 +1,6 @@
-
 import {Bar} from 'react-chartjs-2';
 const MostPlayed = ({games}) =>{
 
-    console.log(games[0]);
     let gamesSort = games;
     //https://stackoverflow.com/questions/979256/sorting-an-array-of-objects-by-property-values
     gamesSort.sort((a, b) => (b.playtime_forever) - (a.playtime_forever));
@@ -17,7 +15,7 @@ const MostPlayed = ({games}) =>{
         playTime.push(gamesSort[i].playtime_forever)
         }
     }
-    console.log(gameNames)
+
     const options = {
         responsive: true,
         plugins: {
