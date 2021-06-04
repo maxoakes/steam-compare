@@ -560,8 +560,19 @@ const Main = ({usernameSearch, searchClick}) => {
   }
 
   //take in an array of achievements and return what percent are 'achieved'
-  function getAchievementPercent(achievementList)
+  function getAchievementPercent(achievementList, targetGame, gameList)
   {
+    let gameFound = false;
+    for (let i = 0; i < gameList.length; i++)
+    {
+      if (gameList[i].appid === targetGame) gameFound = true;
+    }
+
+    if (!gameFound)
+    {
+      return "Player does not have this game."
+    }
+
     if (achievementList)
     {
       //achievements obtained so far
@@ -676,7 +687,7 @@ const Main = ({usernameSearch, searchClick}) => {
             </div>
             <div className="col-xs-12 col-md-4 game-banner-info">
               <p className="text-light game-banner-info-playercount">{playerCount + " players online"}</p>
-              <p className="text-light game-banner-info-achievement">{getAchievementPercent(gameAchievements)}</p>
+              <p className="text-light game-banner-info-achievement">{getAchievementPercent(gameAchievements, appid, allGames)}</p>
             </div>
           </div>
         }

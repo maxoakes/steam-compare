@@ -142,7 +142,7 @@ function App()
         </div>
         <BodyHTML></BodyHTML>
         <div className="row">
-          <div className="footer col-xs-12 col-md-12 bg-dark">
+          <div className="footer col-xs-12 col-md-12">
             <hr />
             <p className="footer-links">
               <a href="https://steamdb.info/calculator/">SteamDB</a> |&nbsp;
@@ -153,7 +153,7 @@ function App()
             <p className="footer-authors font-weight-light">
               Created by Arturo Bravo, Courtney Ficker, Max Oakes
             </p>
-            <p className="footer-legal text-muted ">Steam and the Steam logo are trademarks of
+            <p className="footer-legal text-muted ">Steam is a trademark of
             Valve Corporation. All other trademarks are property of their respective owners.
             This deployment was created under fair use.
             </p>
