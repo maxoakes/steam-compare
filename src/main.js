@@ -619,9 +619,11 @@ const Main = ({usernameSearch, searchClick}) => {
         <h3 className="alert alert-danger">Not a valid search</h3>
       </div>
       }
-      <Router>
-        <Loading loading={loading} loadingMsg={loadMsg} />
-      </Router>
+      {(!broken) &&
+        <div>
+         <Loading loading={loading} loadingMsg={loadMsg} />
+        </div>
+      }
     </div>
   ) :
     (
