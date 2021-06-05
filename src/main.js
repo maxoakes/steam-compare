@@ -25,6 +25,7 @@ const Main = ({usernameSearch, searchClick}) => {
 
   const [loading, setLoad] = useState(null);
   const [loadMsg, setLoadMsg] = useState("");
+  const [broken, setBroken] = useState(null);
 
   const [playerSummary, setPlayerSummary] = useState(null);
   const [steamLevel, setLevel] = useState("");
@@ -43,7 +44,6 @@ const Main = ({usernameSearch, searchClick}) => {
   const [gameAchievements, setGameAchievements] = useState([]);
   const [playerGameStats, setPlayerGameStats] = useState([]);
   
-
   //React things
   useEffect( () => {
     setLoad(1);
@@ -65,6 +65,7 @@ const Main = ({usernameSearch, searchClick}) => {
     setGameTitle(null);
     setGameAchievements(null);
     setPlayerGameStats(null);
+    setBroken(null);
     
     //get the form seach boxes
     let searchedApp = document.getElementById("game").value;
@@ -92,6 +93,9 @@ const Main = ({usernameSearch, searchClick}) => {
         generatedSteamid = searchedProfile;
       }
       console.log("Found user " + generatedSteamid + " from " + searchedProfile);
+      if(generatedSteamid === undefined){
+        console.error("Not a valid user")
+      }
 
       setLoadingMessage(1, "Finding user " + generatedSteamid)
     }
@@ -141,6 +145,9 @@ const Main = ({usernameSearch, searchClick}) => {
         'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=' + 
         key + '&steamids=' + generatedSteamid + '&format=json', headers)
       console.log(playerSummeryResponse.response.players[0])
+      if(playerSummeryResponse.response.players[0] === undefined){
+        console.error("Invalid User")
+      }
 
       setLoadingMessage(15, "fetching player summary")
 
@@ -155,7 +162,7 @@ const Main = ({usernameSearch, searchClick}) => {
       friendsListResponse = await fetchJSON(proxy + 
         'https://api.steampowered.com/ISteamUser/GetFriendList/v1/?key=' + 
         key + '&steamid=' + generatedSteamid + ',&format=json', headers)
-      console.log(friendsListResponse.friendslist)
+      //console.log(friendsListResponse.friendslist)
       setLoadingMessage(32, "")
 
       console.log("IPlayerService/GetOwnedGames")
@@ -281,6 +288,7 @@ const Main = ({usernameSearch, searchClick}) => {
     else
     {
       console.log("\tNO valid item searched");
+      setBroken(1)
     }
 
     setSteamid(generatedSteamid);
@@ -612,6 +620,11 @@ const Main = ({usernameSearch, searchClick}) => {
   ) :
     (
     <div>
+      {broken &&
+      <div> 
+        <h3 className="text-light">Not a valid search</h3>
+      </div>
+      }
       {playerSummary &&
       <div className="row d-flex justify-content-center">
         {/* PLAYER SUMMARY THAT IS ALWAYS PRESENT */}

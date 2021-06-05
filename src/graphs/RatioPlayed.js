@@ -29,6 +29,13 @@ const RatioPlayed = ({games}) => {
             playTime.push(gamesSort[i].playtime_forever);
         }
     }
+    if(avgTime === 0){
+        return(
+            <div>
+            </div>
+        );
+    }
+
     const options = {
         responsive: true,
         plugins: {
