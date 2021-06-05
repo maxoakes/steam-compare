@@ -1,10 +1,3 @@
-import {Bar} from 'react-chartjs-2';
-import{
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link
-  } from "react-router-dom";
 import MostPlayed from './graphs/MostPlayed.js'
 import TimePlayed from './graphs/TimePlayed.js'
 import RatioPlayed from './graphs/RatioPlayed'

@@ -147,6 +147,7 @@ const Main = ({usernameSearch, searchClick}) => {
       console.log(playerSummeryResponse.response.players[0])
       if(playerSummeryResponse.response.players[0] === undefined){
         console.error("Invalid User")
+        setBroken(1);
       }
 
       setLoadingMessage(15, "fetching player summary")
@@ -613,6 +614,11 @@ const Main = ({usernameSearch, searchClick}) => {
   //return HTML/JSX statement
   return (loading) ? (
     <div>
+      {broken &&
+      <div> 
+        <h3 className="alert alert-danger">Not a valid search</h3>
+      </div>
+      }
       <Router>
         <Loading loading={loading} loadingMsg={loadMsg} />
       </Router>
@@ -622,7 +628,7 @@ const Main = ({usernameSearch, searchClick}) => {
     <div>
       {broken &&
       <div> 
-        <h3 className="text-light">Not a valid search</h3>
+        <h3 className="alert alert-danger">Not a valid search</h3>
       </div>
       }
       {playerSummary &&
