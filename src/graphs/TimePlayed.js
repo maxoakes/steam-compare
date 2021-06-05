@@ -1,16 +1,13 @@
 import {Doughnut} from 'react-chartjs-2';
 const TimePlayed = ({games}) =>{
     let backgroundColors = [
-        'rgba(54, 162, 235, 0.8)',
-        'rgba(255, 206, 86, 0.8)',
-        'rgba(255, 99, 132, 0.8)',
-        'rgba(75, 192, 192, 0.8)',
-        'rgba(153, 102, 255, 0.8)',
-        'rgba(255, 159, 64, 0.8)',
-        'rgba(150, 50, 199, 0.8)',
-        'rgba(83, 102, 255, 0.8)',
-        'rgba(40, 159, 64, 0.8)',
-        'rgba(210, 199, 199, 0.8)',
+            'hsl(45, 100%, 50%)',
+            'hsl(37, 100%, 30%)',
+            'hsl(20, 100%, 20%)',
+            'hsl(60, 100%, 70%)',
+            'hsl(20, 100%, 10%)',
+            'hsl(30, 100%, 60%)',
+            'hsl(65, 100%, 40%)',
     ];
     let timePlayed = [
         "Not Played",
@@ -70,6 +67,7 @@ const TimePlayed = ({games}) =>{
           label: 'Playtime',
           data: counts,
           backgroundColor: backgroundColors,
+          borderColor: 'Black',
         }]
     };
 

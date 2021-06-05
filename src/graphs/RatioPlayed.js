@@ -56,6 +56,7 @@ const RatioPlayed = ({games}) => {
           label: 'Playtime',
           data: playTime,
           backgroundColor: colors,
+          borderColor: 'White',
         }]
     };
 
