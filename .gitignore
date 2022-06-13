@@ -4,3 +4,5 @@ cors-anywhere/
 # production
 /build
 *.old
+# api keys
+.env

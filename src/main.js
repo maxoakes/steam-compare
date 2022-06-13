@@ -7,12 +7,13 @@ import RandomGame from './RandomGame.js';
 
 const Main = ({usernameSearch, searchClick}) => {
 
+  console.log(process.env.REACT_APP_STEAM_API_KEY)
   // TODO this works as a proxy website for CORS to allow the api to get fetched.
   //Perhaps there is a more elegent way to do this
   const proxy = "https://still-tor-77449.herokuapp.com/"
 
   //Max's api steam key. Use it for this project
-  const key = "386540A52F687754D4E1767230822EDE";
+  const key = process.env.REACT_APP_STEAM_API_KEY;
   const headers =
   {
       mode: 'cors',
