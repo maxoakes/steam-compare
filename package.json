@@ -2,7 +2,7 @@
   "name": "steamcompare",
   "version": "1.1.0",
   "description": "Showcase of steam user's profile",
-  "homepage": ".",
+  "homepage": "./steam-compare/",
   "main": "main.js",
   "dependencies": {
     "bootstrap": "^5.0.0",
