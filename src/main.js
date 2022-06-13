@@ -7,7 +7,6 @@ import RandomGame from './RandomGame.js';
 
 const Main = ({usernameSearch, searchClick}) => {
 
-  console.log(process.env.REACT_APP_STEAM_API_KEY)
   // TODO this works as a proxy website for CORS to allow the api to get fetched.
   //Perhaps there is a more elegent way to do this
   const proxy = "https://still-tor-77449.herokuapp.com/"
